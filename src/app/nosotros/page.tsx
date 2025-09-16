@@ -1,42 +1,39 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import Navigation from '@/components/Navigation'
-import Hero from '@/components/Hero'
 import Footer from '@/components/Footer'
 
-export default function Home() {
+export default function AboutUsPage() {
   const [language, setLanguage] = useState<'es' | 'en'>('es')
 
   return (
     <div className="min-h-screen bg-white">
       <Navigation language={language} setLanguage={setLanguage} />
-      <Hero language={language} />
 
-      {/* About Section */}
-      <section className="py-16 px-4 max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
-            {language === 'es' ? 'Quienes Somos' : 'Who We Are'}
-          </h2>
-          <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
-            {language === 'es'
-              ? 'Somos Alohja Coffee, una empresa nacida del legado de nuestros abuelos, quienes dedicaron su vida al cultivo del café y al amor por la tierra. Nuestro propósito es continuar esta tradición cultivando bajo sombra, en armonía con la naturaleza, a la vez que apoyamos a las familias campesinas locales. «Nos comprometemos a ofrecer al mundo el mejor café de especialidad de Ecuador, con calidad, sostenibilidad y una historia auténtica en cada grano».'
-              : 'We are Alohja Coffee, a company born from the legacy of our grandparents, who dedicated their lives to coffee farming and love for the land. Our purpose is to continue this tradition by cultivating under shade, in harmony with nature, while supporting local farming families. We are committed to bringing the world Ecuador\'s finest specialty coffee — with quality, sustainability, and an authentic story in every bean.'
-            }
-          </p>
-        </div>
-      </section>
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        {/* About Section */}
+        <section className="mb-16">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
+              {language === 'es' ? 'Quienes Somos' : 'Who We Are'}
+            </h1>
+            <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
+              {language === 'es'
+                ? 'Somos Alohja Coffee, una empresa nacida del legado de nuestros abuelos, quienes dedicaron su vida al cultivo del café y al amor por la tierra. Nuestro propósito es continuar esta tradición cultivando bajo sombra, en armonía con la naturaleza, a la vez que apoyamos a las familias campesinas locales. «Nos comprometemos a ofrecer al mundo el mejor café de especialidad de Ecuador, con calidad, sostenibilidad y una historia auténtica en cada grano».'
+                : 'We are Alohja Coffee, a company born from the legacy of our grandparents, who dedicated their lives to coffee farming and love for the land. Our purpose is to continue this tradition by cultivating under shade, in harmony with nature, while supporting local farming families. We are committed to bringing the world Ecuador\'s finest specialty coffee — with quality, sustainability, and an authentic story in every bean.'
+              }
+            </p>
+          </div>
+        </section>
 
-      {/* Mission, Vision, Purpose */}
-      <section className="py-16 px-4 bg-amber-50">
-        <div className="max-w-6xl mx-auto">
+        {/* Mission, Vision, Purpose */}
+        <section className="mb-16">
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-black mb-4">
+            <div className="text-center bg-amber-50 rounded-lg p-8">
+              <h2 className="text-2xl font-bold text-black mb-4">
                 {language === 'es' ? 'Misión' : 'Mission'}
-              </h3>
+              </h2>
               <p className="text-gray-700">
                 {language === 'es'
                   ? 'Ser una empresa profundamente centrada en las personas, ofreciendo productos auténticos y sostenibles que conecten culturas, historias y territorios, creando valor y experiencias con impacto positivo a nivel global.'
@@ -44,10 +41,10 @@ export default function Home() {
                 }
               </p>
             </div>
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-black mb-4">
+            <div className="text-center bg-amber-50 rounded-lg p-8">
+              <h2 className="text-2xl font-bold text-black mb-4">
                 {language === 'es' ? 'Visión' : 'Vision'}
-              </h3>
+              </h2>
               <p className="text-gray-700">
                 {language === 'es'
                   ? 'Posicionar Alohja como una marca global que trascienda generaciones, llevando productos de calidad al mundo y conectando personas con historias auténticas'
@@ -55,10 +52,10 @@ export default function Home() {
                 }
               </p>
             </div>
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-black mb-4">
+            <div className="text-center bg-amber-50 rounded-lg p-8">
+              <h2 className="text-2xl font-bold text-black mb-4">
                 {language === 'es' ? 'Propósito' : 'Purpose'}
-              </h3>
+              </h2>
               <p className="text-gray-700">
                 {language === 'es'
                   ? 'Generar una conexión real entre el productor y el consumidor a través de nuestros productos, haciendo que cada persona se sienta parte de un cambio verdadero'
@@ -67,15 +64,13 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Values */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-3xl font-bold text-black text-center mb-12">
+        {/* Values */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-black text-center mb-12">
             {language === 'es' ? 'Valores Corporativos' : 'Corporate Values'}
-          </h3>
+          </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
@@ -118,8 +113,21 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Heritage Section */}
+        <section className="text-center bg-green-50 rounded-lg p-8">
+          <h2 className="text-3xl font-bold text-black mb-6">
+            {language === 'es' ? 'Nuestro Legado' : 'Our Heritage'}
+          </h2>
+          <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
+            {language === 'es'
+              ? 'Desde las montañas de Ecuador hasta tu taza, cada grano cuenta una historia de tradición familiar, respeto por la naturaleza y compromiso con la excelencia. Somos más que una empresa de café: somos guardianes de una tradición que honra el pasado mientras construye un futuro sostenible.'
+              : 'From the mountains of Ecuador to your cup, every bean tells a story of family tradition, respect for nature, and commitment to excellence. We are more than a coffee company: we are guardians of a tradition that honors the past while building a sustainable future.'
+            }
+          </p>
+        </section>
+      </div>
 
       <Footer language={language} />
     </div>

@@ -1,0 +1,183 @@
+EL SITIO WEB DEBE ESTAR BILINGÜE OSEA INGLES ESPAÑOL ANALIZA EL LogoHorizontal.png para que obtengas la paleta de colores,
+usemos una tipografia una combinacion amigable, que sea un sitio web premium de una productora de café,
+
+
+Inicio
+Productos
+Nosotros
+Alohja Global
+Sostenibilidad
+Agricultores
+Lotes
+ES
+EN
+
+diseñemos un sitio web de inicio una pagina demo inicial con los componentes y usemos tailwind para simplificar todo, y usemos router para paginacion, y estructura basica de paginas secundarias
+NO USEMOS EN NI UNA PARTE DEL PROYECTO GRADIENTES y en el hero https://player.cloudinary.com/embed/?cloud_name=dzfakhjlh&public_id=Video_Inicio_Pagina_web_du6glp&profile=cld-default este seria el video background.
+
+
+
+Quienes somos
+We are Alohja Coffee, a company born from the legacy of our grandparents, who dedicated their lives to coffee farming and love for the land. Our purpose is to continue this tradition by cultivating under shade, in harmony with nature, while supporting local farming families. We are committed to bringing the world Ecuador’s finest specialty coffee — with quality, sustainability, and an authentic story in every bean.”
+Somos Alohja Coffee, una empresa nacida del legado de nuestros abuelos, quienes dedicaron su vida al cultivo del café y al amor por la tierra. Nuestro propósito es continuar esta tradición cultivando bajo sombra, en armonía con la naturaleza, a la vez que apoyamos a las familias campesinas locales. «Nos comprometemos a ofrecer al mundo el mejor café de especialidad de Ecuador, con calidad, sostenibilidad y una historia auténtica en cada grano».
+Mision
+To be a company deeply focused on people, offering authentic and sustainable products that connect cultures, stories, and territories, creating value and experiences with a positive impact on a global level.
+Ser una empresa profundamente centrada en las personas, ofreciendo productos auténticos y sostenibles que conecten culturas, historias y territorios, creando valor y experiencias con impacto positivo a nivel global.
+Vision
+Position Alohja as a global brand that transcends generations, bringing quality products to the world and connecting people with authentic stories.
+Posicionar Alohja como una marca global que trascienda generaciones, llevando productos de calidad al mundo y conectando personas con historias auténticas
+Propósito:
+Generate a real connection between the producer and the consumer through our products, making each person feel part of a real change.
+Generar una conexión real entre el productor y el consumidor a través de nuestros productos, haciendo que cada persona se sienta parte de un cambio verdadero
+Valores corporativos
+• Confidence in our products – We inspire confidence and pride in those who choose us.
+• Quality – We guarantee excellence in everything we do.
+• Sustainability – We care for the planet and communities.
+• Innovation – We create new ways to inspire and surprise.
+• Transparency – Clear processes that build trust.
+• Inspiration – We motivate others to be part of something meaningful.
+• Ethics - We make correct and responsible decisions, based on integrity, respect and justice in all our actions.
+
+• Fair trade -- We guarantee the fair and dignified payment that producers deserve.
+
+
+•  Confianza en nuestros productos – Inspiramos seguridad y orgullo en quienes nos eligen.
+•  Calidad – garantizamos excelencia en todo lo que hacemos.
+•  Sostenibilidad – Cuidamos el planeta y las comunidades.
+•  Innovación – Creamos nuevas formas de inspirar y sorprender.
+•  Transparencia – Procesos claros que generan confianza.
+•  Inspiración – Motivamos a otros a ser parte de algo significativo.
+• Ética - Tomamos decisiones correctas y responsables, basadas en integridad, respeto y justicia en todas nuestras acciones.
+• Comercio justo: garantizamos el pago justo y digno que merecen los productores
+
+Parametros de lotes en la página de SOSTENIBILIDAD
+Frase inicial:
+Enter the batch number and closely follow the route of your favorite coffee.
+Ingresa el número de lote y sigue de cerca la ruta de tu café favorito.
+Frase sobre la tabla de datos
+Learn all about your favorite coffee
+Aprende todo sobre tu café favorito
+Tabla de contenido
+Bach number/número de lote	Números
+Origin/ Origen	Paltas-Olmedo-Vilcabamba-Cariamanga-chaguarpamba-Portovelo-Piñas-Nanegal-Pacto-Nanegalito-
+Coffee Farmer/caficultor	Pablo Quezada- Armando Ramirez- Ivan Ramirez- Elauterio Fajardo- Edita Collaguazo- Mercy Espinosa- Victoria Fajardo- Luis Fajardo- Melo Fajardo
+harvest date/Cosechado	Fecha
+Drying type/Tipo de secado	Desde (fecha) – hasta (fecha)
+Natural – honey – washed
+Natural – honey - Lavado
+Transfer to Quito/traslado a Quito	Fecha
+Air-Land-maritime/ aéreo-terrestre-marítimo
+Temporary storage
+/ Almacenamiento temporal	Desde (fecha) – hasta (fecha)
+Type of roasting/tipo de tostado	FECHA
+light roast – medium roast – medium dark roast – dark roast
+tueste claro – tueste medio- tueste medio oscuro – tueste oscuro
+Packed/empacado	FECHA
+Transfer to boarding
+/Traslado a embarque	FECHA
+Air-Land-maritime/ aéreo-terrestre-marítimo
+Country of destination
+/ País de destino	Japon- corea del sur- china. Singapur- Taiwán- Emiratos Arabes Unidos, Estados Unidos- Colombia- Peru- Alemania-
+retail distribution / distribución minorista
+
+Frase pie de pagina de los lotes
+Every cup you drink, is connected to sustainable agriculture. Under the shelter of Ecuador's natural forests, our practices prioritize ecological balance, soil regeneration, and responsible use of resources.
+Cada taza que tomas, está conectada a una agricultura sostenible. Bajo el abrigo de los bosques naturales de Ecuador, nuestras prácticas priorizan el equilibrio ecológico, la regeneración de suelos y el uso responsable de los recursos.
+
+Página de los agricultores
+Frase inicial
+“Within every coffee bean lives the story of hardworking hands that, with patience and love for the land, nurture dreams among the mountains. Our farmers, guardians of quality, carefully select each harvest, transforming effort and tradition into the essence of a unique coffee.”
+
+“En cada grano de café late la historia de manos trabajadoras que, con paciencia y amor por la tierra, cultivan sueños entre montañas. Nuestros agricultores, guardianes de la calidad, seleccionan con cuidado cada fruto, transformando esfuerzo y tradición en la esencia de un café único.”
+Listado de agricultores
+Cada nombre con una foto del agricultor
+Pablo Quezada- Armando Ramirez- Elauterio Fajardo- Edita Collaguazo- Mercy Espinosa- Victoria Fajardo- Ivan Ramirez- Luis Fajardo- Melo Fajardo-
+Al hacer click en el nombre que se abra su información con el video de la entrevista y una galería de fotos en la parte inferior (VER VIDEO EN WAPP)
+	Pablo Quezada
+Video de entrevista
+Farm name / Nombre de la Finca	Gran Chaparral
+Origin/ Origen 	Portovelo
+Cultivated variety / variedad de Cultivo	Typica – Gesha- Bourbon - Sidra
+Crop Altitude/ Altitud del cultivo	+ 1 110 masl / + 1 110 msnm
+cultivation method / metodo de cultivo	Bajo sombra
+ Frase dicha por el agricultor
+“Cada amanecer en el campo es una nueva oportunidad. Mi mayor deseo es que el esfuerzo de mis manos se vea reflejado en un café que cruce fronteras y dé orgullo a mi familia.”
+Galeria de fotos
+	Armando Ramirez
+Video de entrevista
+Farm name / Nombre de la Finca	Don Tavo
+Origin/ Origen 	Paltas
+Cultivated variety / variedad de Cultivo	Bourbon- Gesha
+Crop Altitude/ Altitud del cultivo	+ 1 750 masl / + 1 750 msnm
+cultivation method / metodo de cultivo	Bajo sombra
+
+Frase dicha por el agricultor
+“Sembrar café es sembrar esperanza. Sueño con que nuestro trabajo sea reconocido, para que las próximas generaciones encuentren en la tierra un camino digno de progreso.”
+Galeria de fotos
+	Elauterio Fajardo
+Video de entrevista
+Farm name / Nombre de la Finca	Tandambo
+Origin/ Origen 	Paltas
+Cultivated variety / variedad de Cultivo	Bourbon
+Crop Altitude/ Altitud del cultivo	+ 1 700 masl / + 1 700 msnm
+cultivation method / metodo de cultivo	Bajo sombra
+Frase dicha por el agricultor
+“Con cada grano que recojo pienso en un futuro mejor para mis hijos. Quiero que la calidad de nuestro café sea valorada y que nuestra voz como agricultores se escuche en el mundo.”
+Galeria de fotos
+	Edita Collaguazo
+Video de entrevista
+Farm name / Nombre de la Finca	Tandambo
+Origin/ Origen 	Paltas
+Cultivated variety / variedad de Cultivo	Bourbon
+Crop Altitude/ Altitud del cultivo	+ 1 700 masl / + 1 700 msnm
+cultivation method / metodo de cultivo	Bajo sombra
+Frase dicha por el agricultor
+“Cada grano que selecciono lleva consigo mi esperanza de progreso. Sueño con que las mujeres del campo tengamos más oportunidades y que nuestro esfuerzo sea visible.”
+Galeria de fotos
+	Victoria Fajardo
+Video de entrevista
+Farm name / Nombre de la Finca	Reina del Cisne
+Origin/ Origen 	Paltas
+Cultivated variety / variedad de Cultivo	Bourbon
+Crop Altitude/ Altitud del cultivo	+ 1 600 masl / + 1 600 msnm
+cultivation method / metodo de cultivo	Bajo sombra
+Frase dicha por el agricultor
+“Trabajar la tierra es mi orgullo. Mi deseo es que el sacrificio de cada jornada abra puertas para que mi futuro y el de mis hijos sea próspero y se abran más posibilidades.”
+Galeria de fotos
+	Mercy Espinosa
+Video de entrevista
+Farm name / Nombre de la Finca	La Esperanza
+Origin/ Origen 	Portovelo
+Cultivated variety / variedad de Cultivo	Gesha- Sidra
+Crop Altitude/ Altitud del cultivo	+ 1 200 masl / + 1 200 msnm
+cultivation method / metodo de cultivo	Bajo sombra
+Frase dicha por el agricultor
+“Cuidar el café es cuidar la vida. Anhelo que nuestro trabajo llegue lejos, y que se reconozca el valor de quienes lo hacemos con dedicación y amor.”
+Galeria de fotos
+
+	Finca Alohja
+Video de entrevista
+Farm name / Nombre de la Finca	Alohja coffee
+Origin/ Origen 	Portovelo
+Cultivated variety / variedad de Cultivo	Gesha- Sidra – bourbon - typica
+Crop Altitude/ Altitud del cultivo	+ 1 400 masl / + 1 400 msnm
+cultivation method / metodo de cultivo	Bajo sombra
+Frase dicha por el agricultor
+“Cuidar el café es cuidar la vida. Anhelo que nuestro trabajo llegue lejos, y que se reconozca el valor de quienes lo hacemos con dedicación y amor.”
+Galeria de fotos
+
+CARACTERISTICAS DE LOS PRODUCTOS
+Lista de productos
+Café molido tueste claro 250 gr	Café molido tueste claro 340 gr
+Café molido tueste oscuro 250 gr	Café molido tueste oscuro 340 gr
+Café molido clásico claro 200 gr 	Café molido clásico oscuro 200 gr
+Café en grano tueste claro 340 gr	Café en grano tueste oscuro 340 gr
+Café en grano tueste claro 1 kg blend	Café en grano tueste oscuro 1 kg blend
+Café en grano tueste claro 1 kg origen  	Café en grano tueste oscuro 1 kg origen
+Café regalo corportivo claro 50 gr	Café regalo corporativo oscuro 50 gr
+Café en oro, grano verde 1 kg 	Café en oro grano verde 5 kg
+
+
+Tiene que tener este diseño con estos parámetros igualmente con la lista de precios a un costado de los diferentes pesos, etc.
+Mas abajo sugerencia de los demás productos.
+
