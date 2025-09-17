@@ -14,6 +14,7 @@ export default function Home() {
       <Navigation language={language} setLanguage={setLanguage} />
       <Hero language={language} />
 
+
       {/* About Section */}
       <section className="py-16 px-4 max-w-6xl mx-auto">
         <div className="text-center mb-12">
@@ -26,6 +27,164 @@ export default function Home() {
               : 'We are Alohja Coffee, a company born from the legacy of our grandparents, who dedicated their lives to coffee farming and love for the land. Our purpose is to continue this tradition by cultivating under shade, in harmony with nature, while supporting local farming families. We are committed to bringing the world Ecuador\'s finest specialty coffee — with quality, sustainability, and an authentic story in every bean.'
             }
           </p>
+        </div>
+      </section>
+
+      {/* Coffee Process Gallery */}
+      <section className="py-16 px-4 bg-amber-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
+              {language === 'es' ? 'Nuestro Proceso' : 'Our Process'}
+            </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              {language === 'es'
+                ? 'Desde la recolección hasta la taza: un viaje de calidad y tradición en cada grano de café ecuatoriano.'
+                : 'From harvest to cup: a journey of quality and tradition in every Ecuadorian coffee bean.'
+              }
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {/* Paso 1: Recolección */}
+            <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
+              <div className="aspect-[4/3] relative">
+                <Image
+                  src="/assets/fotosinicio/persona recolectando granos.jpg"
+                  alt={language === 'es' ? 'Recolección manual de granos de café' : 'Manual coffee bean harvesting'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent group-hover:from-black/60 transition-all duration-300 flex items-end">
+                <div className="p-6 text-white w-full">
+                  <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">
+                    {language === 'es' ? 'PASO 1' : 'STEP 1'}
+                  </div>
+                  <h3 className="font-bold text-xl mb-2">
+                    {language === 'es' ? 'Recolección' : 'Harvesting'}
+                  </h3>
+                  <p className="text-sm opacity-95 leading-relaxed">
+                    {language === 'es' ? 'Selección manual y cuidadosa de granos maduros en su punto perfecto' : 'Manual and careful selection of ripe beans at their perfect point'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Paso 2: Secado */}
+            <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
+              <div className="aspect-[4/3] relative">
+                <Image
+                  src="/assets/fotosinicio/secadocafe.jpg"
+                  alt={language === 'es' ? 'Proceso de secado del café' : 'Coffee drying process'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent group-hover:from-black/60 transition-all duration-300 flex items-end">
+                <div className="p-6 text-white w-full">
+                  <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">
+                    {language === 'es' ? 'PASO 2' : 'STEP 2'}
+                  </div>
+                  <h3 className="font-bold text-xl mb-2">
+                    {language === 'es' ? 'Secado' : 'Drying'}
+                  </h3>
+                  <p className="text-sm opacity-95 leading-relaxed">
+                    {language === 'es' ? 'Secado natural al sol preservando los sabores únicos' : 'Natural sun drying preserving unique flavors'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Paso 3: Tostado */}
+            <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
+              <div className="aspect-[4/3] relative">
+                <Image
+                  src="/assets/fotosinicio/cafe tostandose.jpg"
+                  alt={language === 'es' ? 'Proceso de tostado del café' : 'Coffee roasting process'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent group-hover:from-black/60 transition-all duration-300 flex items-end">
+                <div className="p-6 text-white w-full">
+                  <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block">
+                    {language === 'es' ? 'PASO 3' : 'STEP 3'}
+                  </div>
+                  <h3 className="font-bold text-xl mb-2">
+                    {language === 'es' ? 'Tostado' : 'Roasting'}
+                  </h3>
+                  <p className="text-sm opacity-95 leading-relaxed">
+                    {language === 'es' ? 'Tostado artesanal controlado para el perfil perfecto' : 'Controlled artisanal roasting for the perfect profile'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Detalles del proceso */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white">
+              <div className="aspect-square relative">
+                <Image
+                  src="/assets/fotosinicio/cafe pre tostado.jpg"
+                  alt={language === 'es' ? 'Granos antes del tostado' : 'Beans before roasting'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                <p className="text-white text-sm font-semibold opacity-0 group-hover:opacity-100 text-center px-3 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                  {language === 'es' ? 'Pre-Tostado' : 'Pre-Roasted'}
+                </p>
+              </div>
+            </div>
+            <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white">
+              <div className="aspect-square relative">
+                <Image
+                  src="/assets/fotosinicio/granosdecafe.jpg"
+                  alt={language === 'es' ? 'Granos de café listos' : 'Ready coffee beans'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                <p className="text-white text-sm font-semibold opacity-0 group-hover:opacity-100 text-center px-3 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                  {language === 'es' ? 'Granos Listos' : 'Ready Beans'}
+                </p>
+              </div>
+            </div>
+            <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white">
+              <div className="aspect-square relative">
+                <Image
+                  src="/assets/fotosinicio/cafetostadoenmano.jpg"
+                  alt={language === 'es' ? 'Café tostado en mano' : 'Roasted coffee in hand'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                <p className="text-white text-sm font-semibold opacity-0 group-hover:opacity-100 text-center px-3 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                  {language === 'es' ? 'Calidad Premium' : 'Premium Quality'}
+                </p>
+              </div>
+            </div>
+            <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white">
+              <div className="aspect-square relative">
+                <Image
+                  src="/assets/fotosinicio/cafe tendido.jpg"
+                  alt={language === 'es' ? 'Café secándose al sol' : 'Coffee drying in the sun'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                <p className="text-white text-sm font-semibold opacity-0 group-hover:opacity-100 text-center px-3 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                  {language === 'es' ? 'Secado Natural' : 'Natural Drying'}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -117,6 +276,97 @@ export default function Home() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Landscape & Origin Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
+              {language === 'es' ? 'Nuestro Origen' : 'Our Origin'}
+            </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              {language === 'es'
+                ? 'Los paisajes únicos de Ecuador proporcionan el ambiente perfecto para cultivar café de especialidad.'
+                : 'Ecuador\'s unique landscapes provide the perfect environment for growing specialty coffee.'
+              }
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div className="relative overflow-hidden rounded-xl shadow-lg">
+              <Image
+                src="/assets/fotosinicio/foto paisaje.jpg"
+                alt={language === 'es' ? 'Paisaje cafetero ecuatoriano' : 'Ecuadorian coffee landscape'}
+                width={600}
+                height={400}
+                className="w-full h-80 object-cover hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end">
+                <div className="p-6 text-white">
+                  <h3 className="text-xl font-bold mb-2">
+                    {language === 'es' ? 'Montañas Ecuatorianas' : 'Ecuadorian Mountains'}
+                  </h3>
+                  <p className="text-sm opacity-90">
+                    {language === 'es' ? 'Altitudes perfectas para café de altura' : 'Perfect altitudes for high-altitude coffee'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative overflow-hidden rounded-xl shadow-lg">
+              <Image
+                src="/assets/fotosinicio/foto paisaje anochecer.jpg"
+                alt={language === 'es' ? 'Atardecer en plantación' : 'Sunset at plantation'}
+                width={600}
+                height={400}
+                className="w-full h-80 object-cover hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end">
+                <div className="p-6 text-white">
+                  <h3 className="text-xl font-bold mb-2">
+                    {language === 'es' ? 'Clima Ideal' : 'Ideal Climate'}
+                  </h3>
+                  <p className="text-sm opacity-90">
+                    {language === 'es' ? 'Condiciones naturales únicas' : 'Unique natural conditions'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="relative overflow-hidden rounded-lg shadow-md">
+              <Image
+                src="/assets/fotosinicio/foto paisaje 1.jpg"
+                alt={language === 'es' ? 'Vista panorámica' : 'Panoramic view'}
+                width={400}
+                height={250}
+                className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div className="relative overflow-hidden rounded-lg shadow-md">
+              <Image
+                src="/assets/fotosinicio/flor blanca.jpg"
+                alt={language === 'es' ? 'Flor del café' : 'Coffee flower'}
+                width={400}
+                height={250}
+                className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div className="bg-green-800 rounded-lg p-6 flex flex-col justify-center text-white">
+              <h4 className="text-xl font-bold mb-3">
+                {language === 'es' ? 'Cultivo Sostenible' : 'Sustainable Farming'}
+              </h4>
+              <p className="text-sm opacity-90 leading-relaxed">
+                {language === 'es'
+                  ? 'Nuestros cafetales bajo sombra preservan la biodiversidad y garantizan la calidad excepcional de nuestros granos.'
+                  : 'Our shade-grown coffee preserves biodiversity and ensures the exceptional quality of our beans.'
+                }
+              </p>
+            </div>
           </div>
         </div>
       </section>

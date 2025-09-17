@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 
@@ -8,22 +9,70 @@ export default function ProductsPage() {
   const [language, setLanguage] = useState<'es' | 'en'>('es')
 
   const products = [
-    { name: 'Café molido tueste claro 250 gr', nameEn: 'Ground coffee light roast 250 gr' },
-    { name: 'Café molido tueste claro 340 gr', nameEn: 'Ground coffee light roast 340 gr' },
-    { name: 'Café molido tueste oscuro 250 gr', nameEn: 'Ground coffee dark roast 250 gr' },
-    { name: 'Café molido tueste oscuro 340 gr', nameEn: 'Ground coffee dark roast 340 gr' },
-    { name: 'Café molido clásico claro 200 gr', nameEn: 'Classic light ground coffee 200 gr' },
-    { name: 'Café molido clásico oscuro 200 gr', nameEn: 'Classic dark ground coffee 200 gr' },
-    { name: 'Café en grano tueste claro 340 gr', nameEn: 'Coffee beans light roast 340 gr' },
-    { name: 'Café en grano tueste oscuro 340 gr', nameEn: 'Coffee beans dark roast 340 gr' },
-    { name: 'Café en grano tueste claro 1 kg blend', nameEn: 'Coffee beans light roast 1 kg blend' },
-    { name: 'Café en grano tueste oscuro 1 kg blend', nameEn: 'Coffee beans dark roast 1 kg blend' },
-    { name: 'Café en grano tueste claro 1 kg origen', nameEn: 'Coffee beans light roast 1 kg origin' },
-    { name: 'Café en grano tueste oscuro 1 kg origen', nameEn: 'Coffee beans dark roast 1 kg origin' },
-    { name: 'Café regalo corporativo claro 50 gr', nameEn: 'Corporate gift coffee light 50 gr' },
-    { name: 'Café regalo corporativo oscuro 50 gr', nameEn: 'Corporate gift coffee dark 50 gr' },
-    { name: 'Café en oro, grano verde 1 kg', nameEn: 'Gold coffee, green beans 1 kg' },
-    { name: 'Café en oro grano verde 5 kg', nameEn: 'Gold coffee green beans 5 kg' }
+    { 
+      name: 'Café molido tueste claro 250 gr', 
+      nameEn: 'Ground coffee light roast 250 gr',
+      image: '/assets/productos/placeholderCafé molido tueste claro 250 gr.png',
+      description: 'Café molido con tueste claro, ideal para métodos de filtrado',
+      descriptionEn: 'Ground coffee with light roast, ideal for filter methods',
+      price: '$12.99'
+    },
+    { 
+      name: 'Café molido tueste oscuro 250 gr', 
+      nameEn: 'Ground coffee dark roast 250 gr',
+      image: '/assets/productos/placeholder Cafe molido tueste oscuro 250 gr.png',
+      description: 'Café molido con tueste oscuro, perfecto para espresso',
+      descriptionEn: 'Ground coffee with dark roast, perfect for espresso',
+      price: '$12.99'
+    },
+    { 
+      name: 'Café regalo corporativo claro 50 gr', 
+      nameEn: 'Corporate gift coffee light 50 gr',
+      image: '/assets/productos/placeholder Cafe regalo corporativo claro 50 gr.png',
+      description: 'Presentación especial para regalos corporativos',
+      descriptionEn: 'Special presentation for corporate gifts',
+      price: '$8.99'
+    },
+    { 
+      name: 'Café en oro, grano verde 1 kg', 
+      nameEn: 'Gold coffee, green beans 1 kg',
+      image: '/assets/productos/placeholder Café en oro, grano verde 1 kg.png',
+      description: 'Café verde premium para tostadores profesionales',
+      descriptionEn: 'Premium green coffee for professional roasters',
+      price: '$24.99'
+    },
+    { 
+      name: 'Café molido tueste claro 340 gr', 
+      nameEn: 'Ground coffee light roast 340 gr',
+      image: '/assets/productos/placeholderCafé molido tueste claro 250 gr.png',
+      description: 'Presentación familiar de café molido tueste claro',
+      descriptionEn: 'Family size light roast ground coffee',
+      price: '$16.99'
+    },
+    { 
+      name: 'Café molido tueste oscuro 340 gr', 
+      nameEn: 'Ground coffee dark roast 340 gr',
+      image: '/assets/productos/placeholder Cafe molido tueste oscuro 250 gr.png',
+      description: 'Presentación familiar de café molido tueste oscuro',
+      descriptionEn: 'Family size dark roast ground coffee',
+      price: '$16.99'
+    },
+    { 
+      name: 'Café en grano tueste claro 340 gr', 
+      nameEn: 'Coffee beans light roast 340 gr',
+      image: '/assets/productos/placeholder Café en oro, grano verde 1 kg.png',
+      description: 'Granos enteros con tueste claro para máxima frescura',
+      descriptionEn: 'Whole beans with light roast for maximum freshness',
+      price: '$18.99'
+    },
+    { 
+      name: 'Café regalo corporativo oscuro 50 gr', 
+      nameEn: 'Corporate gift coffee dark 50 gr',
+      image: '/assets/productos/placeholder Cafe regalo corporativo claro 50 gr.png',
+      description: 'Presentación corporativa con tueste oscuro',
+      descriptionEn: 'Corporate presentation with dark roast',
+      price: '$8.99'
+    }
   ]
 
   return (
@@ -43,20 +92,41 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {products.map((product, index) => (
-            <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-              <div className="aspect-square bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
-                <span className="text-gray-400">
-                  {language === 'es' ? 'Imagen del producto' : 'Product image'}
-                </span>
+            <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+              <div className="aspect-square bg-gray-50 rounded-lg mb-4 overflow-hidden">
+                <Image
+                  src={product.image}
+                  alt={language === 'es' ? product.name : product.nameEn}
+                  width={300}
+                  height={300}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h3 className="font-semibold text-black mb-2">
-                {language === 'es' ? product.name : product.nameEn}
-              </h3>
-              <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-medium py-2 px-4 rounded-lg transition-colors">
-                {language === 'es' ? 'Ver Detalles' : 'View Details'}
-              </button>
+              
+              <div className="space-y-3">
+                <h3 className="font-bold text-lg text-black leading-tight">
+                  {language === 'es' ? product.name : product.nameEn}
+                </h3>
+                
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {language === 'es' ? product.description : product.descriptionEn}
+                </p>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl font-bold text-green-700">
+                    {product.price}
+                  </span>
+                  <div className="text-xs text-gray-500">
+                    {language === 'es' ? 'Por unidad' : 'Per unit'}
+                  </div>
+                </div>
+                
+                <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+                  {language === 'es' ? 'Ver Detalles' : 'View Details'}
+                </button>
+              </div>
             </div>
           ))}
         </div>

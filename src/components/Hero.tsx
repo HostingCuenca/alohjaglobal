@@ -23,35 +23,38 @@ export default function Hero({ language }: HeroProps) {
         ubicacion: language === 'es' ? 'Provincia de Loja, Ecuador' : 'Loja Province, Ecuador'
       }
       setSearchResult(mockResult)
-    }
+    }  
   }
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background */}
-      <div className="absolute inset-0 w-full h-full z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-          style={{ pointerEvents: 'none' }}
-        >
-          <source
-            src="https://res.cloudinary.com/dzfakhjlh/video/upload/v1726497600/Video_Inicio_Pagina_web_du6glp.mp4"
-            type="video/mp4"
-          />
-          {/* Fallback para navegadores que no soporten el video */}
-          <div className="w-full h-full bg-gradient-to-br from-green-800 to-amber-700" />
-        </video>
+      {/* YouTube Video Background - SIMPLIFIED */}
+      <div className="absolute inset-0 w-full h-full">
+        <iframe
+          src="https://www.youtube.com/embed/36VnFiibb68?autoplay=1&mute=1&loop=1&playlist=36VnFiibb68&controls=0"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: '100vw',
+            height: '56.25vw', // 16:9 aspect ratio
+            minHeight: '100vh',
+            minWidth: '177.78vh', // 16:9 aspect ratio
+            transform: 'translate(-50%, -50%)',
+            border: 'none',
+            pointerEvents: 'none'
+          }}
+          allow="autoplay; encrypted-media"
+        />
+        {/* Fallback background */}
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-800 to-amber-700 -z-10" />
       </div>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+      <div className="absolute inset-0 bg-black/70" style={{ zIndex: 10 }}></div>
 
       {/* Content */}
-      <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
+      <div className="relative text-center text-white px-4 max-w-5xl mx-auto" style={{ zIndex: 20 }}>
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
           {language === 'es' ? 'Rastrea tu café' : 'Track your coffee'}
         </h1>
