@@ -338,7 +338,7 @@ export default function BatchesPage() {
               </div>
               <div className="bg-white p-4 rounded-lg shadow">
                 <div className="text-2xl font-bold text-amber-600">
-                  {batches.reduce((acc, b) => acc + (parseFloat(b.green_weight_kg) || 0), 0).toFixed(1)} kg
+                  {batches.reduce((acc, b) => acc + (Number(b.green_weight_kg) || 0), 0).toFixed(1)} kg
                 </div>
                 <div className="text-sm text-gray-500">Peso Total Verde</div>
               </div>
