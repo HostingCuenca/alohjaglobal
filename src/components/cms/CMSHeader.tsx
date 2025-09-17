@@ -3,7 +3,10 @@
 import { useRouter } from 'next/navigation'
 
 interface CMSHeaderProps {
-  user: any
+  user: {
+    email?: string;
+    role?: string;
+  } | null
 }
 
 export default function CMSHeader({ user }: CMSHeaderProps) {

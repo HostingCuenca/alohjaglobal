@@ -162,7 +162,7 @@ export default function FarmersPage() {
                 </div>
 
                 <blockquote className="text-gray-600 italic text-sm mb-4 border-l-4 border-yellow-500 pl-4">
-                  "{language === 'es' ? farmer.quote.es : farmer.quote.en}"
+                  &ldquo;{language === 'es' ? farmer.quote.es : farmer.quote.en}&rdquo;
                 </blockquote>
 
                 <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-medium py-2 px-4 rounded-lg transition-colors">

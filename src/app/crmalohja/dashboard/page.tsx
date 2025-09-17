@@ -12,6 +12,15 @@ interface DashboardStats {
   totalProducts: number
 }
 
+interface User {
+  id: string
+  username: string
+  email: string
+  role: string
+  iat?: number
+  exp?: number
+}
+
 export default function CMSDashboard() {
   const [stats, setStats] = useState<DashboardStats>({
     totalFarmers: 0,
@@ -20,7 +29,7 @@ export default function CMSDashboard() {
     totalProducts: 0
   })
   const [isLoading, setIsLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -66,7 +75,7 @@ export default function CMSDashboard() {
         setStats({
           totalFarmers: farmersData.farmers.length,
           totalBatches: batchesData.batches.length,
-          activeBatches: batchesData.batches.filter((b: any) => b.status === 'active').length,
+          activeBatches: batchesData.batches.filter((b: { status: string }) => b.status === 'active').length,
           totalProducts: 0 // Por implementar
         })
       }

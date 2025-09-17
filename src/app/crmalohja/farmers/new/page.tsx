@@ -12,6 +12,18 @@ interface Province {
   altitude_range: string
 }
 
+interface User {
+  id: string
+  username: string
+  role: string
+  iat?: number
+  exp?: number
+}
+
+interface FormErrors {
+  [key: string]: string
+}
+
 export default function NewFarmerPage() {
   const [formData, setFormData] = useState({
     farmer_code: '',
@@ -31,8 +43,8 @@ export default function NewFarmerPage() {
   const [provinces, setProvinces] = useState<Province[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingData, setIsLoadingData] = useState(true)
-  const [user, setUser] = useState<any>(null)
-  const [errors, setErrors] = useState<any>({})
+  const [user, setUser] = useState<User | null>(null)
+  const [errors, setErrors] = useState<FormErrors>({})
   const router = useRouter()
 
   useEffect(() => {
@@ -46,7 +58,7 @@ export default function NewFarmerPage() {
       const payload = JSON.parse(atob(token.split('.')[1]))
       setUser(payload)
       loadProvinces()
-    } catch (error) {
+    } catch {
       router.push('/crmalohja')
     }
   }, [router])
@@ -75,7 +87,7 @@ export default function NewFarmerPage() {
     
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors((prev: any) => ({
+      setErrors((prev: FormErrors) => ({
         ...prev,
         [name]: ''
       }))
@@ -83,7 +95,7 @@ export default function NewFarmerPage() {
   }
 
   const validateForm = () => {
-    const newErrors: any = {}
+    const newErrors: FormErrors = {}
 
     if (!formData.farmer_code.trim()) {
       newErrors.farmer_code = 'El código del agricultor es requerido'
@@ -133,7 +145,7 @@ export default function NewFarmerPage() {
       } else {
         setErrors({ submit: data.error || 'Error al crear el agricultor' })
       }
-    } catch (error) {
+    } catch {
       setErrors({ submit: 'Error de conexión' })
     } finally {
       setIsLoading(false)

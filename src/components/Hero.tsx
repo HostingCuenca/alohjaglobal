@@ -8,7 +8,15 @@ interface HeroProps {
 
 export default function Hero({ language }: HeroProps) {
   const [searchValue, setSearchValue] = useState('')
-  const [searchResult, setSearchResult] = useState<any>(null)
+  const [searchResult, setSearchResult] = useState<{
+    loteId: string;
+    finca: string;
+    variedad: string;
+    altitud: string;
+    procesamiento: string;
+    fechaCosecha: string;
+    ubicacion: string;
+  } | null>(null)
 
   const handleSearch = () => {
     // Simulando búsqueda de lote

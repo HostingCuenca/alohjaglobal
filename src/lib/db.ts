@@ -12,7 +12,7 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 })
 
-export async function query(text: string, params?: any[]) {
+export async function query(text: string, params?: (string | number | boolean | null)[]) {
   const start = Date.now()
   try {
     const res = await pool.query(text, params)

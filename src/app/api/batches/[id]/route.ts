@@ -3,10 +3,11 @@ import { query } from '@/lib/db'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
-    const batchId = params.id
+    const resolvedParams = await Promise.resolve(params)
+    const batchId = resolvedParams.id
     
     const result = await query(`
       SELECT 

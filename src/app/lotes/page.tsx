@@ -9,7 +9,7 @@ export default function BatchesPage() {
   const [language, setLanguage] = useState<'es' | 'en'>('es')
   const [selectedBatch, setSelectedBatch] = useState<string>('AR000147')
   const [searchValue, setSearchValue] = useState<string>('')
-  const [searchResult, setSearchResult] = useState<any>(null)
+  // Remove unused searchResult state
 
   // Sample batch data based on your structure
   const sampleBatches = [
@@ -79,11 +79,9 @@ export default function BatchesPage() {
       )
       if (foundBatch) {
         setSelectedBatch(foundBatch.batch_id)
-        setSearchResult(foundBatch)
       } else {
-        setSearchResult(null)
-        alert(language === 'es' 
-          ? 'Lote no encontrado. Prueba con: AR000147, PQ000258, o MG000369' 
+        alert(language === 'es'
+          ? 'Lote no encontrado. Prueba con: AR000147, PQ000258, o MG000369'
           : 'Batch not found. Try: AR000147, PQ000258, or MG000369')
       }
     }

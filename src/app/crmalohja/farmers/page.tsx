@@ -20,10 +20,18 @@ interface Farmer {
   created_at: string
 }
 
+interface User {
+  id: string
+  username: string
+  role: string
+  iat?: number
+  exp?: number
+}
+
 export default function FarmersPage() {
   const [farmers, setFarmers] = useState<Farmer[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const router = useRouter()
 
@@ -38,7 +46,7 @@ export default function FarmersPage() {
       const payload = JSON.parse(atob(token.split('.')[1]))
       setUser(payload)
       loadFarmers()
-    } catch (error) {
+    } catch {
       router.push('/crmalohja')
     }
   }, [router])

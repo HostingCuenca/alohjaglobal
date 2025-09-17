@@ -3,10 +3,11 @@ import { query } from '@/lib/db'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
-    const farmerId = params.id
+    const resolvedParams = await Promise.resolve(params)
+    const farmerId = resolvedParams.id
     
     const result = await query(`
       SELECT 
@@ -40,10 +41,11 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
-    const farmerId = params.id
+    const resolvedParams = await Promise.resolve(params)
+    const farmerId = resolvedParams.id
     const body = await request.json()
     const {
       farmer_code,
@@ -108,10 +110,11 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
-    const farmerId = params.id
+    const resolvedParams = await Promise.resolve(params)
+    const farmerId = resolvedParams.id
 
     // Verificar si el agricultor tiene lotes asociados
     const batchCheck = await query(`

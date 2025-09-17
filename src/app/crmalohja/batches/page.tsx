@@ -24,10 +24,18 @@ interface Batch {
   final_weight_kg: number
 }
 
+interface User {
+  id: string
+  username: string
+  role: string
+  iat?: number
+  exp?: number
+}
+
 export default function BatchesPage() {
   const [batches, setBatches] = useState<Batch[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const router = useRouter()
@@ -43,7 +51,7 @@ export default function BatchesPage() {
       const payload = JSON.parse(atob(token.split('.')[1]))
       setUser(payload)
       loadBatches()
-    } catch (error) {
+    } catch {
       router.push('/crmalohja')
     }
   }, [router])
