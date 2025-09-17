@@ -1,15 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import BatchTrackingTimeline from '@/components/BatchTrackingTimeline'
 
 export default function BatchesPage() {
   const [language, setLanguage] = useState<'es' | 'en'>('es')
   const [selectedBatch, setSelectedBatch] = useState<string>('AR000147')
   const [searchValue, setSearchValue] = useState<string>('')
-  // Remove unused searchResult state
+  const [realBatchData, setRealBatchData] = useState<any>(null)
+  const [availableBatches, setAvailableBatches] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   // Sample batch data based on your structure
   const sampleBatches = [
@@ -63,6 +66,43 @@ export default function BatchesPage() {
     }
   ]
 
+  // Load available batches on component mount
+  useEffect(() => {
+    loadAvailableBatches()
+    // Try to load real data for default batch
+    loadBatchData(selectedBatch)
+  }, [])
+
+  const loadAvailableBatches = async () => {
+    try {
+      const response = await fetch('/api/public/batches')
+      const data = await response.json()
+      if (data.success) {
+        setAvailableBatches(data.batches)
+      }
+    } catch (error) {
+      console.error('Error loading available batches:', error)
+    }
+  }
+
+  const loadBatchData = async (batchId: string) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`/api/public/batches?batch_id=${batchId}`)
+      const data = await response.json()
+      if (data.success) {
+        setRealBatchData(data.batch)
+      } else {
+        setRealBatchData(null)
+      }
+    } catch (error) {
+      console.error('Error loading batch data:', error)
+      setRealBatchData(null)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const getProvinceMap = (province: string) => {
     const maps: { [key: string]: string } = {
       'LOJA': '/assets/mapaspng/mapaecuadorLOJA.png',
@@ -72,17 +112,21 @@ export default function BatchesPage() {
     return maps[province] || '/assets/mapaspng/ilustracioncafe.png'
   }
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (searchValue.trim()) {
-      const foundBatch = sampleBatches.find(batch => 
-        batch.batch_id.toLowerCase() === searchValue.toLowerCase().trim()
-      )
-      if (foundBatch) {
-        setSelectedBatch(foundBatch.batch_id)
-      } else {
-        alert(language === 'es'
-          ? 'Lote no encontrado. Prueba con: AR000147, PQ000258, o MG000369'
-          : 'Batch not found. Try: AR000147, PQ000258, or MG000369')
+      setSelectedBatch(searchValue.trim())
+      await loadBatchData(searchValue.trim())
+
+      // Check if it's found in real data, otherwise check sample data
+      if (!realBatchData) {
+        const foundBatch = sampleBatches.find(batch =>
+          batch.batch_id.toLowerCase() === searchValue.toLowerCase().trim()
+        )
+        if (!foundBatch) {
+          alert(language === 'es'
+            ? 'Lote no encontrado. Prueba con un código de lote válido.'
+            : 'Batch not found. Try with a valid batch code.')
+        }
       }
     }
   }
@@ -403,6 +447,25 @@ export default function BatchesPage() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Batch Tracking Timeline */}
+        <section className="mb-12">
+          <BatchTrackingTimeline
+            batch={{
+              batch_id: realBatchData?.batch_id || currentBatch.batch_id,
+              harvest_date: realBatchData?.harvest_date || currentBatch.harvest_date,
+              processing_method: realBatchData?.processing_method || currentBatch.process,
+              drying_method: realBatchData?.drying_method || currentBatch.drying_method,
+              transport_mode: realBatchData?.transport_mode || currentBatch.transport_mode,
+              roast_date: realBatchData?.roast_date || currentBatch.roast_date,
+              pack_date: realBatchData?.pack_date || currentBatch.pack_date,
+              distribution_date: realBatchData?.distribution_date || currentBatch.distribution_date,
+              retail_date: realBatchData?.retail_date || currentBatch.retail_date,
+              status: realBatchData?.status || 'active'
+            }}
+            language={language}
+          />
         </section>
 
         {/* Sustainability Message */}

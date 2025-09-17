@@ -55,35 +55,86 @@ export async function POST(request: Request) {
       farm_id,
       variety_id,
       harvest_date,
+      harvest_season,
+      harvest_method,
+      harvest_notes,
       processing_method,
       drying_method,
+      fermentation_time,
+      drying_time,
       transport_mode,
+      warehouse_location,
       green_weight_kg,
-      roast_date,
-      pack_date,
-      distribution_date,
-      retail_date
+      moisture_content,
+      screen_size,
+      defect_count,
+      cupping_score,
+      cupping_notes,
+      status
     } = body
+
+    // Validations
+    if (!batch_id || !farmer_id || !farm_id || !variety_id || !harvest_date || !processing_method || !drying_method || !transport_mode) {
+      return NextResponse.json({
+        success: false,
+        error: 'Required fields: batch_id, farmer_id, farm_id, variety_id, harvest_date, processing_method, drying_method, transport_mode'
+      }, { status: 400 })
+    }
+
+    // Check if batch_id already exists
+    const existingBatch = await query(`
+      SELECT batch_id FROM coffee_batches WHERE batch_id = $1
+    `, [batch_id])
+
+    if (existingBatch.rows.length > 0) {
+      return NextResponse.json({
+        success: false,
+        error: 'Batch ID already exists'
+      }, { status: 400 })
+    }
 
     const result = await query(`
       INSERT INTO coffee_batches (
         batch_id, farmer_id, farm_id, variety_id, harvest_date,
-        processing_method, drying_method, transport_mode,
-        green_weight_kg, roast_date, pack_date, distribution_date, retail_date
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        harvest_season, harvest_method, harvest_notes,
+        processing_method, drying_method, fermentation_time, drying_time,
+        transport_mode, warehouse_location, green_weight_kg,
+        moisture_content, screen_size, defect_count, cupping_score, cupping_notes,
+        status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
       RETURNING *
     `, [
       batch_id, farmer_id, farm_id, variety_id, harvest_date,
-      processing_method, drying_method, transport_mode,
-      green_weight_kg, roast_date, pack_date, distribution_date, retail_date
+      harvest_season || 'main', harvest_method || 'selective', harvest_notes,
+      processing_method, drying_method, fermentation_time || 0, drying_time || 0,
+      transport_mode, warehouse_location, green_weight_kg || 0,
+      moisture_content || 0, screen_size, defect_count || 0, cupping_score || 0, cupping_notes,
+      status || 'active'
     ])
 
     return NextResponse.json({
       success: true,
       batch: result.rows[0]
-    })
+    }, { status: 201 })
   } catch (error) {
     console.error('Error creating batch:', error)
+
+    // Handle specific PostgreSQL errors
+    if (error instanceof Error) {
+      if (error.message.includes('foreign key constraint')) {
+        return NextResponse.json({
+          success: false,
+          error: 'Invalid farmer, farm, or variety ID'
+        }, { status: 400 })
+      }
+      if (error.message.includes('unique constraint')) {
+        return NextResponse.json({
+          success: false,
+          error: 'Batch ID already exists'
+        }, { status: 400 })
+      }
+    }
+
     return NextResponse.json({
       success: false,
       error: 'Failed to create batch'

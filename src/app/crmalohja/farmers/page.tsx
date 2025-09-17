@@ -238,6 +238,12 @@ export default function FarmersPage() {
                                 Editar
                               </button>
                               <button
+                                onClick={() => router.push(`/crmalohja/farmers/${farmer.id}/content`)}
+                                className="text-purple-600 hover:text-purple-900"
+                              >
+                                Contenido
+                              </button>
+                              <button
                                 onClick={() => deleteFarmer(farmer.id)}
                                 className="text-red-600 hover:text-red-900"
                               >

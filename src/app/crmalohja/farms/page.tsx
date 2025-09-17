@@ -5,39 +5,34 @@ import { useRouter } from 'next/navigation'
 import CMSSidebar from '@/components/cms/CMSSidebar'
 import CMSHeader from '@/components/cms/CMSHeader'
 
-interface Batch {
-  batch_id: string
-  harvest_date: string
+interface Farm {
+  id: string
+  farmer_id: string
+  name: string
+  total_area_hectares: string
+  coffee_area_hectares: string
+  altitude_min: number
+  altitude_max: number
+  soil_type: string
+  shade_percentage: number
   processing_method: string
-  drying_method: string
-  transport_mode: string
-  roast_date: string
-  pack_date: string
-  status: string
   farmer_name: string
   farmer_code: string
-  farm_name: string
-  variety_name: string
-  province_name: string
-  province_code: string
-  green_weight_kg: number
-  final_weight_kg: number
+  created_at: string
 }
 
 interface User {
   id: string
   username: string
   role: string
-  iat?: number
-  exp?: number
 }
 
-export default function BatchesPage() {
-  const [batches, setBatches] = useState<Batch[]>([])
+export default function FarmsPage() {
+  const [farms, setFarms] = useState<Farm[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState<User | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
-  const [filterStatus, setFilterStatus] = useState('all')
+  const [filterFarmer, setFilterFarmer] = useState('all')
   const router = useRouter()
 
   useEffect(() => {
@@ -50,83 +45,68 @@ export default function BatchesPage() {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]))
       setUser(payload)
-      loadBatches()
+      loadFarms()
     } catch {
       router.push('/crmalohja')
     }
   }, [router])
 
-  const loadBatches = async () => {
+  const loadFarms = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/batches')
+      const response = await fetch('/api/farms')
       const data = await response.json()
-      
+
       if (data.success) {
-        setBatches(data.batches)
+        setFarms(data.farms)
       }
     } catch (error) {
-      console.error('Error loading batches:', error)
+      console.error('Error loading farms:', error)
     } finally {
       setIsLoading(false)
     }
   }
 
-  const deleteBatch = async (batchId: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar este lote?')) {
+  const deleteFarm = async (farmId: string) => {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta finca?')) {
       return
     }
 
     try {
-      const response = await fetch(`/api/batches/${batchId}`, {
+      const response = await fetch(`/api/farms/${farmId}`, {
         method: 'DELETE'
       })
 
       if (response.ok) {
-        loadBatches()
+        loadFarms()
       }
     } catch (error) {
-      console.error('Error deleting batch:', error)
+      console.error('Error deleting farm:', error)
     }
   }
 
-  const filteredBatches = batches.filter(batch => {
-    const matchesSearch = 
-      batch.batch_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      batch.farmer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      batch.farmer_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      batch.variety_name.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesStatus = filterStatus === 'all' || batch.status === filterStatus
-    
-    return matchesSearch && matchesStatus
+  const filteredFarms = farms.filter(farm => {
+    const matchesSearch =
+      farm.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      farm.farmer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      farm.farmer_code.toLowerCase().includes(searchTerm.toLowerCase())
+
+    const matchesFarmer = filterFarmer === 'all' || farm.farmer_id === filterFarmer
+
+    return matchesSearch && matchesFarmer
   })
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800'
-      case 'sold':
-        return 'bg-blue-100 text-blue-800'
-      case 'expired':
-        return 'bg-red-100 text-red-800'
-      default:
-        return 'bg-gray-100 text-gray-800'
+  // Get unique farmers for filter
+  const uniqueFarmers = farms.reduce((acc: any[], farm) => {
+    if (!acc.find(f => f.farmer_id === farm.farmer_id)) {
+      acc.push({
+        farmer_id: farm.farmer_id,
+        farmer_name: farm.farmer_name,
+        farmer_code: farm.farmer_code
+      })
     }
-  }
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'Activo'
-      case 'sold':
-        return 'Vendido'
-      case 'expired':
-        return 'Expirado'
-      default:
-        return status
-    }
-  }
+    return acc
+  }, [])
 
   if (isLoading) {
     return (
@@ -135,7 +115,7 @@ export default function BatchesPage() {
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Cargando lotes...</p>
+            <p className="mt-4 text-gray-600">Cargando fincas...</p>
           </div>
         </div>
       </div>
@@ -145,28 +125,28 @@ export default function BatchesPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex">
       <CMSSidebar />
-      
+
       <div className="flex-1 flex flex-col">
         <CMSHeader user={user} />
-        
+
         <main className="flex-1 p-6">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="mb-8 flex justify-between items-center">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Lotes de Café</h1>
-                <p className="text-gray-600 mt-2">Gestión de lotes y trazabilidad</p>
+                <h1 className="text-3xl font-bold text-gray-900">Fincas</h1>
+                <p className="text-gray-600 mt-2">Gestión de fincas y propiedades</p>
               </div>
-              
+
               <button
-                onClick={() => router.push('/crmalohja/batches/new')}
-                className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
+                onClick={() => router.push('/crmalohja/farms/new')}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
               >
                 <div className="flex items-center">
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
-                  Nuevo Lote
+                  Nueva Finca
                 </div>
               </button>
             </div>
@@ -177,10 +157,10 @@ export default function BatchesPage() {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Buscar por código, agricultor o variedad..."
+                    placeholder="Buscar por nombre de finca o agricultor..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                   <svg
                     className="absolute left-3 top-3.5 w-5 h-5 text-gray-400"
@@ -192,45 +172,44 @@ export default function BatchesPage() {
                   </svg>
                 </div>
               </div>
-              
+
               <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                value={filterFarmer}
+                onChange={(e) => setFilterFarmer(e.target.value)}
+                className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                <option value="all">Todos los estados</option>
-                <option value="active">Activo</option>
-                <option value="sold">Vendido</option>
-                <option value="expired">Expirado</option>
+                <option value="all">Todos los agricultores</option>
+                {uniqueFarmers.map((farmer) => (
+                  <option key={farmer.farmer_id} value={farmer.farmer_id}>
+                    {farmer.farmer_name} ({farmer.farmer_code})
+                  </option>
+                ))}
               </select>
             </div>
 
-            {/* Batches Table */}
+            {/* Farms Table */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Código Lote
+                        Finca
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Agricultor
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Variedad
+                        Área (ha)
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Fecha Cosecha
+                        Altitud (m)
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Procesamiento
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Peso (kg)
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Estado
+                        Sombra
                       </th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Acciones
@@ -238,72 +217,67 @@ export default function BatchesPage() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredBatches.length === 0 ? (
+                    {filteredFarms.length === 0 ? (
                       <tr>
-                        <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
-                          {searchTerm ? 'No se encontraron lotes' : 'No hay lotes registrados'}
+                        <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                          {searchTerm ? 'No se encontraron fincas' : 'No hay fincas registradas'}
                         </td>
                       </tr>
                     ) : (
-                      filteredBatches.map((batch) => (
-                        <tr key={batch.batch_id} className="hover:bg-gray-50">
+                      filteredFarms.map((farm) => (
+                        <tr key={farm.id} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-medium text-gray-900">
-                              {batch.batch_id}
+                              {farm.name}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {batch.province_code}
+                              {farm.soil_type || 'N/A'}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-medium text-gray-900">
-                              {batch.farmer_name}
+                              {farm.farmer_name}
                             </div>
                             <div className="text-sm text-gray-500">
-                              {batch.farmer_code}
+                              {farm.farmer_code}
                             </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {batch.variety_name}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {new Date(batch.harvest_date).toLocaleDateString()}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{batch.processing_method}</div>
-                            <div className="text-sm text-gray-500">{batch.drying_method}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-900">
-                              Verde: {batch.green_weight_kg || 'N/A'}
+                              Total: {parseFloat(farm.total_area_hectares || '0').toFixed(1)} ha
                             </div>
                             <div className="text-sm text-gray-500">
-                              Final: {batch.final_weight_kg || 'N/A'}
+                              Café: {parseFloat(farm.coffee_area_hectares || '0').toFixed(1)} ha
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(batch.status)}`}
-                            >
-                              {getStatusText(batch.status)}
-                            </span>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {farm.altitude_min && farm.altitude_max
+                              ? `${farm.altitude_min} - ${farm.altitude_max}m`
+                              : 'N/A'
+                            }
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {farm.processing_method || 'N/A'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {farm.shade_percentage ? `${farm.shade_percentage}%` : 'N/A'}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div className="flex justify-end space-x-2">
                               <button
-                                onClick={() => router.push(`/crmalohja/batches/${batch.batch_id}`)}
+                                onClick={() => router.push(`/crmalohja/farms/${farm.id}`)}
                                 className="text-blue-600 hover:text-blue-900"
                               >
                                 Ver
                               </button>
                               <button
-                                onClick={() => router.push(`/crmalohja/batches/${batch.batch_id}/edit`)}
+                                onClick={() => router.push(`/crmalohja/farms/${farm.id}/edit`)}
                                 className="text-green-600 hover:text-green-900"
                               >
                                 Editar
                               </button>
                               <button
-                                onClick={() => deleteBatch(batch.batch_id)}
+                                onClick={() => deleteFarm(farm.id)}
                                 className="text-red-600 hover:text-red-900"
                               >
                                 Eliminar
@@ -321,26 +295,26 @@ export default function BatchesPage() {
             {/* Stats */}
             <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white p-4 rounded-lg shadow">
-                <div className="text-2xl font-bold text-gray-900">{batches.length}</div>
-                <div className="text-sm text-gray-500">Total Lotes</div>
+                <div className="text-2xl font-bold text-gray-900">{farms.length}</div>
+                <div className="text-sm text-gray-500">Total Fincas</div>
               </div>
               <div className="bg-white p-4 rounded-lg shadow">
                 <div className="text-2xl font-bold text-green-600">
-                  {batches.filter(b => b.status === 'active').length}
+                  {uniqueFarmers.length}
                 </div>
-                <div className="text-sm text-gray-500">Activos</div>
+                <div className="text-sm text-gray-500">Agricultores</div>
               </div>
               <div className="bg-white p-4 rounded-lg shadow">
                 <div className="text-2xl font-bold text-blue-600">
-                  {batches.filter(b => b.status === 'sold').length}
+                  {farms.reduce((acc, f) => acc + parseFloat(f.total_area_hectares || '0'), 0).toFixed(1)} ha
                 </div>
-                <div className="text-sm text-gray-500">Vendidos</div>
+                <div className="text-sm text-gray-500">Área Total</div>
               </div>
               <div className="bg-white p-4 rounded-lg shadow">
                 <div className="text-2xl font-bold text-amber-600">
-                  {batches.reduce((acc, b) => acc + (parseFloat(b.green_weight_kg) || 0), 0).toFixed(1)} kg
+                  {farms.reduce((acc, f) => acc + parseFloat(f.coffee_area_hectares || '0'), 0).toFixed(1)} ha
                 </div>
-                <div className="text-sm text-gray-500">Peso Total Verde</div>
+                <div className="text-sm text-gray-500">Área de Café</div>
               </div>
             </div>
           </div>

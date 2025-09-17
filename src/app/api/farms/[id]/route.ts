@@ -7,34 +7,34 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await Promise.resolve(params)
-    const farmerId = resolvedParams.id
-    
+    const farmId = resolvedParams.id
+
     const result = await query(`
-      SELECT 
+      SELECT
         f.*,
-        p.name as province_name,
-        p.code as province_code
-      FROM farmers f
-      LEFT JOIN provinces p ON f.province_id = p.id
+        farmer.full_name as farmer_name,
+        farmer.farmer_code
+      FROM farms f
+      LEFT JOIN farmers farmer ON f.farmer_id = farmer.id
       WHERE f.id = $1
-    `, [farmerId])
-    
+    `, [farmId])
+
     if (result.rows.length === 0) {
       return NextResponse.json({
         success: false,
-        error: 'Farmer not found'
+        error: 'Farm not found'
       }, { status: 404 })
     }
 
     return NextResponse.json({
       success: true,
-      farmer: result.rows[0]
+      farm: result.rows[0]
     })
   } catch (error) {
-    console.error('Error fetching farmer:', error)
+    console.error('Error fetching farm:', error)
     return NextResponse.json({
       success: false,
-      error: 'Failed to fetch farmer'
+      error: 'Failed to fetch farm'
     }, { status: 500 })
   }
 }
@@ -45,37 +45,35 @@ export async function PUT(
 ) {
   try {
     const resolvedParams = await Promise.resolve(params)
-    const farmerId = resolvedParams.id
+    const farmId = resolvedParams.id
     const body = await request.json()
 
-    // Obtener el agricultor actual
-    const currentFarmer = await query(`
-      SELECT * FROM farmers WHERE id = $1
-    `, [farmerId])
+    // Get current farm data
+    const currentFarm = await query(`
+      SELECT * FROM farms WHERE id = $1
+    `, [farmId])
 
-    if (currentFarmer.rows.length === 0) {
+    if (currentFarm.rows.length === 0) {
       return NextResponse.json({
         success: false,
-        error: 'Farmer not found'
+        error: 'Farm not found'
       }, { status: 404 })
     }
 
-    const current = currentFarmer.rows[0]
+    const current = currentFarm.rows[0]
 
-    // Construir UPDATE dinámico solo para campos que cambiaron
+    // Build dynamic UPDATE for changed fields only
     const updates: string[] = []
     const values: any[] = []
     let paramIndex = 1
 
-    // Lista de campos actualizables
     const updatableFields = [
-      'farmer_code', 'first_name', 'last_name', 'email', 'phone',
-      'province_id', 'municipality', 'address', 'profile_image_url',
-      'cover_image_url', 'biography', 'years_experience', 'farming_philosophy',
-      'is_active'
+      'farmer_id', 'name', 'total_area_hectares', 'coffee_area_hectares',
+      'altitude_min', 'altitude_max', 'latitude', 'longitude',
+      'soil_type', 'shade_percentage', 'irrigation_system', 'processing_method'
     ]
 
-    // Agregar campos que han cambiado
+    // Add changed fields
     updatableFields.forEach(field => {
       if (body.hasOwnProperty(field) && body[field] !== current[field]) {
         updates.push(`${field} = $${paramIndex}`)
@@ -84,68 +82,53 @@ export async function PUT(
       }
     })
 
-    // Manejar certificaciones (JSONB)
-    if (body.hasOwnProperty('certifications')) {
-      const newCerts = JSON.stringify(body.certifications || [])
-      const currentCerts = JSON.stringify(current.certifications || [])
+    // Handle farm_images (JSONB)
+    if (body.hasOwnProperty('farm_images')) {
+      const newImages = JSON.stringify(body.farm_images || [])
+      const currentImages = JSON.stringify(current.farm_images || [])
 
-      if (newCerts !== currentCerts) {
-        updates.push(`certifications = $${paramIndex}`)
-        values.push(newCerts)
+      if (newImages !== currentImages) {
+        updates.push(`farm_images = $${paramIndex}`)
+        values.push(newImages)
         paramIndex++
       }
     }
 
-    // Manejar social_media (JSONB)
-    if (body.hasOwnProperty('social_media')) {
-      const newSocial = JSON.stringify(body.social_media || {})
-      const currentSocial = JSON.stringify(current.social_media || {})
-
-      if (newSocial !== currentSocial) {
-        updates.push(`social_media = $${paramIndex}`)
-        values.push(newSocial)
-        paramIndex++
-      }
-    }
-
-    // Si no hay cambios, retornar el agricultor actual
+    // If no changes, return current farm
     if (updates.length === 0) {
       return NextResponse.json({
         success: true,
-        farmer: current,
+        farm: current,
         message: 'No changes detected'
       })
     }
 
-    // Siempre actualizar updated_at
+    // Always update updated_at
     updates.push(`updated_at = NOW()`)
 
-    // Agregar WHERE clause
-    values.push(farmerId)
+    // Add WHERE clause
+    values.push(farmId)
     const whereIndex = paramIndex
 
     const updateQuery = `
-      UPDATE farmers SET
+      UPDATE farms SET
         ${updates.join(', ')}
       WHERE id = $${whereIndex}
       RETURNING *
     `
 
-    console.log('Dynamic UPDATE query:', updateQuery)
-    console.log('Values:', values)
-
     const result = await query(updateQuery, values)
 
     return NextResponse.json({
       success: true,
-      farmer: result.rows[0],
+      farm: result.rows[0],
       updated_fields: updates.filter(u => u !== 'updated_at = NOW()').length
     })
   } catch (error) {
-    console.error('Error updating farmer:', error)
+    console.error('Error updating farm:', error)
     return NextResponse.json({
       success: false,
-      error: 'Failed to update farmer',
+      error: 'Failed to update farm',
       details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
   }
@@ -157,44 +140,44 @@ export async function DELETE(
 ) {
   try {
     const resolvedParams = await Promise.resolve(params)
-    const farmerId = resolvedParams.id
+    const farmId = resolvedParams.id
 
-    // Verificar si el agricultor tiene lotes asociados
+    // Check if farm has associated batches
     const batchCheck = await query(`
       SELECT COUNT(*) as batch_count
       FROM coffee_batches
-      WHERE farmer_id = $1
-    `, [farmerId])
+      WHERE farm_id = $1
+    `, [farmId])
 
     if (parseInt(batchCheck.rows[0].batch_count) > 0) {
       return NextResponse.json({
         success: false,
-        error: 'No se puede eliminar el agricultor porque tiene lotes asociados'
+        error: 'No se puede eliminar la finca porque tiene lotes asociados'
       }, { status: 400 })
     }
 
     const result = await query(`
-      DELETE FROM farmers
+      DELETE FROM farms
       WHERE id = $1
-      RETURNING id
-    `, [farmerId])
+      RETURNING id, name
+    `, [farmId])
 
     if (result.rows.length === 0) {
       return NextResponse.json({
         success: false,
-        error: 'Farmer not found'
+        error: 'Farm not found'
       }, { status: 404 })
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Agricultor eliminado correctamente'
+      message: `Finca "${result.rows[0].name}" eliminada correctamente`
     })
   } catch (error) {
-    console.error('Error deleting farmer:', error)
+    console.error('Error deleting farm:', error)
     return NextResponse.json({
       success: false,
-      error: 'Failed to delete farmer'
+      error: 'Failed to delete farm'
     }, { status: 500 })
   }
 }
