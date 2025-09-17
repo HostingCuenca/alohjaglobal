@@ -215,7 +215,7 @@ export default function VideoContentPage() {
               {youtubeId ? (
                 <div className="aspect-video bg-black rounded-xl overflow-hidden shadow-2xl">
                   <iframe
-                    src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&showinfo=0`}
+                    src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&cc_load_policy=0&fs=1&disablekb=0&controls=1&autohide=1&color=white&theme=light`}
                     title={content.title}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

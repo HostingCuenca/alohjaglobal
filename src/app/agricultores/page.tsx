@@ -247,7 +247,7 @@ export default function FarmersPage() {
                 <img
                   src={coffeeImages[currentImageIndex].src}
                   alt={coffeeImages[currentImageIndex].alt}
-                  className="w-full h-full object-cover transition-all duration-1000 ease-in-out"
+                  className="w-full h-full object-cover transition-all duration-1000 ease-in-out opacity-90"
                 />
 
                 {/* Overlay gradiente */}

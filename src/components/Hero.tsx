@@ -59,7 +59,7 @@ export default function Hero({ language }: HeroProps) {
       </div>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/70" style={{ zIndex: 10 }}></div>
+      <div className="absolute inset-0 bg-black/60" style={{ zIndex: 10 }}></div>
 
       {/* Content */}
       <div className="relative text-center text-white px-4 max-w-5xl mx-auto" style={{ zIndex: 20 }}>
