@@ -3,10 +3,10 @@ import { query } from '@/lib/db'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const farmerId = params.id
+    const { id: farmerId } = await params
 
     // Get basic farmer info first (fast query)
     const farmerResult = await query(`

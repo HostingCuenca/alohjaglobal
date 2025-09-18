@@ -22,25 +22,11 @@ const eslintConfig = [
   },
   {
     rules: {
-      // TypeScript rules
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-unused-expressions": "off",
-
-      // React rules
+      "@typescript-eslint/no-unused-vars": "warn",
       "react/no-unescaped-entities": "off",
-      "react-hooks/exhaustive-deps": "off",
-      "react/display-name": "off",
-
-      // Next.js rules
       "@next/next/no-img-element": "off",
-      "@next/next/no-html-link-for-pages": "off",
-      "@next/next/no-page-custom-font": "off",
-
-      // General rules
-      "no-unused-vars": "off",
-      "no-console": "off",
-      "prefer-const": "off"
+      "@next/next/no-html-link-for-pages": "warn"
     }
   }
 ];

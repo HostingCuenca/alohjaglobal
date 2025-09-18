@@ -140,7 +140,7 @@ export default function FarmersPage() {
             .then(data => {
               if (data.success) {
                 // Add farmer_id to each content item
-                return data.content.map(content => ({
+                return data.content.map((content: any) => ({
                   ...content,
                   farmer_id: farmer.id
                 }))
