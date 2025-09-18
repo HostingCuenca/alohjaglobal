@@ -31,15 +31,16 @@ export default function Hero({ language }: HeroProps) {
         ubicacion: language === 'es' ? 'Provincia de Loja, Ecuador' : 'Loja Province, Ecuador'
       }
       setSearchResult(mockResult)
-    }  
+    }
   }
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* YouTube Video Background - SIMPLIFIED */}
+      {/* Video Background with Smooth Transition */}
       <div className="absolute inset-0 w-full h-full">
+        {/* High-Quality YouTube Video */}
         <iframe
-          src="https://www.youtube.com/embed/36VnFiibb68?autoplay=1&mute=1&loop=1&playlist=36VnFiibb68&controls=0"
+          src="https://www.youtube.com/embed/36VnFiibb68?autoplay=1&mute=1&loop=1&playlist=36VnFiibb68&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&vq=hd1080"
           style={{
             position: 'absolute',
             top: '50%',
@@ -53,13 +54,24 @@ export default function Hero({ language }: HeroProps) {
             pointerEvents: 'none'
           }}
           allow="autoplay; encrypted-media"
+          title="Coffee plantation background video"
         />
-        {/* Fallback background */}
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-800 to-amber-700 -z-10" />
+
+        {/* Elegant Fallback Background that fades as video loads */}
+        <div
+          className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-900 via-green-800 to-amber-800"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 25% 75%, rgba(251, 191, 36, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 75% 25%, rgba(34, 197, 94, 0.1) 0%, transparent 50%)
+            `,
+            zIndex: -1
+          }}
+        />
       </div>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60" style={{ zIndex: 10 }}></div>
+      <div className="absolute inset-0 bg-black/40" style={{ zIndex: 10 }}></div>
 
       {/* Content */}
       <div className="relative text-center text-white px-4 max-w-5xl mx-auto" style={{ zIndex: 20 }}>
