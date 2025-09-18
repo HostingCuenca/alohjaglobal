@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/context/CartContext";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-headline",
@@ -30,7 +31,9 @@ export default function RootLayout({
         className={`${playfairDisplay.variable} ${inter.variable} font-body antialiased`}
         suppressHydrationWarning={true}
       >
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

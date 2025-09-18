@@ -72,3 +72,29 @@ h1, h2, h3, h4, h5, h6 {
 .duration-2000 {
   transition-duration: 2000ms;
 }
+
+/* Hero Component Optimized Styles */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.09);
+  z-index: 10;
+}
+
+.hero-content {
+  z-index: 20;
+}
+
+.search-box {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-result {
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}

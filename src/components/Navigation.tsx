@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useCart } from '@/context/CartContext'
 
 interface NavigationProps {
   language: 'es' | 'en'
@@ -11,6 +12,7 @@ interface NavigationProps {
 
 export default function Navigation({ language, setLanguage }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { state, toggleCart } = useCart()
 
   const menuItems = [
     { es: 'Inicio', en: 'Home', href: '/' },
@@ -50,8 +52,25 @@ export default function Navigation({ language, setLanguage }: NavigationProps) {
             ))}
           </div>
 
-          {/* Language Toggle & Mobile Menu Button */}
+          {/* Cart, Language Toggle & Mobile Menu Button */}
           <div className="flex items-center space-x-4">
+            {/* Cart Button */}
+            <button
+              onClick={toggleCart}
+              className="relative p-2 text-black hover:text-yellow-600 transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                <circle cx="8" cy="21" r="1"/>
+                <circle cx="19" cy="21" r="1"/>
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+              </svg>
+              {state.itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {state.itemCount > 9 ? '9+' : state.itemCount}
+                </span>
+              )}
+            </button>
+
             {/* Language Toggle */}
             <div className="flex items-center bg-gray-100 rounded-full p-1">
               <button

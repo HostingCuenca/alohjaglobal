@@ -14,6 +14,34 @@ export default function Home() {
       <Navigation language={language} setLanguage={setLanguage} />
       <Hero language={language} />
 
+      {/* Coffee Traceability Section */}
+      <section className="py-16 px-4 bg-gradient-to-br from-green-50 to-yellow-50">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
+            {language === 'es' ? 'Trazabilidad del Café' : 'Coffee Traceability'}
+          </h2>
+          <p className="text-lg md:text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
+            {language === 'es'
+              ? 'Descubre el origen, la finca y el proceso de tu café favorito. Cada lote cuenta una historia única desde las montañas de Ecuador hasta tu taza. Con nuestro sistema de trazabilidad, puedes conocer exactamente qué agricultor cultivó tu café, en qué finca, cuándo fue cosechado y cómo fue procesado.'
+              : 'Discover the origin, farm, and process of your favorite coffee. Each batch tells a unique story from the mountains of Ecuador to your cup. With our traceability system, you can know exactly which farmer grew your coffee, on which farm, when it was harvested, and how it was processed.'
+            }
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => window.location.href = '/lotes'}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-300"
+            >
+              {language === 'es' ? 'Explorar Lotes' : 'Explore Batches'}
+            </button>
+            <button
+              onClick={() => window.location.href = '/agricultores'}
+              className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-bold py-3 px-8 rounded-lg transition-all duration-300"
+            >
+              {language === 'es' ? 'Conoce a los Agricultores' : 'Meet the Farmers'}
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* About Section */}
       <section className="py-16 px-4 max-w-6xl mx-auto">

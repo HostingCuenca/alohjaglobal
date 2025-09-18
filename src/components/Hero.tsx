@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface HeroProps {
   language: 'es' | 'en'
@@ -36,28 +36,22 @@ export default function Hero({ language }: HeroProps) {
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Video Background with Smooth Transition */}
+      {/* Video Background */}
       <div className="absolute inset-0 w-full h-full">
-        {/* High-Quality YouTube Video */}
-        <iframe
-          src="https://www.youtube.com/embed/36VnFiibb68?autoplay=1&mute=1&loop=1&playlist=36VnFiibb68&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&vq=hd1080"
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: '100vw',
-            height: '56.25vw', // 16:9 aspect ratio
-            minHeight: '100vh',
-            minWidth: '177.78vh', // 16:9 aspect ratio
-            transform: 'translate(-50%, -50%)',
-            border: 'none',
-            pointerEvents: 'none'
+            minHeight: '100%',
+            minWidth: '100%'
           }}
-          allow="autoplay; encrypted-media"
-          title="Coffee plantation background video"
-        />
+        >
+          <source src="https://blog.torisoftt.com/videos/1.%20Video%20Inicio%20Pagina%20web.mp4" type="video/mp4" />
+        </video>
 
-        {/* Elegant Fallback Background that fades as video loads */}
         <div
           className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-900 via-green-800 to-amber-800"
           style={{
@@ -70,23 +64,25 @@ export default function Hero({ language }: HeroProps) {
         />
       </div>
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/40" style={{ zIndex: 10 }}></div>
+      {/* Simplified Overlay */}
+      <div className="hero-overlay"></div>
 
       {/* Content */}
-      <div className="relative text-center text-white px-4 max-w-5xl mx-auto" style={{ zIndex: 20 }}>
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
+      <div className="hero-content relative text-center text-white px-4 max-w-5xl mx-auto">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
           {language === 'es' ? 'Rastrea tu café' : 'Track your coffee'}
         </h1>
-        <p className="text-lg md:text-xl mb-8 opacity-90 max-w-3xl mx-auto">
+        {/* Temporarily commented - description moved to separate section below
+        <p className="text-lg md:text-xl mb-8 text-gray-100 max-w-3xl mx-auto">
           {language === 'es'
             ? 'Descubre el origen, la finca y el proceso de tu café favorito. Cada lote cuenta una historia única desde las montañas de Ecuador hasta tu taza.'
             : 'Discover the origin, farm, and process of your favorite coffee. Each batch tells a unique story from the mountains of Ecuador to your cup.'
           }
         </p>
+        */}
 
         {/* Search Box */}
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
+        <div className="search-box rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
           <h3 className="text-xl md:text-2xl font-semibold mb-4">
             {language === 'es' ? 'Busca tu lote de café' : 'Search your coffee batch'}
           </h3>
@@ -110,7 +106,7 @@ export default function Hero({ language }: HeroProps) {
 
         {/* Search Result */}
         {searchResult && (
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 text-black max-w-3xl mx-auto mb-8">
+          <div className="search-result rounded-2xl p-6 text-black max-w-3xl mx-auto mb-8">
             <h4 className="text-2xl font-bold mb-4 text-center">
               {language === 'es' ? `Lote: ${searchResult.loteId}` : `Batch: ${searchResult.loteId}`}
             </h4>
@@ -139,10 +135,16 @@ export default function Hero({ language }: HeroProps) {
 
         {!searchResult && (
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+            <button
+              onClick={() => window.location.href = '/productos'}
+              className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
+            >
               {language === 'es' ? 'Descubre Nuestros Productos' : 'Discover Our Products'}
             </button>
-            <button className="border-2 border-white text-white hover:bg-white hover:text-black font-bold py-4 px-8 rounded-full transition-all duration-300">
+            <button
+              onClick={() => window.location.href = '/historia'}
+              className="border-2 border-white text-white hover:bg-white hover:text-black font-bold py-4 px-8 rounded-full transition-all duration-300"
+            >
               {language === 'es' ? 'Conoce Nuestra Historia' : 'Learn Our Story'}
             </button>
           </div>
