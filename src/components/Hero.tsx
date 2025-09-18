@@ -92,7 +92,7 @@ export default function Hero({ language }: HeroProps) {
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder={language === 'es' ? 'Ingresa el código de tu lote (ej: ALO2024-001)' : 'Enter your batch code (e.g: ALO2024-001)'}
-              className="flex-1 px-4 py-3 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="flex-1 px-4 py-3 rounded-lg text-white placeholder-gray-300 bg-black bg-opacity-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             />
             <button
