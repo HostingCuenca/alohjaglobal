@@ -148,16 +148,7 @@ export default function BatchTrackingTimeline({ batch, language }: BatchTracking
 
   const stages = getTrackingStages()
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircle className="w-5 h-5 text-green-600" />
-      case 'current':
-        return <Clock className="w-5 h-5 text-blue-600" />
-      default:
-        return <Circle className="w-5 h-5 text-gray-400" />
-    }
-  }
+  // Removed unused getStatusIcon function
 
   const getStatusColors = (status: string) => {
     switch (status) {

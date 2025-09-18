@@ -2,6 +2,7 @@
 
 import { useCart } from '@/context/CartContext'
 import { useState } from 'react'
+import Image from 'next/image'
 
 interface CartSidebarProps {
   language: 'es' | 'en'
@@ -88,9 +89,11 @@ export default function CartSidebar({ language }: CartSidebarProps) {
               <div className="space-y-4">
                 {state.items.map((item) => (
                   <div key={item.id} className="flex items-center space-x-4 p-4 border rounded-lg">
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.name}
+                      width={64}
+                      height={64}
                       className="w-16 h-16 object-cover rounded"
                     />
                     <div className="flex-1">

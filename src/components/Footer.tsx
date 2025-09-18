@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface FooterProps {
   language: 'es' | 'en'
@@ -69,18 +70,18 @@ export default function Footer({ language }: FooterProps) {
                   {language === 'es' ? 'Enlaces Rápidos' : 'Quick Links'}
                 </h3>
                 <ul className="space-y-2">
-                  <li><a href="/productos" className="text-gray-300 hover:text-yellow-500 transition-colors">
+                  <li><Link href="/productos" className="text-gray-300 hover:text-yellow-500 transition-colors">
                     {language === 'es' ? 'Productos' : 'Products'}
-                  </a></li>
-                  <li><a href="/nosotros" className="text-gray-300 hover:text-yellow-500 transition-colors">
+                  </Link></li>
+                  <li><Link href="/nosotros" className="text-gray-300 hover:text-yellow-500 transition-colors">
                     {language === 'es' ? 'Nosotros' : 'About Us'}
-                  </a></li>
-                  <li><a href="/sostenibilidad" className="text-gray-300 hover:text-yellow-500 transition-colors">
+                  </Link></li>
+                  <li><Link href="/sostenibilidad" className="text-gray-300 hover:text-yellow-500 transition-colors">
                     {language === 'es' ? 'Sostenibilidad' : 'Sustainability'}
-                  </a></li>
-                  <li><a href="/agricultores" className="text-gray-300 hover:text-yellow-500 transition-colors">
+                  </Link></li>
+                  <li><Link href="/agricultores" className="text-gray-300 hover:text-yellow-500 transition-colors">
                     {language === 'es' ? 'Agricultores' : 'Farmers'}
-                  </a></li>
+                  </Link></li>
                 </ul>
               </div>
 
