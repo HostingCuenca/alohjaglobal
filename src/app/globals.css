@@ -72,7 +72,7 @@ h1, h2, h3, h4, h5, h6 {
 .duration-2000 {
   transition-duration: 2000ms;
 }
-
+ 
 /* Hero Component Optimized Styles */
 .hero-overlay {
   position: absolute;
