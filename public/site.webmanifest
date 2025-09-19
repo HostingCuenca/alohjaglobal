@@ -1,0 +1,17 @@
+{
+  "name": "Alohja Coffee",
+  "short_name": "Alohja",
+  "description": "Premium coffee from Ecuador cultivated under shade in harmony with nature",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#2D5016",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
+}

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /crmalohja
+
+# Sitemap
+Sitemap: https://alohjaglobal.com/sitemap.xml
+
+# Common crawl delay (be respectful)
+Crawl-delay: 1
