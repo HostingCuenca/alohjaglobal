@@ -80,12 +80,12 @@ export default function Navigation({ language, setLanguage }: NavigationProps) {
             </button>
 
             {/* Language Toggle */}
-            <div className="flex items-center bg-white bg-opacity-20 backdrop-blur-sm rounded-full p-1">
+            <div className="flex items-center bg-black bg-opacity-30 backdrop-blur-sm rounded-full p-1">
               <button
                 onClick={() => setLanguage('es')}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
                   language === 'es'
-                    ? 'bg-black text-white'
+                    ? 'bg-yellow-400 text-black'
                     : 'text-white hover:text-yellow-300'
                 }`}
               >
@@ -95,7 +95,7 @@ export default function Navigation({ language, setLanguage }: NavigationProps) {
                 onClick={() => setLanguage('en')}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
                   language === 'en'
-                    ? 'bg-black text-white'
+                    ? 'bg-yellow-400 text-black'
                     : 'text-white hover:text-yellow-300'
                 }`}
               >

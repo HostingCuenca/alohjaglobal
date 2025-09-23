@@ -131,7 +131,7 @@ export default function GlobalPage() {
             }
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {['Organic', 'Fair Trade', 'Rainforest Alliance', 'SCA'].map((cert, index) => (
+            {['Organic', 'Fair Trade', 'SCA'].map((cert, index) => (
               <div key={index} className="bg-white rounded-lg p-4 border border-gray-200">
                 <div className="w-12 h-12 bg-gray-200 rounded mx-auto mb-2"></div>
                 <p className="text-sm font-medium text-black">{cert}</p>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 
@@ -115,6 +116,28 @@ export default function SustainabilityPage() {
   return (
     <div className="min-h-screen bg-white">
       <Navigation language={language} setLanguage={setLanguage} />
+
+      {/* Sustainability Video Section */}
+      <section className="bg-black">
+        <div className="w-full">
+          <div className="aspect-video bg-gray-900">
+            <video
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/assets/fotosinicio/foto paisaje.jpg"
+            >
+              <source src="https://blog.torisoftt.com/videos/sostenibilidad.mp4" type="video/mp4" />
+              {language === 'es'
+                ? 'Tu navegador no soporta el elemento de video.'
+                : 'Your browser does not support the video element.'
+              }
+            </video>
+          </div>
+        </div>
+      </section>
 
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
