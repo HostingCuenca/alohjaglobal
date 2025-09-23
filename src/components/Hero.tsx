@@ -43,10 +43,10 @@ export default function Hero({ language }: HeroProps) {
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute top-0 left-0 w-full h-full object-cover"
           style={{
-            minHeight: '100%',
-            minWidth: '100%'
+            width: '100%',
+            height: '100%'
           }}
         >
           <source src="https://blog.torisoftt.com/videos/1.%20Video%20Inicio%20Pagina%20web.mp4" type="video/mp4" />
