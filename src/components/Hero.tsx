@@ -69,9 +69,9 @@ export default function Hero({ language }: HeroProps) {
 
       {/* Content */}
       <div className="hero-content relative text-center text-white px-4 max-w-5xl mx-auto">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
+        {/* <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
           {language === 'es' ? 'Rastrea tu café' : 'Track your coffee'}
-        </h1>
+        </h1> */}
         {/* Temporarily commented - description moved to separate section below
         <p className="text-lg md:text-xl mb-8 text-gray-100 max-w-3xl mx-auto">
           {language === 'es'
