@@ -9,23 +9,26 @@ interface FooterProps {
 
 export default function Footer({ language }: FooterProps) {
   return (
-    <footer className="bg-black text-white">
+    <footer className="text-white relative z-10">
       {/* Background Image */}
       <div
-        className="bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url(/assets/bgfooter.png)' }}
+        className="bg-cover bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/assets/backfooter.png)',
+          backgroundPosition: '40% 71%'
+        }}
       >
-        <div className="bg-black bg-opacity-70">
-          <div className="max-w-7xl mx-auto px-4 py-16">
+        <div>
+          <div className="max-w-7xl mx-auto px-4 py-32">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {/* Logo and Description */}
               <div className="lg:col-span-2">
                 <Image
-                  src="/assets/LogoHorizontal.png"
+                  src="/assets/logo-nuevohorizontal.png"
                   alt="Alohja Coffee"
                   width={150}
                   height={50}
-                  className="h-12 w-auto mb-4 brightness-0 invert"
+                  className="h-12 w-auto mb-4"
                 />
                 <p className="text-gray-300 mb-4 max-w-md">
                   {language === 'es'
@@ -100,9 +103,17 @@ export default function Footer({ language }: FooterProps) {
 
             {/* Bottom Bar */}
             <div className="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-              <p className="text-gray-400 text-sm">
-                © 2024 Alohja Coffee. {language === 'es' ? 'Todos los derechos reservados' : 'All rights reserved'}.
-              </p>
+              <div className="flex flex-col space-y-1">
+                <p className="text-gray-400 text-sm">
+                  © 2025 Alohja Coffee. {language === 'es' ? 'Todos los derechos reservados' : 'All rights reserved'}.
+                </p>
+                <p className="text-gray-400 text-xs">
+                  {language === 'es' ? 'Sitio web desarrollado por' : 'Website developed by'}{' '}
+                  <a href="https://torisoftt.com" target="_blank" rel="noopener noreferrer" className="hover:text-yellow-500 transition-colors">
+                    Torisoftt
+                  </a>
+                </p>
+              </div>
               <div className="flex space-x-4 mt-4 md:mt-0">
                 <a href="#" className="text-gray-400 hover:text-yellow-500 text-sm transition-colors">
                   {language === 'es' ? 'Política de Privacidad' : 'Privacy Policy'}
