@@ -14,6 +14,138 @@ export default function Home() {
       <Navigation language={language} setLanguage={setLanguage} />
       <Hero language={language} />
 
+      {/* Our Process Section */}
+      <section className="py-16 px-4 bg-gradient-to-br from-green-50 to-yellow-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
+              {language === 'es' ? 'Nuestro Proceso' : 'Our Process'}
+            </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              {language === 'es'
+                ? 'Desde el cultivo hasta la taza: un proceso cuidadoso que preserva la calidad y sostenibilidad en cada etapa.'
+                : 'From cultivation to cup: a careful process that preserves quality and sustainability at every stage.'
+              }
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            {/* Paso 1: Cultivo bajo sombra */}
+            <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
+              <div className="aspect-[3/2] relative">
+                <Image
+                  src="/assets/fotosinicio/persona recolectando granos.jpg"
+                  alt={language === 'es' ? 'Cultivo bajo sombra' : 'Shade cultivation'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/70 transition-all duration-300 flex items-end">
+                <div className="p-8 text-white w-full">
+                  <div className="bg-green-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-4 inline-block">
+                    {language === 'es' ? 'PASO 1' : 'STEP 1'}
+                  </div>
+                  <h3 className="font-bold text-2xl mb-3">
+                    {language === 'es' ? 'Cultivo bajo sombra' : 'Shade Cultivation'}
+                  </h3>
+                  <p className="text-base opacity-95 leading-relaxed">
+                    {language === 'es'
+                      ? 'El cultivo bajo sombra protege la biodiversidad, conserva los suelos y fomenta un ecosistema sostenible, donde el café crece en equilibrio con la naturaleza.'
+                      : 'Shade cultivation protects biodiversity, conserves soil and fosters a sustainable ecosystem, where coffee grows in balance with nature.'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Paso 2: Recolección */}
+            <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
+              <div className="aspect-[3/2] relative">
+                <Image
+                  src="/assets/fotosinicio/recoleccionn.jpg"
+                  alt={language === 'es' ? 'Recolección manual de granos de café' : 'Manual coffee bean harvesting'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/70 transition-all duration-300 flex items-end">
+                <div className="p-8 text-white w-full">
+                  <div className="bg-green-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-4 inline-block">
+                    {language === 'es' ? 'PASO 2' : 'STEP 2'}
+                  </div>
+                  <h3 className="font-bold text-2xl mb-3">
+                    {language === 'es' ? 'Recolección' : 'Harvesting'}
+                  </h3>
+                  <p className="text-base opacity-95 leading-relaxed">
+                    {language === 'es'
+                      ? 'Selección manual y cuidadosa de granos maduros en su punto perfecto, preservando la calidad excepcional.'
+                      : 'Manual and careful selection of ripe beans at their perfect point, preserving exceptional quality.'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Paso 3: Secado */}
+            <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
+              <div className="aspect-[3/2] relative">
+                <Image
+                  src="/assets/fotosinicio/secadocafe.jpg"
+                  alt={language === 'es' ? 'Proceso de secado del café' : 'Coffee drying process'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/70 transition-all duration-300 flex items-end">
+                <div className="p-8 text-white w-full">
+                  <div className="bg-green-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-4 inline-block">
+                    {language === 'es' ? 'PASO 3' : 'STEP 3'}
+                  </div>
+                  <h3 className="font-bold text-2xl mb-3">
+                    {language === 'es' ? 'Secado' : 'Drying'}
+                  </h3>
+                  <p className="text-base opacity-95 leading-relaxed">
+                    {language === 'es'
+                      ? 'Secado natural al sol preservando los sabores únicos y las características especiales del grano.'
+                      : 'Natural sun drying preserving unique flavors and special characteristics of the bean.'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Paso 4: Tostado */}
+            <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
+              <div className="aspect-[3/2] relative">
+                <Image
+                  src="/assets/fotosinicio/tostado.jpg"
+                  alt={language === 'es' ? 'Proceso de tostado del café' : 'Coffee roasting process'}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/70 transition-all duration-300 flex items-end">
+                <div className="p-8 text-white w-full">
+                  <div className="bg-green-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-4 inline-block">
+                    {language === 'es' ? 'PASO 4' : 'STEP 4'}
+                  </div>
+                  <h3 className="font-bold text-2xl mb-3">
+                    {language === 'es' ? 'Tostado' : 'Roasting'}
+                  </h3>
+                  <p className="text-base opacity-95 leading-relaxed">
+                    {language === 'es'
+                      ? 'Tostado artesanal controlado para desarrollar el perfil de sabor perfecto y resaltar las notas únicas.'
+                      : 'Controlled artisanal roasting to develop the perfect flavor profile and highlight unique notes.'
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       {/* Coffee Traceability Section */}
       <section className="py-16 px-4 bg-gradient-to-br from-green-50 to-yellow-50">
         <div className="max-w-6xl mx-auto text-center">
@@ -43,6 +175,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Featured Video Section */}
+      <section className="bg-black">
+        <div className="text-center py-12 px-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            {language === 'es' ? 'Nuestro Compromiso' : 'Our Commitment'}
+          </h2>
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            {language === 'es'
+              ? 'Conoce de cerca nuestro trabajo, valores y el impacto que generamos en las comunidades productoras.'
+              : 'Get to know our work, values and the impact we generate in producing communities.'
+            }
+          </p>
+        </div>
+
+        <div className="w-full">
+          <div className="aspect-video bg-gray-900">
+            <video
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/assets/fotosinicio/foto paisaje.jpg"
+            >
+              <source src="https://blog.torisoftt.com/videos/video-inicio-2.mp4" type="video/mp4" />
+              {language === 'es'
+                ? 'Tu navegador no soporta el elemento de video.'
+                : 'Your browser does not support the video element.'
+              }
+            </video>
+          </div>
+        </div>
+      </section>
+
       {/* About Section */}
       <section className="py-16 px-4 max-w-6xl mx-auto">
         <div className="text-center mb-12">
@@ -58,7 +224,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Coffee Process Gallery */}
+      {/* Coffee Process Gallery - OLD VERSION - COMMENTED FOR BACKUP
       <section className="py-16 px-4 bg-amber-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -74,7 +240,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {/* Paso 1: Recolección */}
+            <!-- Paso 1: Recolección -->
             <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
               <div className="aspect-[4/3] relative">
                 <Image
@@ -99,7 +265,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Paso 2: Secado */}
+            <!-- Paso 2: Secado -->
             <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
               <div className="aspect-[4/3] relative">
                 <Image
@@ -124,7 +290,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Paso 3: Tostado */}
+            <!-- Paso 3: Tostado -->
             <div className="relative group overflow-hidden rounded-xl shadow-xl bg-white">
               <div className="aspect-[4/3] relative">
                 <Image
@@ -150,7 +316,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Detalles del proceso */}
+          <!-- Detalles del proceso -->
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="relative overflow-hidden rounded-lg shadow-lg group bg-white">
               <div className="aspect-square relative">
@@ -215,6 +381,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+      END OF OLD VERSION */}
+
 
       {/* Mission, Vision, Purpose */}
       <section className="py-16 px-4 bg-amber-50">
