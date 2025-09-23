@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 
@@ -10,6 +11,104 @@ export default function AboutUsPage() {
   return (
     <div className="min-h-screen bg-white">
       <Navigation language={language} setLanguage={setLanguage} />
+
+      {/* Who We Are Video Section */}
+      <section className="bg-black">
+        <div className="w-full">
+          <div className="aspect-video bg-gray-900">
+            <video
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/assets/fotosinicio/foto paisaje.jpg"
+            >
+              <source src="https://blog.torisoftt.com/videos/quienes-somos.mp4" type="video/mp4" />
+              {language === 'es'
+                ? 'Tu navegador no soporta el elemento de video.'
+                : 'Your browser does not support the video element.'
+              }
+            </video>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission and Vision Section */}
+      <section className="bg-amber-900 py-16">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-white mb-2">
+                {language === 'es' ? 'Misión' : 'Mission'}
+              </h2>
+              <div className="w-16 h-1 bg-yellow-400 mx-auto mb-6"></div>
+              <p className="text-amber-100 text-lg leading-relaxed">
+                {language === 'es'
+                  ? 'Generar progreso para las familias agricultoras ecuatorianas con base en la ética e innovación, construyendo excelencia profesional y calidad en el servicio.'
+                  : 'Generate progress for Ecuadorian farming families based on ethics and innovation, building professional excellence and service quality.'
+                }
+              </p>
+            </div>
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-white mb-2">
+                {language === 'es' ? 'Visión' : 'Vision'}
+              </h2>
+              <div className="w-16 h-1 bg-yellow-400 mx-auto mb-6"></div>
+              <p className="text-amber-100 text-lg leading-relaxed">
+                {language === 'es'
+                  ? 'Ser una marca global que trascienda generaciones, llevando productos de calidad al mundo y conectando a las personas con historias auténticas.'
+                  : 'To be a global brand that transcends generations, bringing quality products to the world and connecting people with authentic stories.'
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Values Image */}
+      <section>
+        <div className="w-full">
+          <Image
+            src="/assets/nuestrosvalores.png"
+            alt={language === 'es' ? 'Nuestros Valores - Alohja Coffee' : 'Our Values - Alohja Coffee'}
+            width={1920}
+            height={800}
+            className="w-full h-auto object-cover"
+          />
+        </div>
+      </section>
+
+      {/* PREVIOUS VERSION - COMMENTED FOR BACKUP
+      <section className="bg-amber-900 py-16">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-white mb-6">
+                {language === 'es' ? 'Misión' : 'Mission'}
+              </h2>
+              <p className="text-amber-100 text-lg leading-relaxed">
+                {language === 'es'
+                  ? 'Ser una empresa profundamente centrada en las personas, ofreciendo productos auténticos y sostenibles que conecten culturas, historias y territorios, creando valor y experiencias con impacto positivo a nivel global.'
+                  : 'To be a company deeply focused on people, offering authentic and sustainable products that connect cultures, stories, and territories, creating value and experiences with a positive impact on a global level.'
+                }
+              </p>
+            </div>
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-white mb-6">
+                {language === 'es' ? 'Visión' : 'Vision'}
+              </h2>
+              <p className="text-amber-100 text-lg leading-relaxed">
+                {language === 'es'
+                  ? 'Posicionar Alohja como una marca global que trascienda generaciones, llevando productos de calidad al mundo y conectando personas con historias auténticas'
+                  : 'Position Alohja as a global brand that transcends generations, bringing quality products to the world and connecting people with authentic stories.'
+                }
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      END OF PREVIOUS VERSION */}
 
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* About Section */}
@@ -27,42 +126,18 @@ export default function AboutUsPage() {
           </div>
         </section>
 
-        {/* Mission, Vision, Purpose */}
+        {/* Purpose Section */}
         <section className="mb-16">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center bg-amber-50 rounded-lg p-8">
-              <h2 className="text-2xl font-bold text-black mb-4">
-                {language === 'es' ? 'Misión' : 'Mission'}
-              </h2>
-              <p className="text-gray-700">
-                {language === 'es'
-                  ? 'Ser una empresa profundamente centrada en las personas, ofreciendo productos auténticos y sostenibles que conecten culturas, historias y territorios, creando valor y experiencias con impacto positivo a nivel global.'
-                  : 'To be a company deeply focused on people, offering authentic and sustainable products that connect cultures, stories, and territories, creating value and experiences with a positive impact on a global level.'
-                }
-              </p>
-            </div>
-            <div className="text-center bg-amber-50 rounded-lg p-8">
-              <h2 className="text-2xl font-bold text-black mb-4">
-                {language === 'es' ? 'Visión' : 'Vision'}
-              </h2>
-              <p className="text-gray-700">
-                {language === 'es'
-                  ? 'Posicionar Alohja como una marca global que trascienda generaciones, llevando productos de calidad al mundo y conectando personas con historias auténticas'
-                  : 'Position Alohja as a global brand that transcends generations, bringing quality products to the world and connecting people with authentic stories.'
-                }
-              </p>
-            </div>
-            <div className="text-center bg-amber-50 rounded-lg p-8">
-              <h2 className="text-2xl font-bold text-black mb-4">
-                {language === 'es' ? 'Propósito' : 'Purpose'}
-              </h2>
-              <p className="text-gray-700">
-                {language === 'es'
-                  ? 'Generar una conexión real entre el productor y el consumidor a través de nuestros productos, haciendo que cada persona se sienta parte de un cambio verdadero'
-                  : 'Generate a real connection between the producer and the consumer through our products, making each person feel part of a real change.'
-                }
-              </p>
-            </div>
+          <div className="text-center bg-amber-50 rounded-lg p-8">
+            <h2 className="text-3xl font-bold text-black mb-6">
+              {language === 'es' ? 'Propósito' : 'Purpose'}
+            </h2>
+            <p className="text-gray-700 text-lg leading-relaxed max-w-4xl mx-auto">
+              {language === 'es'
+                ? 'Generar una conexión real entre el productor y el consumidor a través de nuestros productos, haciendo que cada persona se sienta parte de un cambio verdadero'
+                : 'Generate a real connection between the producer and the consumer through our products, making each person feel part of a real change.'
+              }
+            </p>
           </div>
         </section>
 

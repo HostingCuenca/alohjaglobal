@@ -209,6 +209,139 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Products Section */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
+              {language === 'es' ? 'Nuestros Productos' : 'Our Products'}
+            </h2>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              {language === 'es'
+                ? 'Descubre nuestra selección de cafés premium, cada uno con su propia historia y características únicas que reflejan la riqueza de Ecuador.'
+                : 'Discover our selection of premium coffees, each with its own story and unique characteristics that reflect the richness of Ecuador.'
+              }
+            </p>
+          </div>
+
+          {/* Featured Products Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {/* Product 1 - Café molido tueste claro 250 gr */}
+            <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+              <div className="aspect-square bg-gray-50 rounded-lg mb-3 overflow-hidden">
+                <Image
+                  src="/assets/productosreales/4. 250 gr.png"
+                  alt={language === 'es' ? 'Café molido tueste claro 250 gr' : 'Ground coffee light roast 250 gr'}
+                  width={200}
+                  height={200}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-bold text-sm text-black leading-tight">
+                  {language === 'es' ? 'Café molido tueste claro 250 gr' : 'Ground coffee light roast 250 gr'}
+                </h3>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Cítrico</span>
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Floral</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-green-700">$12.99</span>
+                  <span className="text-xs text-gray-500">250g</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 2 - Café molido tueste oscuro 250 gr */}
+            <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+              <div className="aspect-square bg-gray-50 rounded-lg mb-3 overflow-hidden">
+                <Image
+                  src="/assets/productosreales/7. 250 gr.png"
+                  alt={language === 'es' ? 'Café molido tueste oscuro 250 gr' : 'Ground coffee dark roast 250 gr'}
+                  width={200}
+                  height={200}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-bold text-sm text-black leading-tight">
+                  {language === 'es' ? 'Café molido tueste oscuro 250 gr' : 'Ground coffee dark roast 250 gr'}
+                </h3>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Chocolate</span>
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Nuez</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-green-700">$12.99</span>
+                  <span className="text-xs text-gray-500">250g</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 3 - Café Premium Blend */}
+            <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+              <div className="aspect-square bg-gray-50 rounded-lg mb-3 overflow-hidden">
+                <Image
+                  src="/assets/productosreales/6.png"
+                  alt={language === 'es' ? 'Café Premium Blend' : 'Premium Coffee Blend'}
+                  width={200}
+                  height={200}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-bold text-sm text-black leading-tight">
+                  {language === 'es' ? 'Café Premium Blend' : 'Premium Coffee Blend'}
+                </h3>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Floral</span>
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Bergamota</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-green-700">$15.99</span>
+                  <span className="text-xs text-gray-500">250g</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 4 - Café Signature Series */}
+            <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+              <div className="aspect-square bg-gray-50 rounded-lg mb-3 overflow-hidden">
+                <Image
+                  src="/assets/productosreales/9.png"
+                  alt={language === 'es' ? 'Café Signature Series' : 'Signature Series Coffee'}
+                  width={200}
+                  height={200}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-bold text-sm text-black leading-tight">
+                  {language === 'es' ? 'Café Signature Series' : 'Signature Series Coffee'}
+                </h3>
+                <div className="flex flex-wrap gap-1">
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Chocolate</span>
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Vainilla</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-green-700">$22.99</span>
+                  <span className="text-xs text-gray-500">340g</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <button
+              onClick={() => window.location.href = '/productos'}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-10 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              {language === 'es' ? 'Ver Todos los Productos' : 'View All Products'}
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* About Section */}
       <section className="py-16 px-4 max-w-6xl mx-auto">
         <div className="text-center mb-12">
@@ -223,6 +356,20 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      {/* Who We Are Banner */}
+      <section className="cursor-pointer" onClick={() => window.location.href = '/nosotros'}>
+        <div className="w-full">
+          <Image
+            src="/assets/fotosinicio/quienesomos1.png"
+            alt={language === 'es' ? 'Quienes Somos - Alohja Coffee' : 'Who We Are - Alohja Coffee'}
+            width={1920}
+            height={800}
+            className="w-full h-auto object-cover"
+          />
+        </div>
+      </section>
+
 
       {/* Coffee Process Gallery - OLD VERSION - COMMENTED FOR BACKUP
       <section className="py-16 px-4 bg-amber-50">
