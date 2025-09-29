@@ -1,0 +1,789 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
+// import { useCache } from '@/hooks/useCache' // BACKUP: Para migración posterior
+
+// BACKUP INTERFACES - Para migración posterior a BD
+// interface Farmer {
+//   id: string
+//   farmer_code: string
+//   first_name: string
+//   last_name: string
+//   full_name: string
+//   profile_image_url?: string
+//   biography?: string
+//   years_experience: number
+//   farming_philosophy?: string
+//   province_name: string
+//   province_code: string
+//   altitude_range?: string
+//   media_count: number
+//   batches_count: number
+//   farms: string[]
+//   varieties: string[]
+// }
+
+// interface FarmerContent {
+//   id: string
+//   media_type: string
+//   media_category: string
+//   title: string
+//   description: string
+//   media_url: string
+//   thumbnail_url?: string
+//   duration: number
+//   is_featured: boolean
+//   farmer_name: string
+//   farmer_code: string
+//   farmer_id?: string
+// }
+
+// HARDCODED DATA - Basado en JSON proporcionado
+const farmersData = {
+  agricultores: [
+    {
+      id: "pablo-quezada",
+      name: "Pablo Quezada",
+      photo: "https://blog.torisoftt.com/videos/agricultores/pabloquezadaperfil.png",
+      hasInterview: true,
+      farmName: "Gran Chaparral",
+      origin: "Portovelo – El Oro",
+      varieties: ["Typica", "Gesha", "Bourbon", "Sidra"],
+      altitude: "+ 1 110 masl / + 1 110 msnm",
+      cultivationMethod: "Bajo sombra",
+      quote: "Cada amanecer en el campo es una nueva oportunidad. Mi mayor deseo es que el esfuerzo de mis manos se vea reflejado en un café que cruce fronteras y dé orgullo a mi familia.",
+      gallery: ["https://blog.torisoftt.com/videos/agricultores/pabloquezadaperfil.png"]
+    },
+    {
+      id: "armando-ramirez",
+      name: "Armando Ramirez",
+      photo: "https://blog.torisoftt.com/videos/agricultores/armandoramirezperfil.png",
+      hasInterview: true,
+      farmName: "Don Tavo",
+      origin: "Paltas - Loja",
+      varieties: ["Bourbon", "Gesha"],
+      altitude: "+ 1 750 masl / + 1 750 msnm",
+      cultivationMethod: "Bajo sombra",
+      quote: "Sembrar café es sembrar esperanza. Sueño con que nuestro trabajo sea reconocido, para que las próximas generaciones encuentren en la tierra un camino digno de progreso.",
+      gallery: [
+        "https://blog.torisoftt.com/videos/agricultores/armandoramirez.png",
+        "https://blog.torisoftt.com/videos/agricultores/armandoramirez2.png",
+        "https://blog.torisoftt.com/videos/agricultores/armandoramirezperfil.png"
+      ]
+    },
+    {
+      id: "elauterio-fajardo",
+      name: "Elauterio Fajardo",
+      photo: "https://blog.torisoftt.com/videos/agricultores/elauteriofajardoperfil.png",
+      hasInterview: false,
+      farmName: "Tandambo",
+      origin: "Paltas - Loja",
+      varieties: ["Bourbon"],
+      altitude: "+ 1 700 masl / + 1 700 msnm",
+      cultivationMethod: "Bajo sombra",
+      quote: "Con cada grano que recojo pienso en un futuro mejor para mis hijos. Quiero que la calidad de nuestro café sea valorada y que nuestra voz como agricultores se escuche en el mundo.",
+      gallery: ["https://blog.torisoftt.com/videos/agricultores/elauteriofajardoperfil.png"]
+    },
+    {
+      id: "edita-collaguazo",
+      name: "Edita Collaguazo",
+      photo: "https://blog.torisoftt.com/videos/agricultores/elbitacollaguazoperfil.png",
+      hasInterview: false,
+      farmName: "Tandambo",
+      origin: "Paltas - Loja",
+      varieties: ["Bourbon"],
+      altitude: "+ 1 700 masl / + 1 700 msnm",
+      cultivationMethod: "Bajo sombra",
+      quote: "Cada grano que selecciono lleva consigo mi esperanza de progreso. Sueño con que las mujeres del campo tengamos más oportunidades y que nuestro esfuerzo sea visible.",
+      gallery: ["https://blog.torisoftt.com/videos/agricultores/elbitacollaguazoperfil.png"]
+    },
+    {
+      id: "mercy-espinosa",
+      name: "Mercy Espinosa",
+      photo: "https://blog.torisoftt.com/videos/agricultores/mercyespinozaperfil.png",
+      hasInterview: false,
+      farmName: "La Esperanza",
+      origin: "Portovelo - Loja",
+      varieties: ["Gesha", "Sidra"],
+      altitude: "+ 1 200 masl / + 1 200 msnm",
+      cultivationMethod: "Bajo sombra",
+      quote: "Cuidar el café es cuidar la vida. Anhelo que nuestro trabajo llegue lejos, y que se reconozca el valor de quienes lo hacemos con dedicación y amor.",
+      gallery: ["https://blog.torisoftt.com/videos/agricultores/mercyespinozaperfil.png"]
+    }
+  ],
+  fincas: [
+    {
+      id: "alohja",
+      name: "Finca Alohja",
+      photo: null,
+      hasInterview: false,
+      farmName: "Alohja coffee",
+      origin: "Portovelo – El Oro",
+      varieties: ["Gesha", "Sidra", "Bourbon", "Typica"],
+      altitude: "+ 1 400 masl / + 1 400 msnm",
+      cultivationMethod: "Bajo sombra",
+      quote: "Cuidar el café es cuidar la vida. Anhelo que nuestro trabajo llegue lejos, y que se reconozca el valor de quienes lo hacemos con dedicación y amor.",
+      gallery: []
+    },
+    {
+      id: "alohja-pichincha",
+      name: "Finca Pichincha",
+      photo: null,
+      hasInterview: false,
+      farmName: "Alohja Pichincha",
+      origin: "Nanegal - Pichincha",
+      varieties: ["Sidra", "Bourbon", "Typica"],
+      altitude: "+ 1 500 masl / + 1 400 msnm",
+      cultivationMethod: "Bajo sombra",
+      quote: "Cuidar el café es cuidar la vida. Anhelo que nuestro trabajo llegue lejos, y que se reconozca el valor de quienes lo hacemos con dedicación y amor.",
+      gallery: []
+    }
+  ]
+}
+
+export default function FarmersPage() {
+  const [language, setLanguage] = useState<'es' | 'en'>('es')
+  // const [allContent, setAllContent] = useState<FarmerContent[]>([]) // BACKUP
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const router = useRouter()
+
+  // Array de imágenes para el slideshow
+  const coffeeImages = [
+    {
+      src: '/assets/fotosinicio/persona recolectando granos.jpg',
+      alt: 'Agricultor recolectando café',
+      label: { es: 'Recolección', en: 'Harvest' }
+    },
+    {
+      src: '/assets/fotosinicio/secadocafe.jpg',
+      alt: 'Secado de café',
+      label: { es: 'Secado', en: 'Drying' }
+    },
+    {
+      src: '/assets/fotosinicio/granosdecafe.jpg',
+      alt: 'Granos de café',
+      label: { es: 'Granos', en: 'Beans' }
+    },
+    {
+      src: '/assets/fotosinicio/foto paisaje.jpg',
+      alt: 'Paisaje cafetero',
+      label: { es: 'Paisaje', en: 'Landscape' }
+    },
+    {
+      src: '/assets/fotosinicio/cafe tendido.jpg',
+      alt: 'Café tendido al sol',
+      label: { es: 'Proceso', en: 'Process' }
+    },
+    {
+      src: '/assets/fotosinicio/cafetostadoenmano.jpg',
+      alt: 'Café tostado en mano',
+      label: { es: 'Tostado', en: 'Roasted' }
+    }
+  ]
+
+  // BACKUP: Use cache for farmers data - Para migración posterior
+  // const {
+  //   data: farmers,
+  //   loading: isLoading,
+  //   error: farmersError
+  // } = useCache('farmers-list', async () => {
+  //   const response = await fetch('/api/public/farmers')
+  //   const data = await response.json()
+  //   if (!data.success) throw new Error(data.error)
+  //   return data.farmers as Farmer[]
+  // }, 3) // Cache for 3 minutes
+
+  // HARDCODED: Usando datos estáticos
+  const isLoading = false
+  const allFarmers = [...farmersData.agricultores, ...farmersData.fincas]
+
+  // Auto-rotate images every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) =>
+        (prevIndex + 1) % coffeeImages.length
+      )
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [coffeeImages.length])
+
+  // BACKUP: Fallback farmers y load content - Para migración posterior
+  // const fallbackFarmers = [...]
+  // useEffect(() => { if (farmers && farmers.length > 0) { loadContent(farmers) } }, [farmers])
+  // const loadContent = async (farmersData: Farmer[]) => { ... }
+
+  // BACKUP: Funciones de utilidad - Para migración posterior
+  // const getYouTubeId = (url: string): string | null => { ... }
+  // const getCategoryLabel = (category: string) => { ... }
+
+  const handleViewFarmerProfile = (farmerId: string) => {
+    // Navigate to individual farmer page
+    router.push(`/agricultores/${farmerId}`)
+  }
+
+  // BACKUP: handleViewFarmerBatches - Para migración posterior
+  // const handleViewFarmerBatches = (farmer: Farmer) => { ... }
+
+  // BACKUP: formatDuration - Para migración posterior
+  // const formatDuration = (seconds: number) => { ... }
+
+  // Skeleton component for farmer cards
+  const FarmerSkeleton = () => (
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
+      <div className="aspect-[4/3] bg-gray-200"></div>
+      <div className="p-6">
+        <div className="h-6 bg-gray-200 rounded mb-4"></div>
+        <div className="space-y-2 mb-4">
+          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        </div>
+        <div className="space-y-2 mb-4 bg-gray-50 p-4 rounded-lg">
+          <div className="h-3 bg-gray-200 rounded"></div>
+          <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+          <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+        </div>
+        <div className="space-y-2">
+          <div className="h-10 bg-gray-200 rounded"></div>
+          <div className="h-8 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // BACKUP: Variables de contenido - Para migración posterior
+  // const featuredContent = allContent.filter(content => content.is_featured)
+  // const recentContent = allContent.slice(0, 6)
+
+  // Temporal: Variables mínimas para evitar errores
+  const featuredContent: any[] = []
+  const recentContent: any[] = []
+  const allContent: any[] = []
+  const getYouTubeId = (url: string) => null
+  const getCategoryLabel = (category: string) => category
+  const formatDuration = (seconds: number) => '0:00'
+
+  return (
+    <div className="min-h-screen bg-white">
+      <Navigation language={language} setLanguage={setLanguage} />
+
+      {/* Farmers Video Section */}
+      <section className="bg-black">
+        <div className="w-full">
+          <div className="aspect-video bg-gray-900">
+            <video
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/assets/fotosinicio/foto paisaje.jpg"
+            >
+              <source src="https://blog.torisoftt.com/videos/inicio-agricultores.mp4" type="video/mp4" />
+              {language === 'es'
+                ? 'Tu navegador no soporta el elemento de video.'
+                : 'Your browser does not support the video element.'
+              }
+            </video>
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        {/* Header - LOADS IMMEDIATELY */}
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            {language === 'es' ? 'Nuestros Agricultores' : 'Our Farmers'}
+          </h1>
+          <p className="text-lg text-gray-800 max-w-4xl mx-auto leading-relaxed">
+            {language === 'es'
+              ? '"En cada grano de café late la historia de manos trabajadoras que, con paciencia y amor por la tierra, cultivan sueños entre montañas. Nuestros agricultores, guardianes de la calidad, seleccionan con cuidado cada fruto, transformando esfuerzo y tradición en la esencia de un café único."'
+              : '"Within every coffee bean lives the story of hardworking hands that, with patience and love for the land, nurture dreams among the mountains. Our farmers, guardians of quality, carefully select each harvest, transforming effort and tradition into the essence of a unique coffee."'
+            }
+          </p>
+        </div>
+
+        {/* Nueva sección inspiracional con slideshow - CARGA INMEDIATAMENTE */}
+        <div className="mb-16 relative">
+          <div className="bg-gradient-to-r from-amber-50 via-yellow-50 to-green-50 rounded-2xl p-8 shadow-lg">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+
+              {/* Slideshow de fotos */}
+              <div className="relative h-80 rounded-xl overflow-hidden group">
+                <img
+                  src={coffeeImages[currentImageIndex].src}
+                  alt={coffeeImages[currentImageIndex].alt}
+                  className="w-full h-full object-cover transition-all duration-1000 ease-in-out opacity-90"
+                />
+
+                {/* Overlay gradiente */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+
+                {/* Label de la imagen actual */}
+                <div className="absolute bottom-4 left-4 text-white">
+                  <span className="bg-black/60 px-3 py-1 rounded-lg text-sm font-medium">
+                    {coffeeImages[currentImageIndex].label[language]}
+                  </span>
+                </div>
+
+                {/* Indicadores de progreso */}
+                <div className="absolute bottom-4 right-4 flex gap-2">
+                  {coffeeImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Contenido de texto */}
+              <div className="space-y-4">
+                <span className="inline-block bg-amber-500 text-black px-3 py-1 rounded-full text-sm font-bold">
+                  ☕ {language === 'es' ? 'Nuestra Esencia' : 'Our Essence'}
+                </span>
+
+                <p className="text-lg text-gray-700 leading-relaxed italic">
+                  {language === 'es'
+                    ? '"En cada grano de café late la historia de manos trabajadoras que, con paciencia y amor por la tierra, cultivan sueños entre montañas. Nuestros agricultores, guardianes de la calidad, seleccionan con cuidado cada fruto, transformando esfuerzo y tradición en la esencia de un café único."'
+                    : '"Within every coffee bean lives the story of hardworking hands that, with patience and love for the land, nurture dreams among the mountains. Our farmers, guardians of quality, carefully select each harvest, transforming effort and tradition into the essence of a unique coffee."'
+                  }
+                </p>
+
+                <div className="flex flex-wrap gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <span className="text-gray-600">{language === 'es' ? 'Tradición Familiar' : 'Family Tradition'}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                    <span className="text-gray-600">{language === 'es' ? 'Calidad Premium' : 'Premium Quality'}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                    <span className="text-gray-600">{language === 'es' ? 'Café Único' : 'Unique Coffee'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        {/* Farmers Grid */}
+        <div className="mb-16">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-gray-900">
+              {language === 'es' ? 'Nuestros Productores' : 'Our Producers'}
+            </h2>
+            <div className="h-1 flex-1 bg-gradient-to-r from-green-400 to-transparent ml-6"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {isLoading ? (
+              // BACKUP: Skeleton loading
+              <div className="col-span-full text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+                <p className="text-gray-600">{language === 'es' ? 'Cargando...' : 'Loading...'}</p>
+              </div>
+            ) : (
+              allFarmers.map((farmer) => (
+                <div key={farmer.id} className="group relative">
+                  {/* Card Container */}
+                  <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+
+                    {/* Profile Image */}
+                    <div className="aspect-[4/3] relative overflow-hidden bg-gradient-to-br from-green-100 to-amber-100">
+                      {farmer.photo ? (
+                        <img
+                          src={farmer.photo}
+                          alt={farmer.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        />
+                      ) : (
+                        // Fallback for farms without photos
+                        <div className="w-full h-full bg-gradient-to-br from-green-600 to-amber-600 flex items-center justify-center">
+                          <div className="text-center text-white">
+                            <div className="text-4xl mb-3">🏔️</div>
+                            <h3 className="text-lg font-bold">{farmer.name}</h3>
+                            <p className="text-sm opacity-90">{farmer.origin}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Overlay with gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                      {/* Badges */}
+                      <div className="absolute top-4 right-4 space-y-2">
+                        {farmer.hasInterview && (
+                          <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                            🎥 {language === 'es' ? 'Entrevista' : 'Interview'}
+                          </span>
+                        )}
+                        <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg block">
+                          ☕ {farmer.varieties.length} {language === 'es' ? 'Variedades' : 'Varieties'}
+                        </span>
+                      </div>
+
+                      {/* Farm Name Badge */}
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-amber-500 text-black px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                          🏡 {farmer.farmName}
+                        </span>
+                      </div>
+
+                      {/* Hover Overlay Info */}
+                      <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <p className="text-sm font-medium">{farmer.altitude}</p>
+                        <p className="text-xs opacity-90">{farmer.cultivationMethod}</p>
+                      </div>
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="p-6">
+                      {/* Name and Origin */}
+                      <div className="mb-4">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{farmer.name}</h3>
+                        <p className="text-sm text-gray-600 flex items-center gap-2">
+                          <span className="text-green-600">📍</span>
+                          {farmer.origin}
+                        </p>
+                      </div>
+
+                      {/* Varieties */}
+                      <div className="mb-4">
+                        <p className="text-xs text-gray-500 mb-2 font-medium">
+                          {language === 'es' ? 'VARIEDADES:' : 'VARIETIES:'}
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {farmer.varieties.slice(0, 3).map((variety, index) => (
+                            <span
+                              key={index}
+                              className="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs font-medium"
+                            >
+                              {variety}
+                            </span>
+                          ))}
+                          {farmer.varieties.length > 3 && (
+                            <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">
+                              +{farmer.varieties.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Quote */}
+                      <blockquote className="text-gray-700 italic text-sm mb-6 border-l-4 border-green-500 pl-4 bg-green-50 p-3 rounded-r-lg">
+                        &ldquo;{farmer.quote.slice(0, 120)}...&rdquo;
+                      </blockquote>
+
+                      {/* Action Button */}
+                      <button
+                        onClick={() => handleViewFarmerProfile(farmer.id)}
+                        className="w-full bg-gradient-to-r from-green-600 to-amber-600 hover:from-green-700 hover:to-amber-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                      >
+                        {language === 'es' ? 'Conocer Historia' : 'Learn Story'} →
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* BACKUP: Featured Content y All Content Sections - Para migración posterior
+        {featuredContent.length > 0 && (
+          <div className="mb-16">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-3xl font-bold text-gray-900">
+                {language === 'es' ? 'Historias Destacadas' : 'Featured Stories'}
+              </h2>
+              <div className="h-1 flex-1 bg-gradient-to-r from-yellow-400 to-transparent ml-6"></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+              {featuredContent.map((content, index) => {
+                // Si es el último elemento y es impar (queda solo), hacer layout horizontal
+                const isLastOdd = index === featuredContent.length - 1 && featuredContent.length % 2 !== 0
+
+                return (
+                  <div
+                    key={content.id}
+                    className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow group ${
+                      isLastOdd ? 'md:col-span-2' : ''
+                    }`}
+                  >
+                    <div className={`${isLastOdd ? 'md:flex md:items-center' : ''}`}>
+                      {/* Video thumbnail */}
+                      <div className={`bg-gray-900 relative overflow-hidden ${
+                        isLastOdd ? 'aspect-video md:w-1/2 md:aspect-[16/10]' : 'aspect-video'
+                      }`}>
+                        {getYouTubeId(content.media_url) ? (
+                          <img
+                            src={`https://img.youtube.com/vi/${getYouTubeId(content.media_url)}/maxresdefault.jpg`}
+                            alt={content.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-green-600 to-amber-600 flex items-center justify-center">
+                            <div className="text-white text-center">
+                              <div className="text-4xl mb-2">🎥</div>
+                              <p className="text-sm font-medium">{getCategoryLabel(content.media_category)}</p>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Play button overlay */}
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                          <div className="bg-red-600 rounded-full p-3 transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z"/>
+                            </svg>
+                          </div>
+                        </div>
+
+                        {/* Category badge */}
+                        <div className="absolute top-3 left-3">
+                          <span className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                            {getCategoryLabel(content.media_category)}
+                          </span>
+                        </div>
+
+                        {/* Duration */}
+                        <div className="absolute bottom-3 right-3">
+                          <span className="bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                            {formatDuration(content.duration)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className={`p-6 ${isLastOdd ? 'md:w-1/2' : ''}`}>
+                        <div className="flex items-start justify-between mb-3">
+                          <h3 className={`font-bold text-gray-900 line-clamp-2 flex-1 ${
+                            isLastOdd ? 'text-xl md:text-2xl' : 'text-lg'
+                          }`}>
+                            {content.title}
+                          </h3>
+                          <span className="ml-3 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                            {content.farmer_code}
+                          </span>
+                        </div>
+
+                        <p className={`text-gray-800 mb-4 line-clamp-3 ${
+                          isLastOdd ? 'text-base' : 'text-sm'
+                        }`}>
+                          {content.description}
+                        </p>
+
+                        <div className="flex items-center justify-between">
+                          <span className={`font-medium text-gray-900 ${
+                            isLastOdd ? 'text-base' : 'text-sm'
+                          }`}>
+                            {content.farmer_name}
+                          </span>
+                          <button
+                            onClick={() => {
+                              if (content.farmer_id) {
+                                router.push(`/agricultores/${content.farmer_id}/videos/${content.id}`)
+                              } else {
+                                window.open(content.media_url, '_blank')
+                              }
+                            }}
+                            className={`bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors ${
+                              isLastOdd ? 'px-6 py-3 text-base' : 'px-4 py-2 text-sm'
+                            }`}
+                          >
+                            {language === 'es' ? 'Ver Contenido' : 'View Content'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* All Content Section */}
+        {recentContent.length > 0 && (
+          <div className="mb-16">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-3xl font-bold text-gray-900">
+                {language === 'es' ? 'Todos los Videos' : 'All Videos'}
+              </h2>
+              <div className="h-1 flex-1 bg-gradient-to-r from-red-400 to-transparent ml-6"></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {recentContent.map((content, index) => {
+                // Si es el último elemento y es impar (queda solo), hacer layout horizontal
+                const isLastOdd = index === recentContent.length - 1 && recentContent.length % 2 !== 0
+
+                return (
+                  <div
+                    key={content.id}
+                    className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow ${
+                      isLastOdd ? 'md:col-span-2' : ''
+                    }`}
+                  >
+                    <div className={`${isLastOdd ? 'md:flex md:items-center' : ''}`}>
+                      {/* Video thumbnail */}
+                      <div className={`bg-gray-200 relative ${
+                        isLastOdd ? 'aspect-video md:w-1/2 md:aspect-[16/10]' : 'aspect-video'
+                      }`}>
+                        {getYouTubeId(content.media_url) ? (
+                          <img
+                            src={`https://img.youtube.com/vi/${getYouTubeId(content.media_url)}/hqdefault.jpg`}
+                            alt={content.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center">
+                            <span className="text-white text-4xl">🎥</span>
+                          </div>
+                        )}
+
+                        <div className="absolute bottom-2 right-2">
+                          <span className="bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                            {formatDuration(content.duration)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className={`p-4 ${isLastOdd ? 'md:w-1/2' : ''}`}>
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className={`font-semibold text-gray-900 line-clamp-2 flex-1 ${
+                            isLastOdd ? 'text-base md:text-lg' : 'text-sm'
+                          }`}>
+                            {content.title}
+                          </h3>
+                          <span className={`ml-2 text-gray-700 font-medium ${
+                            isLastOdd ? 'text-sm' : 'text-xs'
+                          }`}>
+                            {content.farmer_code}
+                          </span>
+                        </div>
+
+                        <p className={`text-gray-800 mb-3 line-clamp-2 ${
+                          isLastOdd ? 'text-sm' : 'text-xs'
+                        }`}>
+                          {content.description}
+                        </p>
+
+                        <div className="flex items-center justify-between">
+                          <span className={`text-gray-700 ${
+                            isLastOdd ? 'text-sm' : 'text-xs'
+                          }`}>
+                            {content.farmer_name}
+                          </span>
+                          <button
+                            onClick={() => {
+                              if (content.farmer_id) {
+                                router.push(`/agricultores/${content.farmer_id}/videos/${content.id}`)
+                              } else {
+                                window.open(content.media_url, '_blank')
+                              }
+                            }}
+                            className={`bg-red-500 hover:bg-red-600 text-white rounded transition-colors ${
+                              isLastOdd ? 'px-4 py-2 text-sm' : 'px-3 py-1 text-xs'
+                            }`}
+                          >
+                            ▶️ {language === 'es' ? 'Ver' : 'View'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        */}
+
+        {/* Stats Section - Actualizada para datos hardcodeados */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-2xl p-6 text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">{farmersData.agricultores.length}</div>
+            <div className="text-sm text-green-700 font-medium">
+              {language === 'es' ? 'Agricultores' : 'Farmers'}
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 rounded-2xl p-6 text-center">
+            <div className="text-3xl font-bold text-amber-600 mb-2">
+              {farmersData.agricultores.filter(f => f.hasInterview).length}
+            </div>
+            <div className="text-sm text-amber-700 font-medium">
+              {language === 'es' ? 'Entrevistas' : 'Interviews'}
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-6 text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {[...new Set(allFarmers.flatMap(f => f.varieties))].length}
+            </div>
+            <div className="text-sm text-blue-700 font-medium">
+              {language === 'es' ? 'Variedades' : 'Varieties'}
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-2xl p-6 text-center">
+            <div className="text-3xl font-bold text-red-600 mb-2">
+              {allFarmers.length}
+            </div>
+            <div className="text-sm text-red-700 font-medium">
+              {language === 'es' ? 'Fincas' : 'Farms'}
+            </div>
+          </div>
+        </div>
+
+        {/* BACKUP: Estadísticas originales - Para migración posterior */}
+        {/* {farmers && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">{farmers.length}</div>
+            <div className="text-sm text-green-700 font-medium">
+              {language === 'es' ? 'Agricultores' : 'Farmers'}
+            </div>
+          </div>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
+            <div className="text-3xl font-bold text-amber-600 mb-2">
+              {farmers.reduce((acc, f) => acc + f.years_experience, 0)}
+            </div>
+            <div className="text-sm text-amber-700 font-medium">
+              {language === 'es' ? 'Años de Experiencia' : 'Years Experience'}
+            </div>
+          </div>
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {farmers.reduce((acc, f) => acc + f.batches_count, 0)}
+            </div>
+            <div className="text-sm text-blue-700 font-medium">
+              {language === 'es' ? 'Lotes Activos' : 'Active Batches'}
+            </div>
+          </div>
+          <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+            <div className="text-3xl font-bold text-red-600 mb-2">
+              {allContent.length}
+            </div>
+            <div className="text-sm text-red-700 font-medium">
+              {language === 'es' ? 'Videos' : 'Videos'}
+            </div>
+          </div>
+          </div>
+        )} */}
+      </div>
+
+      <Footer language={language} />
+    </div>
+  )
+}

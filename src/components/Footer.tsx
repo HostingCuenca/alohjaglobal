@@ -96,7 +96,7 @@ export default function Footer({ language }: FooterProps) {
                 <ul className="space-y-2 text-gray-300">
                   <li>Ecuador</li>
                   <li>info@alohja.com</li>
-                  <li>+593 XXX XXXX</li>
+                  <li>+593 962573519</li>
                 </ul>
               </div>
             </div>
