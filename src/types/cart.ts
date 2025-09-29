@@ -51,4 +51,10 @@ export interface Product {
     batchId: string
     percentage: number
   }[]
+  weightOptions?: {
+    weight: number
+    price: number
+    sku: string
+    image: string
+  }[]
 }

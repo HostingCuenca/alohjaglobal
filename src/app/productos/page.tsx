@@ -2,16 +2,19 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CartSidebar from '@/components/CartSidebar'
 import { useCart } from '@/context/CartContext'
 import { Product } from '@/types/cart'
+import { products } from '@/data/products'
 
 export default function ProductsPage() {
   const [language, setLanguage] = useState<'es' | 'en'>('es')
   const { addToCart, state } = useCart()
   const [selectedProductImages, setSelectedProductImages] = useState<{[key: string]: number}>({})
+  const [selectedWeights, setSelectedWeights] = useState<{[key: string]: number}>({})
 
   const handleImageClick = (productId: string, imageIndex: number) => {
     setSelectedProductImages(prev => ({
@@ -20,168 +23,29 @@ export default function ProductsPage() {
     }))
   }
 
-  const products: Product[] = [
-    {
-      id: 'coffee-ground-light-250',
-      sku: 'CGL250',
-      name: 'Café molido tueste claro 250 gr',
-      nameEn: 'Ground coffee light roast 250 gr',
-      primaryImageUrl: '/assets/productosreales/4. 250 gr.png',
-      galleryImages: ['/assets/productosreales/4. 250 gr.png'],
-      description: 'Café molido con tueste claro, ideal para métodos de filtrado',
-      descriptionEn: 'Ground coffee with light roast, ideal for filter methods',
-      weightGrams: 250,
-      roastLevel: 'light',
-      grindType: 'ground',
-      priceUsd: 12.99,
-      priceLocal: 12.99,
-      currencyLocal: 'USD',
-      isActive: true,
-      stockQuantity: 50,
-      variety: { name: 'Typica Mejorada' },
-      flavorNotes: ['Cítrico', 'Floral', 'Dulce']
-    },
-    {
-      id: 'coffee-ground-dark-250',
-      sku: 'CGD250',
-      name: 'Café molido tueste oscuro 250 gr',
-      nameEn: 'Ground coffee dark roast 250 gr',
-      primaryImageUrl: '/assets/productosreales/7. 250 gr.png',
-      galleryImages: ['/assets/productosreales/7. 250 gr.png'],
-      description: 'Café molido con tueste oscuro, perfecto para espresso',
-      descriptionEn: 'Ground coffee with dark roast, perfect for espresso',
-      weightGrams: 250,
-      roastLevel: 'dark',
-      grindType: 'ground',
-      priceUsd: 12.99,
-      priceLocal: 12.99,
-      currencyLocal: 'USD',
-      isActive: true,
-      stockQuantity: 45,
-      variety: { name: 'Bourbon Rosado' },
-      flavorNotes: ['Chocolate', 'Nuez', 'Caramelo']
-    },
-    {
-      id: 'coffee-premium-blend',
-      sku: 'CPB001',
-      name: 'Café Premium Blend',
-      nameEn: 'Premium Coffee Blend',
-      primaryImageUrl: '/assets/productosreales/6.png',
-      galleryImages: ['/assets/productosreales/6.png'],
-      description: 'Mezcla premium de variedades selectas',
-      descriptionEn: 'Premium blend of select varieties',
-      weightGrams: 250,
-      roastLevel: 'medium',
-      packagingType: 'bag',
-      priceUsd: 15.99,
-      priceLocal: 15.99,
-      currencyLocal: 'USD',
-      isActive: true,
-      stockQuantity: 30,
-      variety: { name: 'Gesha' },
-      flavorNotes: ['Floral', 'Bergamota', 'Jasmin']
-    },
-    {
-      id: 'coffee-signature-series',
-      sku: 'CSS001',
-      name: 'Café Signature Series',
-      nameEn: 'Signature Series Coffee',
-      primaryImageUrl: '/assets/productosreales/9.png',
-      galleryImages: ['/assets/productosreales/9.png', '/assets/productosreales/11.png'],
-      description: 'Edición limitada de nuestra colección signature',
-      descriptionEn: 'Limited edition from our signature collection',
-      weightGrams: 340,
-      roastLevel: 'medium',
-      grindType: 'whole_bean',
-      priceUsd: 22.99,
-      priceLocal: 22.99,
-      currencyLocal: 'USD',
-      isActive: true,
-      stockQuantity: 20,
-      variety: { name: 'Typica Mejorada' },
-      flavorNotes: ['Chocolate', 'Vainilla', 'Frutal']
-    },
-    {
-      id: 'coffee-ground-light-340',
-      sku: 'CGL340',
-      name: 'Café molido tueste claro 340 gr',
-      nameEn: 'Ground coffee light roast 340 gr',
-      primaryImageUrl: '/assets/productosreales/5. 340 gr.png',
-      galleryImages: ['/assets/productosreales/5. 340 gr.png', '/assets/productosreales/10. solo en 340 gr.png'],
-      description: 'Presentación familiar de café molido tueste claro',
-      descriptionEn: 'Family size light roast ground coffee',
-      weightGrams: 340,
-      roastLevel: 'light',
-      grindType: 'ground',
-      priceUsd: 16.99,
-      priceLocal: 16.99,
-      currencyLocal: 'USD',
-      isActive: true,
-      stockQuantity: 35,
-      variety: { name: 'Typica Mejorada' },
-      flavorNotes: ['Cítrico', 'Floral', 'Dulce']
-    },
-    {
-      id: 'coffee-ground-dark-340',
-      sku: 'CGD340',
-      name: 'Café molido tueste oscuro 340 gr',
-      nameEn: 'Ground coffee dark roast 340 gr',
-      primaryImageUrl: '/assets/productosreales/8. 340 gr.png',
-      galleryImages: ['/assets/productosreales/8. 340 gr.png', '/assets/productosreales/13. solo en 340 gr.png'],
-      description: 'Presentación familiar de café molido tueste oscuro',
-      descriptionEn: 'Family size dark roast ground coffee',
-      weightGrams: 340,
-      roastLevel: 'dark',
-      grindType: 'ground',
-      priceUsd: 16.99,
-      priceLocal: 16.99,
-      currencyLocal: 'USD',
-      isActive: true,
-      stockQuantity: 40,
-      variety: { name: 'Bourbon Rosado' },
-      flavorNotes: ['Chocolate', 'Nuez', 'Caramelo']
-    },
-    {
-      id: 'coffee-artisan-blend',
-      sku: 'CAB001',
-      name: 'Café Artesanal Blend',
-      nameEn: 'Artisan Coffee Blend',
-      primaryImageUrl: '/assets/productosreales/12.png',
-      galleryImages: ['/assets/productosreales/12.png', '/assets/productosreales/14.png'],
-      description: 'Mezcla artesanal de granos selectos',
-      descriptionEn: 'Artisanal blend of select beans',
-      weightGrams: 340,
-      roastLevel: 'medium',
-      grindType: 'whole_bean',
-      priceUsd: 19.99,
-      priceLocal: 19.99,
-      currencyLocal: 'USD',
-      isActive: true,
-      stockQuantity: 25,
-      variety: { name: 'Gesha' },
-      flavorNotes: ['Floral', 'Bergamota', 'Dulce']
-    },
-    {
-      id: 'coffee-premium-reserve',
-      sku: 'CPR001',
-      name: 'Café Premium Reserve',
-      nameEn: 'Premium Reserve Coffee',
-      primaryImageUrl: '/assets/productosreales/15.png',
-      galleryImages: ['/assets/productosreales/15.png'],
-      description: 'Reserva premium de edición limitada',
-      descriptionEn: 'Limited edition premium reserve',
-      weightGrams: 250,
-      roastLevel: 'dark',
-      packagingType: 'premium_bag',
-      priceUsd: 24.99,
-      priceLocal: 24.99,
-      currencyLocal: 'USD',
-      isActive: true,
-      stockQuantity: 25,
-      variety: { name: 'Bourbon Rosado' },
-      flavorNotes: ['Chocolate', 'Especias', 'Caramelo']
-    }
-  ]
+  const handleWeightSelection = (productId: string, weightIndex: number) => {
+    setSelectedWeights(prev => ({
+      ...prev,
+      [productId]: weightIndex
+    }))
+  }
+
+  const getSelectedWeightOption = (product: Product) => {
+    if (!product.weightOptions || product.weightOptions.length === 0) return null
+    const selectedIndex = selectedWeights[product.id] || 0
+    return product.weightOptions[selectedIndex]
+  }
+
+  const getCurrentPrice = (product: Product) => {
+    const selectedWeight = getSelectedWeightOption(product)
+    return selectedWeight ? selectedWeight.price : product.priceLocal
+  }
+
+  const getCurrentWeight = (product: Product) => {
+    const selectedWeight = getSelectedWeightOption(product)
+    return selectedWeight ? selectedWeight.weight : product.weightGrams
+  }
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -203,98 +67,142 @@ export default function ProductsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {products.map((product, index) => {
             const currentImageIndex = selectedProductImages[product.id] || 0
-            const currentImage = product.galleryImages?.[currentImageIndex] || product.primaryImageUrl || '/images/coffee-placeholder.jpg'
+            const selectedWeightOption = getSelectedWeightOption(product)
+            const currentImage = selectedWeightOption?.image || product.galleryImages?.[currentImageIndex] || product.primaryImageUrl || '/images/coffee-placeholder.jpg'
+            const currentPrice = getCurrentPrice(product)
+            const currentWeight = getCurrentWeight(product)
 
             return (
-              <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <div className="aspect-square bg-gray-50 rounded-lg mb-4 overflow-hidden relative">
-                  <Image
-                    src={currentImage}
-                    alt={language === 'es' ? product.name : product.nameEn}
-                    width={300}
-                    height={300}
-                    className="w-full h-full object-cover"
-                  />
+              <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col h-full">
+                <Link href={`/productos/${product.id}`} className="block flex-grow">
+                  <div className="flex flex-col h-full">
+                    <div className="aspect-square bg-gray-50 rounded-lg mb-4 overflow-hidden relative">
+                      <Image
+                        src={currentImage}
+                        alt={language === 'es' ? product.name : product.nameEn}
+                        width={300}
+                        height={300}
+                        className="w-full h-full object-cover"
+                      />
 
-                  {/* Image Gallery Indicators */}
-                  {product.galleryImages && product.galleryImages.length > 1 && (
-                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
-                      {product.galleryImages.map((_, imgIndex) => (
+                      {/* Image Gallery Indicators */}
+                      {product.galleryImages && product.galleryImages.length > 1 && (
+                        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                          {product.galleryImages.map((_, imgIndex) => (
+                            <button
+                              key={imgIndex}
+                              onClick={() => handleImageClick(product.id, imgIndex)}
+                              className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                                currentImageIndex === imgIndex
+                                  ? 'bg-yellow-500'
+                                  : 'bg-white/60 hover:bg-white/80'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Navigation Arrows for multiple images */}
+                      {product.galleryImages && product.galleryImages.length > 1 && (
+                        <>
+                          <button
+                            onClick={() => handleImageClick(product.id, currentImageIndex > 0 ? currentImageIndex - 1 : product.galleryImages!.length - 1)}
+                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200"
+                          >
+                            ←
+                          </button>
+                          <button
+                            onClick={() => handleImageClick(product.id, currentImageIndex < product.galleryImages!.length - 1 ? currentImageIndex + 1 : 0)}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200"
+                          >
+                            →
+                          </button>
+                        </>
+                      )}
+                    </div>
+
+                    <h3 className="font-bold text-lg text-black leading-tight mb-3">
+                      {language === 'es' ? product.name : product.nameEn}
+                    </h3>
+
+                    <p className="text-gray-600 text-sm leading-relaxed mb-3 flex-grow">
+                      {language === 'es' ? product.description : product.descriptionEn}
+                    </p>
+
+                    {/* Variety and Weight Info */}
+                    <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+                      <span>{product.variety?.name}</span>
+                      <span>{currentWeight}g</span>
+                    </div>
+
+                    {/* Flavor Notes */}
+                    {product.flavorNotes && (
+                      <div className="flex flex-wrap gap-1 mb-4">
+                        {product.flavorNotes.slice(0, 3).map((note, noteIndex) => (
+                          <span key={noteIndex} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                            {note}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-2xl font-bold text-green-700">
+                        ${currentPrice.toFixed(2)}
+                      </span>
+                      <div className="text-xs text-gray-500">
+                        {language === 'es' ? 'Por unidad' : 'Per unit'}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* Weight Options */}
+                {product.weightOptions && product.weightOptions.length > 1 && (
+                  <div className="mb-3">
+                    <label className="block text-xs font-medium text-gray-700 mb-2">
+                      {language === 'es' ? 'Peso:' : 'Weight:'}
+                    </label>
+                    <div className="flex gap-2">
+                      {product.weightOptions.map((option, optionIndex) => (
                         <button
-                          key={imgIndex}
-                          onClick={() => handleImageClick(product.id, imgIndex)}
-                          className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                            currentImageIndex === imgIndex
-                              ? 'bg-yellow-500'
-                              : 'bg-white/60 hover:bg-white/80'
+                          key={optionIndex}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleWeightSelection(product.id, optionIndex)
+                          }}
+                          className={`px-3 py-1 text-xs rounded-full border transition-all duration-200 ${
+                            (selectedWeights[product.id] || 0) === optionIndex
+                              ? 'bg-yellow-500 text-black border-yellow-500'
+                              : 'bg-white text-gray-600 border-gray-300 hover:border-yellow-400'
                           }`}
-                        />
+                        >
+                          {option.weight}g - ${option.price.toFixed(2)}
+                        </button>
                       ))}
                     </div>
-                  )}
-
-                  {/* Navigation Arrows for multiple images */}
-                  {product.galleryImages && product.galleryImages.length > 1 && (
-                    <>
-                      <button
-                        onClick={() => handleImageClick(product.id, currentImageIndex > 0 ? currentImageIndex - 1 : product.galleryImages!.length - 1)}
-                        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200"
-                      >
-                        ←
-                      </button>
-                      <button
-                        onClick={() => handleImageClick(product.id, currentImageIndex < product.galleryImages!.length - 1 ? currentImageIndex + 1 : 0)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200"
-                      >
-                        →
-                      </button>
-                    </>
-                  )}
-                </div>
-              
-              <div className="space-y-3">
-                <h3 className="font-bold text-lg text-black leading-tight">
-                  {language === 'es' ? product.name : product.nameEn}
-                </h3>
-                
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {language === 'es' ? product.description : product.descriptionEn}
-                </p>
-
-                {/* Variety and Weight Info */}
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  <span>{product.variety?.name}</span>
-                  <span>{product.weightGrams}g</span>
-                </div>
-
-                {/* Flavor Notes */}
-                {product.flavorNotes && (
-                  <div className="flex flex-wrap gap-1">
-                    {product.flavorNotes.slice(0, 3).map((note, noteIndex) => (
-                      <span key={noteIndex} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                        {note}
-                      </span>
-                    ))}
                   </div>
                 )}
 
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-green-700">
-                    ${product.priceLocal.toFixed(2)}
-                  </span>
-                  <div className="text-xs text-gray-500">
-                    {language === 'es' ? 'Por unidad' : 'Per unit'}
-                  </div>
-                </div>
-
                 <button
-                  onClick={() => addToCart(product, 1)}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    const selectedWeightOption = getSelectedWeightOption(product)
+                    const productToAdd = selectedWeightOption ? {
+                      ...product,
+                      sku: selectedWeightOption.sku,
+                      priceLocal: selectedWeightOption.price,
+                      priceUsd: selectedWeightOption.price,
+                      weightGrams: selectedWeightOption.weight,
+                      primaryImageUrl: selectedWeightOption.image
+                    } : product
+                    addToCart(productToAdd, 1)
+                  }}
                   className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg"
                 >
                   {language === 'es' ? 'Agregar al Carrito' : 'Add to Cart'}
                 </button>
               </div>
-            </div>
             )
           })}
         </div>
