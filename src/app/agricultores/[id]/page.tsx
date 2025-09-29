@@ -96,26 +96,32 @@ const farmersData = {
       name: "Finca Alohja",
       photo: null,
       hasInterview: false,
+      gender: "neutral",
       farmName: "Alohja coffee",
       origin: "Portovelo – El Oro",
       varieties: ["Gesha", "Sidra", "Bourbon", "Typica"],
       altitude: "+ 1 400 masl / + 1 400 msnm",
       cultivationMethod: "Bajo sombra",
       quote: "Cuidar el café es cuidar la vida. Anhelo que nuestro trabajo llegue lejos, y que se reconozca el valor de quienes lo hacemos con dedicación y amor.",
-      gallery: []
+      gallery: [],
+      interviewVideo: null,
+      individualVideo: null
     },
     {
       id: "alohja-pichincha",
       name: "Finca Pichincha",
       photo: null,
       hasInterview: false,
+      gender: "neutral",
       farmName: "Alohja Pichincha",
       origin: "Nanegal - Pichincha",
       varieties: ["Sidra", "Bourbon", "Typica"],
       altitude: "+ 1 500 masl / + 1 400 msnm",
       cultivationMethod: "Bajo sombra",
       quote: "Cuidar el café es cuidar la vida. Anhelo que nuestro trabajo llegue lejos, y que se reconozca el valor de quienes lo hacemos con dedicación y amor.",
-      gallery: []
+      gallery: [],
+      interviewVideo: null,
+      individualVideo: null
     }
   ]
 }
@@ -284,7 +290,7 @@ export default function FarmerDetailPage() {
           </div>
 
           {/* 2. Video Individual - Medio */}
-          {farmer.individualVideo && (
+          {farmer.individualVideo && farmer.gender !== 'neutral' && (
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">
