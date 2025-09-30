@@ -102,6 +102,40 @@ export default function ProductDetailPage() {
     return labels[roastLevel as keyof typeof labels] || roastLevel
   }
 
+  // Extraer datos del origen y altitud de la descripción
+  const getOriginData = () => {
+    const description = product.description
+
+    // Detectar origen
+    let origin = ""
+    let mapImage = ""
+
+    if (description.includes("Portovelo") || description.includes("El Oro")) {
+      origin = "Portovelo – El Oro"
+      mapImage = "/assets/mapaspng/mapaecuadorELORO.png"
+    } else if (description.includes("Loja") || description.includes("Catacocha") || description.includes("Cariamanga")) {
+      origin = "Loja"
+      mapImage = "/assets/mapaspng/mapaecuadorLOJA.png"
+    } else if (description.includes("Pichincha") || description.includes("Nanegal")) {
+      origin = "Nanegal – Pichincha"
+      mapImage = "/assets/mapaspng/mapaecuadorPICHINCHA.png"
+    }
+
+    // Extraer altitud
+    const altitudeMatch = description.match(/(\d+[–-]\d+)\s*m[as]nl?m?/i)
+    const altitude = altitudeMatch ? altitudeMatch[1] + " msnm" : ""
+
+    // Extraer variedad
+    const varietyMatch = description.match(/Variedad(?:es)?:\s*([^.]+)/i)
+    const variety = varietyMatch ? varietyMatch[1].trim() : ""
+
+    // Extraer proceso de secado
+    const processMatch = description.match(/Secado:\s*([^.]+)/i)
+    const process = processMatch ? processMatch[1].trim() : ""
+
+    return { origin, mapImage, altitude, variety, process }
+  }
+
   return (
     <>
       <Head>
@@ -235,49 +269,128 @@ export default function ProductDetailPage() {
               </p>
             </div>
 
-            {/* Product Specifications */}
-            <div className="grid grid-cols-2 gap-4 p-6 bg-gray-50 rounded-xl">
-              <div>
-                <span className="text-sm font-medium text-gray-500 block">
-                  {language === 'es' ? 'Peso' : 'Weight'}
-                </span>
-                <span className="text-lg font-semibold text-gray-900">
-                  {getCurrentWeight()}g
-                </span>
+            {/* Product Specifications - Estilo referencia */}
+            <div className="space-y-6">
+              {/* Origen y características - Estilo minimalista */}
+              {(() => {
+                const originData = getOriginData();
+
+                const getRoastDots = () => {
+                  if (product.roastLevel === 'light') return '●●○○'
+                  if (product.roastLevel === 'dark') return '●●●●'
+                  return '●●●○'
+                }
+
+                return originData.origin && (
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                      {/* Información del origen - Lado izquierdo */}
+                      <div className="space-y-4">
+                        {/* Origen */}
+                        <div>
+                          <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                            {language === 'es' ? 'ORIGEN:' : 'ORIGIN:'}
+                          </span>
+                          <span className="text-xl font-bold text-gray-900">
+                            {originData.origin.replace('–', '').replace('Portovelo ', '').replace('Nanegal ', '').toUpperCase()}
+                          </span>
+                        </div>
+
+                        {/* Variedad */}
+                        {originData.variety && (
+                          <div>
+                            <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                              {language === 'es' ? 'VARIEDAD:' : 'VARIETY:'}
+                            </span>
+                            <span className="text-xl font-bold text-gray-900">
+                              {originData.variety.toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Altitud y Tostado en una línea */}
+                        <div className="flex items-center gap-8">
+                          {originData.altitude && (
+                            <div>
+                              <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                                {language === 'es' ? 'ALTITUD:' : 'ALTITUDE:'}
+                              </span>
+                              <span className="text-xl font-bold text-gray-900">
+                                {originData.altitude.replace(' msnm', '').toUpperCase()} (MSNM)
+                              </span>
+                            </div>
+                          )}
+
+                          {product.roastLevel && (
+                            <div>
+                              <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                                {language === 'es' ? 'TOSTADO:' : 'ROAST:'}
+                              </span>
+                              <span className="text-2xl font-bold text-gray-900 tracking-wider">
+                                {getRoastDots()}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Mapa - Lado derecho */}
+                      <div className="flex justify-center lg:justify-end">
+                        {originData.mapImage ? (
+                          <Image
+                            src={originData.mapImage}
+                            alt={`Mapa de ${originData.origin}`}
+                            width={200}
+                            height={200}
+                            className="w-48 h-48 object-contain opacity-80"
+                          />
+                        ) : (
+                          <div className="w-48 h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                            <span className="text-4xl opacity-50">🗺️</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Especificaciones adicionales */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-6 bg-gray-50 rounded-xl">
+                <div>
+                  <span className="text-sm font-medium text-gray-500 block">
+                    {language === 'es' ? 'Peso' : 'Weight'}
+                  </span>
+                  <span className="text-lg font-semibold text-gray-900">
+                    {getCurrentWeight()}g
+                  </span>
+                </div>
+
+                {product.grindType && (
+                  <div>
+                    <span className="text-sm font-medium text-gray-500 block">
+                      {language === 'es' ? 'Molienda' : 'Grind'}
+                    </span>
+                    <span className="text-lg font-semibold text-gray-900">
+                      {getGrindTypeLabel(product.grindType)}
+                    </span>
+                  </div>
+                )}
+
+                {(() => {
+                  const originData = getOriginData();
+                  return originData.process && (
+                    <div>
+                      <span className="text-sm font-medium text-gray-500 block">
+                        {language === 'es' ? 'Proceso' : 'Process'}
+                      </span>
+                      <span className="text-lg font-semibold text-gray-900">
+                        {originData.process}
+                      </span>
+                    </div>
+                  );
+                })()}
               </div>
-
-              {product.variety && (
-                <div>
-                  <span className="text-sm font-medium text-gray-500 block">
-                    {language === 'es' ? 'Variedad' : 'Variety'}
-                  </span>
-                  <span className="text-lg font-semibold text-gray-900">
-                    {product.variety.name}
-                  </span>
-                </div>
-              )}
-
-              {product.roastLevel && (
-                <div>
-                  <span className="text-sm font-medium text-gray-500 block">
-                    {language === 'es' ? 'Tueste' : 'Roast'}
-                  </span>
-                  <span className="text-lg font-semibold text-gray-900">
-                    {getRoastLevelLabel(product.roastLevel)}
-                  </span>
-                </div>
-              )}
-
-              {product.grindType && (
-                <div>
-                  <span className="text-sm font-medium text-gray-500 block">
-                    {language === 'es' ? 'Molienda' : 'Grind'}
-                  </span>
-                  <span className="text-lg font-semibold text-gray-900">
-                    {getGrindTypeLabel(product.grindType)}
-                  </span>
-                </div>
-              )}
             </div>
 
             {/* Weight Options */}
