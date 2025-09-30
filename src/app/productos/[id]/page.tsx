@@ -269,154 +269,182 @@ export default function ProductDetailPage() {
               </p>
             </div>
 
-            {/* Product Specifications - Estilo referencia */}
-            <div className="space-y-6">
-              {/* Origen y características - Estilo minimalista */}
-              {(() => {
-                const originData = getOriginData();
+            {/* Origen y Características */}
+            {(() => {
+              const originData = getOriginData();
 
-                const getRoastDots = () => {
-                  if (product.roastLevel === 'light') return '●●○○'
-                  if (product.roastLevel === 'dark') return '●●●●'
-                  return '●●●○'
-                }
+              const getRoastDots = () => {
+                if (product.roastLevel === 'light') return '●●○○'
+                if (product.roastLevel === 'dark') return '●●●●'
+                return '●●●○'
+              }
 
-                return originData.origin && (
-                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                      {/* Información del origen - Lado izquierdo */}
-                      <div className="space-y-4">
-                        {/* Origen */}
+              return originData.origin && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    {/* Información del origen - Grid 2x2 */}
+                    <div className="grid grid-cols-2 gap-6">
+                      <div>
+                        <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                          {language === 'es' ? 'ORIGEN:' : 'ORIGIN:'}
+                        </span>
+                        <span className="text-xl font-bold text-gray-900">
+                          {originData.origin.replace('–', '').replace('Portovelo ', '').replace('Nanegal ', '').toUpperCase()}
+                        </span>
+                      </div>
+
+                      {originData.variety && (
                         <div>
                           <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
-                            {language === 'es' ? 'ORIGEN:' : 'ORIGIN:'}
+                            {language === 'es' ? 'VARIEDAD:' : 'VARIETY:'}
                           </span>
                           <span className="text-xl font-bold text-gray-900">
-                            {originData.origin.replace('–', '').replace('Portovelo ', '').replace('Nanegal ', '').toUpperCase()}
+                            {originData.variety.toUpperCase()}
                           </span>
                         </div>
+                      )}
 
-                        {/* Variedad */}
-                        {originData.variety && (
-                          <div>
-                            <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
-                              {language === 'es' ? 'VARIEDAD:' : 'VARIETY:'}
-                            </span>
-                            <span className="text-xl font-bold text-gray-900">
-                              {originData.variety.toUpperCase()}
-                            </span>
-                          </div>
-                        )}
-
-                        {/* Altitud y Tostado en una línea */}
-                        <div className="flex items-center gap-8">
-                          {originData.altitude && (
-                            <div>
-                              <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
-                                {language === 'es' ? 'ALTITUD:' : 'ALTITUDE:'}
-                              </span>
-                              <span className="text-xl font-bold text-gray-900">
-                                {originData.altitude.replace(' msnm', '').toUpperCase()} (MSNM)
-                              </span>
-                            </div>
-                          )}
-
-                          {product.roastLevel && (
-                            <div>
-                              <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
-                                {language === 'es' ? 'TOSTADO:' : 'ROAST:'}
-                              </span>
-                              <span className="text-2xl font-bold text-gray-900 tracking-wider">
-                                {getRoastDots()}
-                              </span>
-                            </div>
-                          )}
+                      {originData.altitude && (
+                        <div>
+                          <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                            {language === 'es' ? 'ALTITUD:' : 'ALTITUDE:'}
+                          </span>
+                          <span className="text-xl font-bold text-gray-900">
+                            {originData.altitude.replace(' msnm', '').toUpperCase()} (MSNM)
+                          </span>
                         </div>
-                      </div>
+                      )}
 
-                      {/* Mapa - Lado derecho */}
-                      <div className="flex justify-center lg:justify-end">
-                        {originData.mapImage ? (
-                          <Image
-                            src={originData.mapImage}
-                            alt={`Mapa de ${originData.origin}`}
-                            width={200}
-                            height={200}
-                            className="w-48 h-48 object-contain opacity-80"
-                          />
-                        ) : (
-                          <div className="w-48 h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-                            <span className="text-4xl opacity-50">🗺️</span>
-                          </div>
-                        )}
-                      </div>
+                      {product.roastLevel && (
+                        <div>
+                          <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                            {language === 'es' ? 'TOSTADO:' : 'ROAST:'}
+                          </span>
+                          <span className="text-2xl font-bold text-gray-900 tracking-wider">
+                            {getRoastDots()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Mapa */}
+                    <div className="flex justify-center lg:justify-end">
+                      {originData.mapImage ? (
+                        <Image
+                          src={originData.mapImage}
+                          alt={`Mapa de ${originData.origin}`}
+                          width={200}
+                          height={200}
+                          className="w-48 h-48 object-contain opacity-80"
+                        />
+                      ) : (
+                        <div className="w-48 h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                          <span className="text-4xl opacity-50">🗺️</span>
+                        </div>
+                      )}
                     </div>
                   </div>
-                );
-              })()}
+                </div>
+              );
+            })()}
 
-              {/* Especificaciones adicionales */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-6 bg-gray-50 rounded-xl">
-                <div>
-                  <span className="text-sm font-medium text-gray-500 block">
-                    {language === 'es' ? 'Peso' : 'Weight'}
-                  </span>
-                  <span className="text-lg font-semibold text-gray-900">
-                    {getCurrentWeight()}g
-                  </span>
+            {/* Opciones de Compra */}
+            <div className="bg-amber-50 rounded-xl p-6 border border-amber-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                🛒 {language === 'es' ? 'Opciones de Compra' : 'Purchase Options'}
+              </h3>
+
+              {/* Weight Options */}
+              {product.weightOptions && product.weightOptions.length > 1 && (
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    {language === 'es' ? 'Peso:' : 'Weight:'}
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {product.weightOptions.map((option, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedWeightIndex(index)}
+                        className={`p-3 border-2 rounded-lg text-left transition-all duration-200 ${
+                          selectedWeightIndex === index
+                            ? 'border-amber-500 bg-amber-100'
+                            : 'border-gray-300 hover:border-amber-400 bg-white'
+                        }`}
+                      >
+                        <div className="font-semibold text-gray-900">{option.weight}g</div>
+                        <div className="text-sm text-gray-600">${option.price.toFixed(2)}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Quantity and Add to Cart */}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    {language === 'es' ? 'Cantidad:' : 'Qty:'}
+                  </label>
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-8 h-8 border border-gray-400 rounded flex items-center justify-center hover:bg-gray-100 font-bold text-gray-700 text-lg"
+                  >
+                    −
+                  </button>
+                  <span className="w-12 text-center font-bold text-gray-900 bg-white border border-gray-300 rounded py-1">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-8 h-8 border border-gray-400 rounded flex items-center justify-center hover:bg-gray-100 font-bold text-gray-700 text-lg"
+                  >
+                    +
+                  </button>
                 </div>
 
-                {product.grindType && (
-                  <div>
-                    <span className="text-sm font-medium text-gray-500 block">
-                      {language === 'es' ? 'Molienda' : 'Grind'}
-                    </span>
-                    <span className="text-lg font-semibold text-gray-900">
-                      {getGrindTypeLabel(product.grindType)}
-                    </span>
-                  </div>
-                )}
-
-                {(() => {
-                  const originData = getOriginData();
-                  return originData.process && (
-                    <div>
-                      <span className="text-sm font-medium text-gray-500 block">
-                        {language === 'es' ? 'Proceso' : 'Process'}
-                      </span>
-                      <span className="text-lg font-semibold text-gray-900">
-                        {originData.process}
-                      </span>
-                    </div>
-                  );
-                })()}
+                <button
+                  onClick={handleAddToCart}
+                  className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 rounded-lg transition-colors"
+                >
+                  {language === 'es' ? 'Agregar al Carrito' : 'Add to Cart'}
+                </button>
               </div>
             </div>
 
-            {/* Weight Options */}
-            {product.weightOptions && product.weightOptions.length > 1 && (
+            {/* Especificaciones Técnicas */}
+            <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-3">
-                  {language === 'es' ? 'Selecciona el peso:' : 'Select weight:'}
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  {product.weightOptions.map((option, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedWeightIndex(index)}
-                      className={`p-4 border-2 rounded-xl text-left transition-all duration-200 ${
-                        selectedWeightIndex === index
-                          ? 'border-yellow-500 bg-yellow-50 shadow-md'
-                          : 'border-gray-300 hover:border-yellow-400 hover:bg-gray-50'
-                      }`}
-                    >
-                      <div className="font-bold text-gray-900 text-lg">{option.weight}g</div>
-                      <div className="text-sm font-semibold text-gray-700">${option.price.toFixed(2)}</div>
-                    </button>
-                  ))}
-                </div>
+                <span className="text-sm text-gray-500 block">
+                  {language === 'es' ? 'Peso' : 'Weight'}
+                </span>
+                <span className="font-semibold text-gray-900">
+                  {getCurrentWeight()}g
+                </span>
               </div>
-            )}
+
+              {product.grindType && (
+                <div>
+                  <span className="text-sm text-gray-500 block">
+                    {language === 'es' ? 'Molienda' : 'Grind'}
+                  </span>
+                  <span className="font-semibold text-gray-900">
+                    {getGrindTypeLabel(product.grindType)}
+                  </span>
+                </div>
+              )}
+
+              {(() => {
+                const originData = getOriginData();
+                return originData.process && (
+                  <div>
+                    <span className="text-sm text-gray-500 block">
+                      {language === 'es' ? 'Proceso' : 'Process'}
+                    </span>
+                    <span className="font-semibold text-gray-900">
+                      {originData.process}
+                    </span>
+                  </div>
+                );
+              })()}
+            </div>
 
             {/* Flavor Notes */}
             {product.flavorNotes && product.flavorNotes.length > 0 && (
@@ -449,38 +477,6 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* Quantity and Add to Cart */}
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">
-                  {language === 'es' ? 'Cantidad:' : 'Quantity:'}
-                </label>
-                <div className="flex items-center space-x-3">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-12 h-12 border-2 border-gray-400 rounded-lg flex items-center justify-center hover:bg-gray-100 hover:border-gray-500 transition-all duration-200 text-gray-900 font-bold text-xl"
-                  >
-                    −
-                  </button>
-                  <span className="text-2xl font-bold min-w-[4rem] text-center text-gray-900 bg-gray-50 px-4 py-2 rounded-lg border-2 border-gray-300">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-12 h-12 border-2 border-gray-400 rounded-lg flex items-center justify-center hover:bg-gray-100 hover:border-gray-500 transition-all duration-200 text-gray-900 font-bold text-xl"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <button
-                onClick={handleAddToCart}
-                className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-6 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              >
-                {language === 'es' ? 'Agregar al Carrito' : 'Add to Cart'}
-              </button>
-            </div>
           </div>
         </div>
 

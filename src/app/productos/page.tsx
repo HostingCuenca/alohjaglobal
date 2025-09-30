@@ -51,6 +51,18 @@ export default function ProductsPage() {
     <div className="min-h-screen bg-white">
       <Navigation language={language} setLanguage={setLanguage} />
 
+      {/* Hero Image */}
+      <div className="flex justify-center py-8">
+        <Image
+          src="/assets/FONDOEMPAQUESTRANSPARENTE.png"
+          alt="Alohja Coffee Products"
+          width={800}
+          height={400}
+          className="object-contain"
+          priority
+        />
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
