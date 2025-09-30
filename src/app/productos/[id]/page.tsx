@@ -104,7 +104,7 @@ export default function ProductDetailPage() {
 
   // Extraer datos del origen y altitud de la descripción
   const getOriginData = () => {
-    const description = product.description
+    const description = product.description || ""
 
     // Detectar origen
     let origin = ""
