@@ -118,7 +118,29 @@ export default function SustainabilityPage() {
     <div className="min-h-screen bg-white">
       <Navigation language={language} setLanguage={setLanguage} />
 
-      {/* Sustainability Video Section */}
+      {/* Sustainability Video Section - FULLSCREEN */}
+      <section className="bg-black">
+        <div className="w-full">
+          <div className="aspect-video bg-gray-900">
+            <video
+              className="w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="https://blog.torisoftt.com/videos/sostenibilidad/imagendefondo.png"
+            >
+              <source src="https://blog.torisoftt.com/videos/sostenibilidad/videoportada.mp4" type="video/mp4" />
+              {language === 'es'
+                ? 'Tu navegador no soporta el elemento de video.'
+                : 'Your browser does not support the video element.'
+              }
+            </video>
+          </div>
+        </div>
+      </section>
+
+      {/* OLD VIDEO COMMENTED FOR BACKUP
       <section className="bg-black">
         <div className="w-full">
           <div className="aspect-video bg-gray-900">
@@ -131,14 +153,11 @@ export default function SustainabilityPage() {
               poster="/assets/fotosinicio/foto paisaje.jpg"
             >
               <source src="https://blog.torisoftt.com/videos/sostenibilidad.mp4" type="video/mp4" />
-              {language === 'es'
-                ? 'Tu navegador no soporta el elemento de video.'
-                : 'Your browser does not support the video element.'
-              }
             </video>
           </div>
         </div>
       </section>
+      */}
 
       {/* NEW DESIGN - TABS STRUCTURE */}
       <div className="max-w-7xl mx-auto px-4 py-16">
@@ -149,7 +168,7 @@ export default function SustainabilityPage() {
         </div>
 
         {/* Tabs Navigation */}
-        <div className="flex flex-wrap justify-center mb-8 bg-gray-100 rounded-lg p-2">
+        <div className="flex flex-wrap justify-center gap-3 mb-8">
           {[
             { key: 'sustainability', es: 'Sostenibilidad', en: 'Sustainability' },
             { key: 'certifications', es: 'Certificaciones', en: 'Certifications' },
@@ -159,10 +178,10 @@ export default function SustainabilityPage() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
+              className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
                 activeTab === tab.key
-                  ? 'bg-orange-500 text-white shadow-md'
-                  : 'text-gray-600 hover:text-orange-500'
+                  ? 'bg-yellow-500 text-black shadow-lg'
+                  : 'bg-white text-gray-700 hover:bg-yellow-100 border border-gray-200'
               }`}
             >
               {language === 'es' ? tab.es : tab.en}
@@ -432,6 +451,110 @@ export default function SustainabilityPage() {
           )}
         </div>
       )}
+
+      {/* Multimedia Gallery Section - Rediseñado */}
+      <section className="bg-gradient-to-br from-green-50 to-yellow-50 py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+
+          {/* Nuestra misión - Texto + Video */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <h2 className="text-3xl font-bold text-black mb-6">
+                {language === 'es' ? 'Nuestra misión' : 'Our mission'}
+              </h2>
+              <p className="text-gray-700 leading-relaxed text-lg">
+                {language === 'es'
+                  ? 'En nuestra finca, trabajamos con un modelo de producción sostenible que respeta la biodiversidad y potencia el rol de los polinizadores. Nos dedicamos a prácticas responsables que garantizan un futuro verde.'
+                  : 'On our farm, we work with a sustainable production model that respects biodiversity and enhances the role of pollinators. We are dedicated to responsible practices that guarantee a green future.'
+                }
+              </p>
+            </div>
+            <div className="relative overflow-hidden rounded-xl shadow-2xl">
+              <video
+                className="w-full rounded-xl"
+                controls
+                poster="https://blog.torisoftt.com/videos/sostenibilidad/imagendefondo.png"
+              >
+                <source src="https://blog.torisoftt.com/videos/sostenibilidad/videodepolinizadoresbiodiversidad.mp4" type="video/mp4" />
+                {language === 'es'
+                  ? 'Tu navegador no soporta el elemento de video.'
+                  : 'Your browser does not support the video element.'
+                }
+              </video>
+            </div>
+          </div>
+
+          {/* Galería de imágenes - Grid 3x2 */}
+          <div>
+            <h2 className="text-3xl font-bold text-center text-black mb-8">
+              {language === 'es' ? 'Galería de imágenes' : 'Image gallery'}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="relative overflow-hidden rounded-lg shadow-lg group aspect-square">
+                <Image
+                  src="https://blog.torisoftt.com/videos/sostenibilidad/biodiversidad 1.png"
+                  alt="Biodiversidad 1"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  unoptimized
+                />
+              </div>
+              <div className="relative overflow-hidden rounded-lg shadow-lg group aspect-square">
+                <Image
+                  src="https://blog.torisoftt.com/videos/sostenibilidad/cafe en flor 1.png"
+                  alt="Café en flor 1"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  unoptimized
+                />
+              </div>
+              <div className="relative overflow-hidden rounded-lg shadow-lg group aspect-square">
+                <Image
+                  src="https://blog.torisoftt.com/videos/sostenibilidad/cafe en flor 2.png"
+                  alt="Café en flor 2"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  unoptimized
+                />
+              </div>
+              <div className="relative overflow-hidden rounded-lg shadow-lg group aspect-square">
+                <Image
+                  src="https://blog.torisoftt.com/videos/sostenibilidad/cafe en flor 3.png"
+                  alt="Café en flor 3"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  unoptimized
+                />
+              </div>
+              <div className="relative overflow-hidden rounded-lg shadow-lg group aspect-square">
+                <Image
+                  src="https://blog.torisoftt.com/videos/sostenibilidad/cafe en flor 4.png"
+                  alt="Café en flor 4"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  unoptimized
+                />
+              </div>
+              <div className="relative overflow-hidden rounded-lg shadow-lg group aspect-square">
+                <Image
+                  src="https://blog.torisoftt.com/videos/sostenibilidad/biodiversidad 2.png"
+                  alt="Biodiversidad 2"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  unoptimized
+                />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       <Footer language={language} />
     </div>

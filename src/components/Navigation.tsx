@@ -20,8 +20,8 @@ export default function Navigation({ language, setLanguage }: NavigationProps) {
     { es: 'Nosotros', en: 'About Us', href: '/nosotros' },
     { es: 'Alohja Global', en: 'Alohja Global', href: '/global' },
     { es: 'Sostenibilidad', en: 'Sustainability', href: '/sostenibilidad' },
-    { es: 'Agricultores', en: 'Farmers', href: '/agricultores' },
-    { es: 'Lotes', en: 'Batches', href: '/lotes' }
+    { es: 'Agricultores', en: 'Farmers', href: '/agricultores' }
+    // { es: 'Lotes', en: 'Batches', href: '/lotes' } // Temporarily commented
   ]
 
   return (

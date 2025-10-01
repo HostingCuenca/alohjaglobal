@@ -455,3 +455,196 @@ COMMENT ON TABLE product_batches IS 'Mapping between products and the batches th
 -- GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO alohja_api_user;
 -- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO alohja_cms_user;
 -- GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO alohja_api_user, alohja_cms_user;
+
+-- ============================================
+-- SCHEMA MIGRATIONS FOR PRODUCT FAMILIES & SLUGS
+-- ============================================
+-- Execute these ALTER statements if database already exists
+-- For new databases, incorporate these changes into the main CREATE TABLE statements above
+
+-- 1. Add slug field to products for SEO-friendly URLs
+ALTER TABLE products ADD COLUMN IF NOT EXISTS slug VARCHAR(200) UNIQUE;
+CREATE UNIQUE INDEX IF NOT EXISTS idx_products_slug ON products(slug);
+
+-- 2. Create product_families table to group product variants (different weights/prices of same product)
+CREATE TABLE IF NOT EXISTS product_families (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(200) NOT NULL,
+    name_en VARCHAR(200) NOT NULL,
+    base_slug VARCHAR(200) NOT NULL UNIQUE, -- "cafe-alta-montana"
+    description TEXT,
+    description_en TEXT,
+    category_id INTEGER REFERENCES product_categories(id),
+    variety_id INTEGER REFERENCES coffee_varieties(id),
+
+    -- Shared characteristics across variants
+    roast_level VARCHAR(50),
+    grind_type VARCHAR(50),
+    packaging_type VARCHAR(50),
+
+    -- Shared media
+    primary_image_url TEXT,
+    gallery_images JSONB,
+
+    -- SEO & Marketing (shared)
+    tags JSONB,
+    flavor_notes JSONB,
+    brewing_recommendations TEXT,
+    meta_title TEXT,
+    meta_title_en TEXT,
+    meta_description TEXT,
+    meta_description_en TEXT,
+
+    -- Status
+    is_active BOOLEAN DEFAULT TRUE,
+    display_order INTEGER DEFAULT 0,
+
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 3. Add family_id to products table
+ALTER TABLE products ADD COLUMN IF NOT EXISTS family_id UUID REFERENCES product_families(id);
+
+-- 4. Add display_order to products for ordering variants within a family
+ALTER TABLE products ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;
+
+-- 5. Add is_default_variant to mark the default variant shown in family view
+ALTER TABLE products ADD COLUMN IF NOT EXISTS is_default_variant BOOLEAN DEFAULT FALSE;
+
+-- 6. Create indexes for performance
+CREATE INDEX IF NOT EXISTS idx_products_family ON products(family_id);
+CREATE INDEX IF NOT EXISTS idx_product_families_slug ON product_families(base_slug);
+CREATE INDEX IF NOT EXISTS idx_product_families_category ON product_families(category_id);
+CREATE INDEX IF NOT EXISTS idx_product_families_active ON product_families(is_active);
+
+-- 7. Add trigger for product_families updated_at
+CREATE TRIGGER IF NOT EXISTS update_product_families_updated_at
+    BEFORE UPDATE ON product_families
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- 8. Create view for product families with their variants
+CREATE OR REPLACE VIEW v_product_families AS
+SELECT
+    pf.id as family_id,
+    pf.base_slug,
+    pf.name,
+    pf.name_en,
+    pf.description,
+    pf.description_en,
+    pf.roast_level,
+    pf.grind_type,
+    pf.primary_image_url as family_image,
+    pf.gallery_images as family_gallery,
+    pf.flavor_notes,
+    pf.brewing_recommendations,
+    pf.is_active as family_active,
+
+    -- Category info
+    pc.name as category_name,
+    pc.name_en as category_name_en,
+
+    -- Variety info
+    cv.name as variety_name,
+
+    -- Aggregate variants
+    json_agg(
+        json_build_object(
+            'id', p.id,
+            'sku', p.sku,
+            'slug', p.slug,
+            'weight_grams', p.weight_grams,
+            'price_usd', p.price_usd,
+            'price_local', p.price_local,
+            'currency_local', p.currency_local,
+            'primary_image_url', p.primary_image_url,
+            'stock_quantity', p.stock_quantity,
+            'is_active', p.is_active,
+            'is_default', p.is_default_variant,
+            'display_order', p.display_order
+        ) ORDER BY p.display_order, p.weight_grams
+    ) as variants,
+
+    -- Pricing range
+    MIN(p.price_usd) as price_from,
+    MAX(p.price_usd) as price_to,
+
+    -- Weight range
+    MIN(p.weight_grams) as min_weight,
+    MAX(p.weight_grams) as max_weight,
+
+    -- Stock status
+    SUM(p.stock_quantity) as total_stock,
+
+    COUNT(p.id) as variant_count
+
+FROM product_families pf
+LEFT JOIN products p ON pf.id = p.family_id AND p.is_active = true
+LEFT JOIN product_categories pc ON pf.category_id = pc.id
+LEFT JOIN coffee_varieties cv ON pf.variety_id = cv.id
+WHERE pf.is_active = true
+GROUP BY
+    pf.id, pf.base_slug, pf.name, pf.name_en, pf.description, pf.description_en,
+    pf.roast_level, pf.grind_type, pf.primary_image_url, pf.gallery_images,
+    pf.flavor_notes, pf.brewing_recommendations, pf.is_active,
+    pc.name, pc.name_en, cv.name;
+
+-- ============================================
+-- COMMENTS FOR NEW TABLES/FIELDS
+-- ============================================
+
+COMMENT ON TABLE product_families IS 'Groups related product variants (e.g., same coffee in different weights/prices)';
+COMMENT ON COLUMN products.slug IS 'SEO-friendly URL identifier (e.g., cafe-alta-montana-250g)';
+COMMENT ON COLUMN products.family_id IS 'Reference to parent product family for grouping variants';
+COMMENT ON COLUMN products.is_default_variant IS 'Default variant shown when viewing the family';
+COMMENT ON COLUMN product_families.base_slug IS 'Base slug for family (e.g., cafe-alta-montana)';
+
+-- ============================================
+-- MIGRATION HELPER FUNCTIONS
+-- ============================================
+
+-- Function to generate slug from product name
+CREATE OR REPLACE FUNCTION generate_product_slug(product_name TEXT, weight_grams INTEGER, sku TEXT)
+RETURNS TEXT AS $$
+DECLARE
+    base_slug TEXT;
+    final_slug TEXT;
+BEGIN
+    -- Remove accents and convert to lowercase
+    base_slug := lower(unaccent(product_name));
+
+    -- Replace spaces and special characters with hyphens
+    base_slug := regexp_replace(base_slug, '[^a-z0-9]+', '-', 'g');
+
+    -- Remove leading/trailing hyphens
+    base_slug := trim(both '-' from base_slug);
+
+    -- Add weight and SKU for uniqueness
+    final_slug := base_slug || '-' || weight_grams || 'g-' || lower(sku);
+
+    RETURN final_slug;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- Function to generate base family slug (without weight/sku)
+CREATE OR REPLACE FUNCTION generate_family_slug(product_name TEXT)
+RETURNS TEXT AS $$
+DECLARE
+    base_slug TEXT;
+BEGIN
+    -- Remove accents and convert to lowercase
+    base_slug := lower(unaccent(product_name));
+
+    -- Replace spaces and special characters with hyphens
+    base_slug := regexp_replace(base_slug, '[^a-z0-9]+', '-', 'g');
+
+    -- Remove leading/trailing hyphens
+    base_slug := trim(both '-' from base_slug);
+
+    -- Remove weight mentions (e.g., "250-gr", "1-kg")
+    base_slug := regexp_replace(base_slug, '-\d+(-?gr?|-?kg?)?', '', 'g');
+
+    RETURN base_slug;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
