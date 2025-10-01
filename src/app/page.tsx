@@ -252,6 +252,7 @@ export default function Home() {
                     <p className="text-xs text-gray-600 leading-tight line-clamp-2">
                       {(() => {
                         const desc = language === 'es' ? product.description : product.descriptionEn;
+                        if (!desc) return '';
                         // Extract first sentence or first 80 characters for preview
                         const firstSentence = desc.split('.')[0];
                         return firstSentence.length > 80 ? firstSentence.substring(0, 77) + '...' : firstSentence + '.';
