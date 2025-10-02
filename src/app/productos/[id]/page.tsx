@@ -251,9 +251,25 @@ export default function ProductDetailPage() {
           {/* Product Details */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                {language === 'es' ? product.name : product.nameEn}
-              </h1>
+              {(() => {
+                const fullName = language === 'es' ? product.name : product.nameEn
+                const match = fullName.match(/^(.*?)\s*\((.*?)\)\s*$/)
+                const productName = match ? match[2] : fullName
+                const subtitle = match ? match[1] : ''
+
+                return (
+                  <>
+                    <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
+                      {productName}
+                    </h1>
+                    {subtitle && (
+                      <p className="text-lg text-gray-600 mb-4">
+                        {subtitle}
+                      </p>
+                    )}
+                  </>
+                )
+              })()}
 
               <div className="flex items-center space-x-4 mb-6">
                 <span className="text-3xl font-bold text-green-700">
