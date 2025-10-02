@@ -142,7 +142,7 @@ export default function Hero({ language }: HeroProps) {
               {language === 'es' ? 'Descubre Nuestros Productos' : 'Discover Our Products'}
             </button>
             <button
-              onClick={() => window.location.href = '/historia'}
+              onClick={() => window.location.href = '/nosotros'}
               className="border-2 border-white text-white hover:bg-white hover:text-black font-bold py-4 px-8 rounded-full transition-all duration-300"
             >
               {language === 'es' ? 'Conoce Nuestra Historia' : 'Learn Our Story'}
