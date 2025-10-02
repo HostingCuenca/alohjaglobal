@@ -133,9 +133,25 @@ export default function ProductsPage() {
                       )}
                     </div>
 
-                    <h3 className="font-bold text-lg text-black leading-tight mb-3">
-                      {language === 'es' ? product.name : product.nameEn}
-                    </h3>
+                    {(() => {
+                      const fullName = language === 'es' ? product.name : product.nameEn
+                      const match = fullName.match(/^(.*?)\s*\((.*?)\)\s*$/)
+                      const productName = match ? match[2] : fullName
+                      const subtitle = match ? match[1] : ''
+
+                      return (
+                        <>
+                          <h3 className="font-bold text-lg text-black leading-tight mb-1">
+                            {productName}
+                          </h3>
+                          {subtitle && (
+                            <p className="text-sm text-gray-500 mb-2">
+                              {subtitle}
+                            </p>
+                          )}
+                        </>
+                      )
+                    })()}
 
                     <p className="text-gray-600 text-sm leading-relaxed mb-3 flex-grow">
                       {language === 'es' ? product.description : product.descriptionEn}

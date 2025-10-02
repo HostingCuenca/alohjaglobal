@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 
@@ -8,16 +9,16 @@ export default function GlobalPage() {
   const [language, setLanguage] = useState<'es' | 'en'>('es')
 
   const markets = [
-    { country: 'Japón', countryEn: 'Japan' },
-    { country: 'Corea del Sur', countryEn: 'South Korea' },
-    { country: 'China', countryEn: 'China' },
-    { country: 'Singapur', countryEn: 'Singapore' },
-    { country: 'Taiwán', countryEn: 'Taiwan' },
-    { country: 'Emiratos Árabes Unidos', countryEn: 'United Arab Emirates' },
-    { country: 'Estados Unidos', countryEn: 'United States' },
-    { country: 'Colombia', countryEn: 'Colombia' },
-    { country: 'Perú', countryEn: 'Peru' },
-    { country: 'Alemania', countryEn: 'Germany' }
+    { country: 'Japón', countryEn: 'Japan', countryCode: 'jp' },
+    { country: 'Corea del Sur', countryEn: 'South Korea', countryCode: 'kr' },
+    { country: 'China', countryEn: 'China', countryCode: 'cn' },
+    { country: 'Singapur', countryEn: 'Singapore', countryCode: 'sg' },
+    { country: 'Taiwán', countryEn: 'Taiwan', countryCode: 'tw' },
+    { country: 'Emiratos Árabes Unidos', countryEn: 'United Arab Emirates', countryCode: 'ae' },
+    { country: 'Estados Unidos', countryEn: 'United States', countryCode: 'us' },
+    { country: 'Colombia', countryEn: 'Colombia', countryCode: 'co' },
+    { country: 'Perú', countryEn: 'Peru', countryCode: 'pe' },
+    { country: 'Alemania', countryEn: 'Germany', countryCode: 'de' }
   ]
 
   return (
@@ -45,8 +46,15 @@ export default function GlobalPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {markets.map((market, index) => (
               <div key={index} className="text-center bg-amber-50 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-gray-400 text-xs">Flag</span>
+                <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden bg-white shadow-sm">
+                  <Image
+                    src={`https://flagcdn.com/w320/${market.countryCode}.png`}
+                    alt={`${language === 'es' ? market.country : market.countryEn} flag`}
+                    width={64}
+                    height={64}
+                    className="object-cover w-full h-full"
+                    unoptimized
+                  />
                 </div>
                 <h3 className="font-semibold text-black">
                   {language === 'es' ? market.country : market.countryEn}

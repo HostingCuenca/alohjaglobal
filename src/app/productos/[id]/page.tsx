@@ -290,9 +290,9 @@ export default function ProductDetailPage() {
               const originData = getOriginData();
 
               const getRoastDots = () => {
-                if (product.roastLevel === 'light') return '●●○○'
-                if (product.roastLevel === 'dark') return '●●●●'
-                return '●●●○'
+                if (product.roastLevel === 'light') return '●●○○○'
+                if (product.roastLevel === 'dark') return '●●●●●'
+                return '●●●○○'
               }
 
               return originData.origin && (

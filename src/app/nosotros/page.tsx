@@ -62,15 +62,15 @@ export default function AboutUsPage() {
       </section>
 
       {/* Mission and Vision Section */}
-      <section className="bg-amber-900 py-16">
+      <section className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12">
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-white mb-2">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
                 {language === 'es' ? 'Misión' : 'Mission'}
               </h2>
               <div className="w-16 h-1 bg-yellow-400 mx-auto mb-6"></div>
-              <p className="text-amber-100 text-lg leading-relaxed">
+              <p className="text-gray-700 text-lg leading-relaxed">
                 {language === 'es'
                   ? 'Generar progreso para las familias agricultoras ecuatorianas con base en la ética e innovación, construyendo excelencia profesional y calidad en el servicio.'
                   : 'Generate progress for Ecuadorian farming families based on ethics and innovation, building professional excellence and service quality.'
@@ -78,11 +78,11 @@ export default function AboutUsPage() {
               </p>
             </div>
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-white mb-2">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
                 {language === 'es' ? 'Visión' : 'Vision'}
               </h2>
               <div className="w-16 h-1 bg-yellow-400 mx-auto mb-6"></div>
-              <p className="text-amber-100 text-lg leading-relaxed">
+              <p className="text-gray-700 text-lg leading-relaxed">
                 {language === 'es'
                   ? 'Ser una marca global que trascienda generaciones, llevando productos de calidad al mundo y conectando a las personas con historias auténticas.'
                   : 'To be a global brand that transcends generations, bringing quality products to the world and connecting people with authentic stories.'
