@@ -230,6 +230,10 @@ export default function FarmerDetailPage() {
                   <video
                     className="w-full h-full object-cover"
                     controls
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
                     poster={farmer.photo || '/assets/fotosinicio/foto paisaje.jpg'}
                   >
                     <source src={farmer.interviewVideo} type="video/mp4" />
@@ -312,6 +316,10 @@ export default function FarmerDetailPage() {
                   <video
                     className="w-full h-full object-cover"
                     controls
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
                     poster={farmer.photo || '/assets/fotosinicio/foto paisaje.jpg'}
                   >
                     <source src={farmer.individualVideo} type="video/mp4" />
