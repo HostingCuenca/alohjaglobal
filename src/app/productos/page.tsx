@@ -52,11 +52,11 @@ export default function ProductsPage() {
       <Navigation language={language} setLanguage={setLanguage} />
 
       {/* Hero Image */}
-      <div className="flex justify-center py-8">
+      <div className="flex justify-center py-8 -mb-30">
         <Image
           src="/assets/FONDOEMPAQUESTRANSPARENTE.png"
           alt="Alohja Coffee Products"
-          width={800}
+          width={1200}
           height={400}
           className="object-contain"
           priority
