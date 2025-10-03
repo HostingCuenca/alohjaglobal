@@ -140,14 +140,14 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     openGraph: {
       title: `${product.name} - Alohja Global`,
       description: product.description,
-      images: [product.primaryImageUrl],
+      images: product.primaryImageUrl ? [product.primaryImageUrl] : [],
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
       title: `${product.name} - Alohja Global`,
       description: product.description,
-      images: [product.primaryImageUrl],
+      images: product.primaryImageUrl ? [product.primaryImageUrl] : [],
     },
   }
 }
