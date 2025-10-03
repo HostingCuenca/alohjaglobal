@@ -72,8 +72,8 @@ export default function AboutUsPage() {
               <div className="w-16 h-1 bg-yellow-400 mx-auto mb-6"></div>
               <p className="text-gray-700 text-lg leading-relaxed">
                 {language === 'es'
-                  ? 'Generar progreso para las familias agricultoras ecuatorianas con base en la ética e innovación, construyendo excelencia profesional y calidad en el servicio.'
-                  : 'Generate progress for Ecuadorian farming families based on ethics and innovation, building professional excellence and service quality.'
+                  ? 'Ser una empresa profundamente centrada en las personas, ofreciendo productos auténticos y sostenibles que conecten culturas, historias y territorios, creando valor y experiencias con impacto positivo a nivel global.'
+                  : 'To be a company deeply focused on people, offering authentic and sustainable products that connect cultures, stories, and territories, creating value and experiences with a positive impact on a global level.'
                 }
               </p>
             </div>
@@ -84,8 +84,8 @@ export default function AboutUsPage() {
               <div className="w-16 h-1 bg-yellow-400 mx-auto mb-6"></div>
               <p className="text-gray-700 text-lg leading-relaxed">
                 {language === 'es'
-                  ? 'Ser una marca global que trascienda generaciones, llevando productos de calidad al mundo y conectando a las personas con historias auténticas.'
-                  : 'To be a global brand that transcends generations, bringing quality products to the world and connecting people with authentic stories.'
+                  ? 'Posicionar Alohja como una marca global que trascienda generaciones, llevando productos de calidad al mundo y conectando personas con historias auténticas.'
+                  : 'Position Alohja as a global brand that transcends generations, bringing quality products to the world and connecting people with authentic stories.'
                 }
               </p>
             </div>

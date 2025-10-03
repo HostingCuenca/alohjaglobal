@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 
@@ -87,18 +88,36 @@ Looking forward to your prompt response!`
     <div className="min-h-screen bg-white">
       <Navigation language={language} setLanguage={setLanguage} />
 
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
-            {language === 'es' ? 'Contáctanos' : 'Contact Us'}
-          </h1>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-            {language === 'es'
-              ? 'Estamos aquí para ayudarte. Envíanos tu consulta y nos pondremos en contacto contigo lo antes posible.'
-              : 'We\'re here to help. Send us your inquiry and we\'ll get back to you as soon as possible.'
-            }
-          </p>
+      {/* Hero Section with Image */}
+      <section className="relative h-[400px] md:h-[500px] overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="https://blog.torisoftt.com/videos/quienesomos/agricultores%201.png"
+            alt="Contacto Alohja Coffee"
+            fill
+            className="object-cover"
+            priority
+            unoptimized
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
         </div>
+
+        <div className="relative h-full max-w-7xl mx-auto px-4 flex items-center justify-center">
+          <div className="max-w-3xl text-white text-center">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              {language === 'es' ? 'Contáctanos' : 'Contact Us'}
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-100 leading-relaxed">
+              {language === 'es'
+                ? 'Estamos aquí para ayudarte. Envíanos tu consulta y nos pondremos en contacto contigo lo antes posible.'
+                : 'We\'re here to help. Send us your inquiry and we\'ll get back to you as soon as possible.'
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 py-16">
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* Contact Form */}
@@ -329,53 +348,69 @@ Looking forward to your prompt response!`
                 </div>
               </div>
             </div>
-
-            <div className="bg-yellow-50 rounded-xl p-8">
-              <h3 className="text-xl font-bold text-black mb-4">
-                {language === 'es' ? '¿Por qué elegirnos?' : 'Why choose us?'}
-              </h3>
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex items-start space-x-2">
-                  <span className="text-yellow-600 font-bold">✓</span>
-                  <span>
-                    {language === 'es'
-                      ? 'Café 100% ecuatoriano de origen único'
-                      : '100% Ecuadorian single-origin coffee'
-                    }
-                  </span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-yellow-600 font-bold">✓</span>
-                  <span>
-                    {language === 'es'
-                      ? 'Trazabilidad completa del grano a la taza'
-                      : 'Complete traceability from bean to cup'
-                    }
-                  </span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-yellow-600 font-bold">✓</span>
-                  <span>
-                    {language === 'es'
-                      ? 'Comercio directo con agricultores'
-                      : 'Direct trade with farmers'
-                    }
-                  </span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-yellow-600 font-bold">✓</span>
-                  <span>
-                    {language === 'es'
-                      ? 'Prácticas sostenibles y orgánicas'
-                      : 'Sustainable and organic practices'
-                    }
-                  </span>
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>
+
+      {/* Why Choose Us Section - Independent */}
+      <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              {language === 'es' ? '¿Por qué elegirnos?' : 'Why choose us?'}
+            </h2>
+            <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+              {language === 'es'
+                ? 'Nos diferenciamos por nuestra calidad, trazabilidad y compromiso con la sostenibilidad'
+                : 'We stand out for our quality, traceability and commitment to sustainability'
+              }
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                icon: '☕',
+                titleEs: 'Café 100% Ecuatoriano',
+                titleEn: '100% Ecuadorian Coffee',
+                descEs: 'Origen único de las mejores regiones cafeteras de Ecuador',
+                descEn: 'Single origin from the best coffee regions of Ecuador'
+              },
+              {
+                icon: '🔍',
+                titleEs: 'Trazabilidad Total',
+                titleEn: 'Full Traceability',
+                descEs: 'Seguimiento completo del grano desde la finca hasta tu taza',
+                descEn: 'Complete tracking from farm to cup'
+              },
+              {
+                icon: '🤝',
+                titleEs: 'Comercio Directo',
+                titleEn: 'Direct Trade',
+                descEs: 'Trabajo directo con agricultores garantizando precios justos',
+                descEn: 'Direct work with farmers ensuring fair prices'
+              },
+              {
+                icon: '🌱',
+                titleEs: 'Sostenibilidad',
+                titleEn: 'Sustainability',
+                descEs: 'Prácticas orgánicas y sostenibles que cuidan el planeta',
+                descEn: 'Organic and sustainable practices that care for the planet'
+              }
+            ].map((item, index) => (
+              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 text-center">
+                <div className="text-6xl mb-4">{item.icon}</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                  {language === 'es' ? item.titleEs : item.titleEn}
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  {language === 'es' ? item.descEs : item.descEn}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <Footer language={language} />
     </div>

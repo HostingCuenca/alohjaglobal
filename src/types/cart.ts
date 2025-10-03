@@ -27,6 +27,8 @@ export interface Product {
   nameEn: string
   description?: string
   descriptionEn?: string
+  longDescription?: string
+  longDescriptionEn?: string
   categoryId?: number
   varietyId?: number
   weightGrams: number
