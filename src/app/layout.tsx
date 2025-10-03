@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
+import SocialMediaSidebar from "@/components/SocialMediaSidebar";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-headline",
@@ -64,6 +65,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <CartProvider>
+          <SocialMediaSidebar />
           {children}
         </CartProvider>
       </body>

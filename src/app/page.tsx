@@ -206,7 +206,7 @@ export default function Home() {
               controls
               poster="/assets/fotosinicio/foto paisaje.jpg"
             >
-              <source src="https://blog.torisoftt.com/videos/video-inicio-2.mp4" type="video/mp4" />
+              <source src="https://blog.torisoftt.com/videos/galeriainicio/1.%20VIDEO%20INICIO%20GALERIA.mp4" type="video/mp4" />
               {language === 'es'
                 ? 'Tu navegador no soporta el elemento de video.'
                 : 'Your browser does not support the video element.'
@@ -414,7 +414,7 @@ export default function Home() {
             {/* Image */}
             <div className="relative overflow-hidden rounded-xl shadow-2xl">
               <Image
-                src="/assets/fotosinicio/quienesomos1.png"
+                src="https://blog.torisoftt.com/videos/quienesomos/agricultores%201.png"
                 alt={language === 'es' ? 'Quienes Somos - Alohja Coffee' : 'Who We Are - Alohja Coffee'}
                 width={600}
                 height={400}
