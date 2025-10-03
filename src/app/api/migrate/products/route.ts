@@ -66,16 +66,21 @@ export async function POST() {
 
         const varietyId = getVarietyId(product)
 
+        // Generate slug from product id
+        const slug = product.id
+
         const result = await query(`
           INSERT INTO products (
             sku, name, name_en, description, description_en,
+            long_description, long_description_en, slug,
             category_id, variety_id, weight_grams, roast_level, grind_type,
             packaging_type, price_usd, price_local, currency_local,
             primary_image_url, gallery_images, tags, flavor_notes,
             brewing_recommendations, stock_quantity, is_active
           ) VALUES (
             $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
-            $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21
+            $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
+            $21, $22, $23, $24
           )
           RETURNING id, sku, name
         `, [
@@ -84,6 +89,9 @@ export async function POST() {
           product.nameEn,
           product.description,
           product.descriptionEn,
+          product.longDescription,
+          product.longDescriptionEn,
+          slug,
           defaultCategoryId,
           varietyId,
           product.weightGrams,

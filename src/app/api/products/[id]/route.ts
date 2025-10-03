@@ -16,6 +16,11 @@ export async function GET(
         p.name_en,
         p.description,
         p.description_en,
+        p.long_description,
+        p.long_description_en,
+        p.slug,
+        p.category_id,
+        p.variety_id,
         p.weight_grams,
         p.roast_level,
         p.grind_type,
@@ -30,57 +35,23 @@ export async function GET(
         p.brewing_recommendations,
         p.is_active,
         p.stock_quantity,
+        p.created_at,
+        p.updated_at,
 
         -- Coffee variety information
+        cv.id as variety_id_ref,
         cv.name as variety_name,
         cv.description as variety_description,
-        cv.characteristics as variety_characteristics,
 
         -- Category information
+        pc.id as category_id_ref,
         pc.name as category_name,
-        pc.name_en as category_name_en,
-
-        -- Batch and origin information (aggregated)
-        COALESCE(
-          json_agg(
-            DISTINCT jsonb_build_object(
-              'batch_id', cb.batch_id,
-              'farmer_name', f.full_name,
-              'farmer_code', f.farmer_code,
-              'province_name', pr.name,
-              'province_code', pr.code,
-              'province_map', pr.map_image_url,
-              'altitude_range', pr.altitude_range,
-              'altitude_min', cb.altitude_min,
-              'altitude_max', cb.altitude_max,
-              'processing_method', cb.processing_method,
-              'drying_method', cb.drying_method,
-              'harvest_date', cb.harvest_date,
-              'transport_mode', cb.transport_mode,
-              'roast_date', cb.roast_date,
-              'percentage', pb.percentage
-            )
-          ) FILTER (WHERE cb.id IS NOT NULL),
-          '[]'::json
-        ) as batches
+        pc.name_en as category_name_en
 
       FROM products p
       LEFT JOIN coffee_varieties cv ON p.variety_id = cv.id
       LEFT JOIN product_categories pc ON p.category_id = pc.id
-      LEFT JOIN product_batches pb ON p.id = pb.product_id
-      LEFT JOIN coffee_batches cb ON pb.batch_id = cb.id
-      LEFT JOIN farmers f ON cb.farmer_id = f.id
-      LEFT JOIN provinces pr ON f.province_id = pr.id
-
-      WHERE p.id = $1 OR p.sku = $1
-      GROUP BY
-        p.id, p.sku, p.name, p.name_en, p.description, p.description_en,
-        p.weight_grams, p.roast_level, p.grind_type, p.packaging_type,
-        p.price_usd, p.price_local, p.currency_local, p.primary_image_url,
-        p.gallery_images, p.tags, p.flavor_notes, p.brewing_recommendations,
-        p.is_active, p.stock_quantity,
-        cv.name, cv.description, cv.characteristics,
-        pc.name, pc.name_en
+      WHERE p.id::text = $1 OR p.sku = $1 OR p.slug = $1
     `, [id])
 
     if (result.rows.length === 0) {
@@ -98,7 +69,8 @@ export async function GET(
     console.error('Error fetching product:', error)
     return NextResponse.json({
       success: false,
-      error: 'Failed to fetch product'
+      error: 'Failed to fetch product',
+      details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
   }
 }
@@ -117,6 +89,9 @@ export async function PUT(
       name_en,
       description,
       description_en,
+      long_description,
+      long_description_en,
+      slug,
       category_id,
       variety_id,
       weight_grams,
@@ -142,27 +117,31 @@ export async function PUT(
         name_en = COALESCE($4, name_en),
         description = COALESCE($5, description),
         description_en = COALESCE($6, description_en),
-        category_id = COALESCE($7, category_id),
-        variety_id = COALESCE($8, variety_id),
-        weight_grams = COALESCE($9, weight_grams),
-        roast_level = COALESCE($10, roast_level),
-        grind_type = COALESCE($11, grind_type),
-        packaging_type = COALESCE($12, packaging_type),
-        price_usd = COALESCE($13, price_usd),
-        price_local = COALESCE($14, price_local),
-        currency_local = COALESCE($15, currency_local),
-        primary_image_url = COALESCE($16, primary_image_url),
-        gallery_images = COALESCE($17, gallery_images),
-        tags = COALESCE($18, tags),
-        flavor_notes = COALESCE($19, flavor_notes),
-        brewing_recommendations = COALESCE($20, brewing_recommendations),
-        stock_quantity = COALESCE($21, stock_quantity),
-        is_active = COALESCE($22, is_active),
+        long_description = COALESCE($7, long_description),
+        long_description_en = COALESCE($8, long_description_en),
+        slug = COALESCE($9, slug),
+        category_id = COALESCE($10, category_id),
+        variety_id = COALESCE($11, variety_id),
+        weight_grams = COALESCE($12, weight_grams),
+        roast_level = COALESCE($13, roast_level),
+        grind_type = COALESCE($14, grind_type),
+        packaging_type = COALESCE($15, packaging_type),
+        price_usd = COALESCE($16, price_usd),
+        price_local = COALESCE($17, price_local),
+        currency_local = COALESCE($18, currency_local),
+        primary_image_url = COALESCE($19, primary_image_url),
+        gallery_images = COALESCE($20, gallery_images),
+        tags = COALESCE($21, tags),
+        flavor_notes = COALESCE($22, flavor_notes),
+        brewing_recommendations = COALESCE($23, brewing_recommendations),
+        stock_quantity = COALESCE($24, stock_quantity),
+        is_active = COALESCE($25, is_active),
         updated_at = NOW()
-      WHERE id = $1 OR sku = $1
+      WHERE id::text = $1 OR sku = $1
       RETURNING *
     `, [
       id, sku, name, name_en, description, description_en,
+      long_description, long_description_en, slug,
       category_id, variety_id, weight_grams, roast_level, grind_type,
       packaging_type, price_usd, price_local, currency_local,
       primary_image_url,
@@ -202,7 +181,7 @@ export async function DELETE(
     const result = await query(`
       UPDATE products
       SET is_active = false, updated_at = NOW()
-      WHERE id = $1 OR sku = $1
+      WHERE id::text = $1 OR sku = $1
       RETURNING id, sku, name
     `, [id])
 

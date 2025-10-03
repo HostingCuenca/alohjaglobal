@@ -12,6 +12,7 @@ export async function GET() {
         p.name_en,
         p.description,
         p.description_en,
+        p.slug,
         p.weight_grams,
         p.roast_level,
         p.grind_type,

@@ -1,0 +1,542 @@
+'use client'
+
+import { useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import Head from 'next/head'
+import Navigation from '@/components/Navigation'
+import Footer from '@/components/Footer'
+import CartSidebar from '@/components/CartSidebar'
+import { useCart } from '@/context/CartContext'
+import { Product } from '@/types/cart'
+
+interface ProductDetailClientProps {
+  product: Product
+  relatedProducts: Product[]
+}
+
+export default function ProductDetailClient({ product, relatedProducts }: ProductDetailClientProps) {
+  const [language, setLanguage] = useState<'es' | 'en'>('es')
+  const { addToCart } = useCart()
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [selectedWeightIndex, setSelectedWeightIndex] = useState(0)
+  const [quantity, setQuantity] = useState(1)
+
+  const getCurrentWeightOption = () => {
+    if (!product.weightOptions || product.weightOptions.length === 0) return null
+    return product.weightOptions[selectedWeightIndex]
+  }
+
+  const getCurrentPrice = () => {
+    const weightOption = getCurrentWeightOption()
+    return weightOption ? weightOption.price : product.priceUsd
+  }
+
+  const getCurrentWeight = () => {
+    const weightOption = getCurrentWeightOption()
+    return weightOption ? weightOption.weight : product.weightGrams
+  }
+
+  const getCurrentImage = () => {
+    const weightOption = getCurrentWeightOption()
+    if (weightOption && selectedImageIndex === 0) {
+      return weightOption.image
+    }
+    return product.galleryImages?.[selectedImageIndex] || product.primaryImageUrl || '/images/coffee-placeholder.jpg'
+  }
+
+  const handleAddToCart = () => {
+    const weightOption = getCurrentWeightOption()
+    const productToAdd = weightOption ? {
+      ...product,
+      sku: weightOption.sku,
+      priceLocal: weightOption.price,
+      priceUsd: weightOption.price,
+      weightGrams: weightOption.weight,
+      primaryImageUrl: weightOption.image
+    } : product
+
+    addToCart(productToAdd, quantity)
+  }
+
+  const getGrindTypeLabel = (grindType: string) => {
+    const labels = {
+      'ground': language === 'es' ? 'Molido' : 'Ground',
+      'whole_bean': language === 'es' ? 'Grano entero' : 'Whole bean'
+    }
+    return labels[grindType as keyof typeof labels] || grindType
+  }
+
+  const getRoastLevelLabel = (roastLevel: string) => {
+    const labels = {
+      'light': language === 'es' ? 'Tueste claro' : 'Light roast',
+      'dark': language === 'es' ? 'Tueste oscuro' : 'Dark roast'
+    }
+    return labels[roastLevel as keyof typeof labels] || roastLevel
+  }
+
+  // Extraer datos del origen y altitud de la descripción
+  const getOriginData = () => {
+    const description = product.description || ""
+
+    // Detectar origen
+    let origin = ""
+    let mapImage = ""
+
+    if (description.includes("Portovelo") || description.includes("El Oro")) {
+      origin = "Portovelo – El Oro"
+      mapImage = "/assets/mapaspng/mapaecuadorELORO.png"
+    } else if (description.includes("Loja") || description.includes("Catacocha") || description.includes("Cariamanga")) {
+      origin = "Loja"
+      mapImage = "/assets/mapaspng/mapaecuadorLOJA.png"
+    } else if (description.includes("Pichincha") || description.includes("Nanegal")) {
+      origin = "Nanegal – Pichincha"
+      mapImage = "/assets/mapaspng/mapaecuadorPICHINCHA.png"
+    }
+
+    // Extraer altitud
+    const altitudeMatch = description.match(/(\d+[–-]\d+)\s*m[as]nl?m?/i)
+    const altitude = altitudeMatch ? altitudeMatch[1] + " msnm" : ""
+
+    // Extraer variedad
+    const varietyMatch = description.match(/Variedad(?:es)?:\s*([^.]+)/i)
+    const variety = varietyMatch ? varietyMatch[1].trim() : ""
+
+    // Extraer proceso de secado
+    const processMatch = description.match(/Secado:\s*([^.]+)/i)
+    const process = processMatch ? processMatch[1].trim() : ""
+
+    return { origin, mapImage, altitude, variety, process }
+  }
+
+  return (
+    <>
+      <Head>
+        <title>{`${language === 'es' ? product.name : product.nameEn} - Alohja Global`}</title>
+        <meta
+          name="description"
+          content={language === 'es' ? product.description : product.descriptionEn}
+        />
+        <meta property="og:title" content={`${language === 'es' ? product.name : product.nameEn} - Alohja Global`} />
+        <meta property="og:description" content={language === 'es' ? product.description : product.descriptionEn} />
+        <meta property="og:image" content={product.primaryImageUrl} />
+        <meta property="og:type" content="product" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${language === 'es' ? product.name : product.nameEn} - Alohja Global`} />
+        <meta name="twitter:description" content={language === 'es' ? product.description : product.descriptionEn} />
+        <meta name="twitter:image" content={product.primaryImageUrl} />
+        <link rel="canonical" href={`https://alohjaglobal.com/productos/${product.id}`} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": language === 'es' ? product.name : product.nameEn,
+              "description": language === 'es' ? product.description : product.descriptionEn,
+              "image": product.primaryImageUrl,
+              "sku": product.sku,
+              "brand": {
+                "@type": "Brand",
+                "name": "Alohja Global"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": getCurrentPrice(),
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock",
+                "seller": {
+                  "@type": "Organization",
+                  "name": "Alohja Global"
+                }
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "5",
+                "reviewCount": "1"
+              }
+            })
+          }}
+        />
+      </Head>
+
+      <div className="min-h-screen bg-white">
+        <Navigation language={language} setLanguage={setLanguage} />
+
+      {/* Breadcrumbs */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <nav className="flex text-sm text-gray-500">
+          <Link href="/" className="hover:text-gray-700">
+            {language === 'es' ? 'Inicio' : 'Home'}
+          </Link>
+          <span className="mx-2">/</span>
+          <Link href="/productos" className="hover:text-gray-700">
+            {language === 'es' ? 'Productos' : 'Products'}
+          </Link>
+          <span className="mx-2">/</span>
+          <span className="text-gray-900 font-medium">
+            {language === 'es' ? product.name : product.nameEn}
+          </span>
+        </nav>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Image Gallery */}
+          <div className="space-y-4">
+            {/* Main Image */}
+            <div className="aspect-square bg-gray-50 rounded-xl overflow-hidden">
+              <Image
+                src={getCurrentImage()}
+                alt={language === 'es' ? product.name : product.nameEn}
+                width={600}
+                height={600}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Thumbnail Gallery */}
+            {product.galleryImages && product.galleryImages.length > 1 && (
+              <div className="grid grid-cols-4 gap-2">
+                {product.galleryImages.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`aspect-square bg-gray-50 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                      selectedImageIndex === index
+                        ? 'border-yellow-500'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${product.name} - ${index + 1}`}
+                      width={150}
+                      height={150}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Product Details */}
+          <div className="space-y-6">
+            <div>
+              {(() => {
+                const fullName = language === 'es' ? product.name : product.nameEn
+                const match = fullName.match(/^(.*?)\s*\((.*?)\)\s*$/)
+
+                if (!match) {
+                  return (
+                    <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
+                      {fullName}
+                    </h1>
+                  )
+                }
+
+                const beforeParens = match[1].trim()
+                const insideParens = match[2].trim()
+
+                // Check if inside parentheses is a brand name (starts with capital, multiple words)
+                const isBrandName = /^[A-Z]/.test(insideParens) && insideParens.split(' ').length >= 2
+
+                const productName = isBrandName ? insideParens : beforeParens
+                const subtitle = isBrandName ? beforeParens : insideParens
+
+                return (
+                  <>
+                    <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
+                      {productName}
+                    </h1>
+                    {subtitle && (
+                      <p className="text-lg text-gray-600 mb-4">
+                        {subtitle}
+                      </p>
+                    )}
+                  </>
+                )
+              })()}
+
+              <div className="flex items-center space-x-4 mb-6">
+                <span className="text-3xl font-bold text-green-700">
+                  ${getCurrentPrice().toFixed(2)} USD
+                </span>
+                <span className="text-sm text-gray-500">
+                  {language === 'es' ? 'Por unidad' : 'Per unit'}
+                </span>
+              </div>
+
+              <p className="text-gray-600 text-lg leading-relaxed">
+                {language === 'es' ? (product.longDescription || product.description) : (product.longDescriptionEn || product.descriptionEn)}
+              </p>
+            </div>
+
+            {/* Origen y Características */}
+            {(() => {
+              const originData = getOriginData();
+
+              const getRoastDots = () => {
+                const description = product.description || ""
+
+                // Detectar nivel de tostado por nombre
+                if (description.includes("Cinnamon") || description.includes("City")) return '●●●○○' // 3/5
+                if (description.includes("American") || description.includes("Full City")) return '●●●●○' // 4/5
+
+                // Fallback a roastLevel
+                if (product.roastLevel === 'light') return '●●●○○'
+                if (product.roastLevel === 'dark') return '●●●●○'
+                return '●●●○○'
+              }
+
+              return originData.origin && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    {/* Información del origen - Grid 2x2 */}
+                    <div className="grid grid-cols-2 gap-6">
+                      <div>
+                        <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                          {language === 'es' ? 'ORIGEN:' : 'ORIGIN:'}
+                        </span>
+                        <span className="text-xl font-bold text-gray-900">
+                          {originData.origin.replace('–', '').replace('Portovelo ', '').replace('Nanegal ', '').toUpperCase()}
+                        </span>
+                      </div>
+
+                      {originData.variety && (
+                        <div>
+                          <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                            {language === 'es' ? 'VARIEDAD:' : 'VARIETY:'}
+                          </span>
+                          <span className="text-xl font-bold text-gray-900">
+                            {originData.variety.toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+
+                      {originData.altitude && (
+                        <div>
+                          <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                            {language === 'es' ? 'ALTITUD:' : 'ALTITUDE:'}
+                          </span>
+                          <span className="text-xl font-bold text-gray-900">
+                            {originData.altitude.replace(' msnm', '').toUpperCase()} (MSNM)
+                          </span>
+                        </div>
+                      )}
+
+                      {product.roastLevel && (
+                        <div>
+                          <span className="text-sm font-bold text-gray-500 uppercase tracking-wide block">
+                            {language === 'es' ? 'TOSTADO:' : 'ROAST:'}
+                          </span>
+                          <span className="text-2xl font-bold text-gray-900 tracking-wider">
+                            {getRoastDots()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Mapa */}
+                    <div className="flex justify-center lg:justify-end">
+                      {originData.mapImage ? (
+                        <Image
+                          src={originData.mapImage}
+                          alt={`Mapa de ${originData.origin}`}
+                          width={200}
+                          height={200}
+                          className="w-48 h-48 object-contain opacity-80"
+                        />
+                      ) : (
+                        <div className="w-48 h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                          <span className="text-4xl opacity-50">🗺️</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Opciones de Compra */}
+            <div className="bg-amber-50 rounded-xl p-6 border border-amber-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                🛒 {language === 'es' ? 'Opciones de Compra' : 'Purchase Options'}
+              </h3>
+
+              {/* Weight Options */}
+              {product.weightOptions && product.weightOptions.length > 1 && (
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    {language === 'es' ? 'Peso:' : 'Weight:'}
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {product.weightOptions.map((option, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedWeightIndex(index)}
+                        className={`p-3 border-2 rounded-lg text-left transition-all duration-200 ${
+                          selectedWeightIndex === index
+                            ? 'border-amber-500 bg-amber-100'
+                            : 'border-gray-300 hover:border-amber-400 bg-white'
+                        }`}
+                      >
+                        <div className="font-semibold text-gray-900">{option.weight}g</div>
+                        <div className="text-sm text-gray-600">${option.price.toFixed(2)}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Quantity and Add to Cart */}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    {language === 'es' ? 'Cantidad:' : 'Qty:'}
+                  </label>
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-8 h-8 border border-gray-400 rounded flex items-center justify-center hover:bg-gray-100 font-bold text-gray-700 text-lg"
+                  >
+                    −
+                  </button>
+                  <span className="w-12 text-center font-bold text-gray-900 bg-white border border-gray-300 rounded py-1">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-8 h-8 border border-gray-400 rounded flex items-center justify-center hover:bg-gray-100 font-bold text-gray-700 text-lg"
+                  >
+                    +
+                  </button>
+                </div>
+
+                <button
+                  onClick={handleAddToCart}
+                  className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 rounded-lg transition-colors"
+                >
+                  {language === 'es' ? 'Agregar al Carrito' : 'Add to Cart'}
+                </button>
+              </div>
+            </div>
+
+            {/* Especificaciones Técnicas */}
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <span className="text-sm text-gray-500 block">
+                  {language === 'es' ? 'Peso' : 'Weight'}
+                </span>
+                <span className="font-semibold text-gray-900">
+                  {getCurrentWeight()}g
+                </span>
+              </div>
+
+              {product.grindType && (
+                <div>
+                  <span className="text-sm text-gray-500 block">
+                    {language === 'es' ? 'Molienda' : 'Grind'}
+                  </span>
+                  <span className="font-semibold text-gray-900">
+                    {getGrindTypeLabel(product.grindType)}
+                  </span>
+                </div>
+              )}
+
+              {(() => {
+                const originData = getOriginData();
+                return originData.process && (
+                  <div>
+                    <span className="text-sm text-gray-500 block">
+                      {language === 'es' ? 'Proceso' : 'Process'}
+                    </span>
+                    <span className="font-semibold text-gray-900">
+                      {originData.process}
+                    </span>
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Flavor Notes */}
+            {product.flavorNotes && product.flavorNotes.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                  {language === 'es' ? 'Notas de sabor' : 'Flavor notes'}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {product.flavorNotes.map((note, index) => (
+                    <span
+                      key={index}
+                      className="bg-green-100 text-green-800 px-3 py-2 rounded-full text-sm font-medium"
+                    >
+                      {note}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Brewing Recommendations */}
+            {product.brewingRecommendations && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                  {language === 'es' ? 'Recomendaciones de preparación' : 'Brewing recommendations'}
+                </h3>
+                <p className="text-gray-600">
+                  {product.brewingRecommendations}
+                </p>
+              </div>
+            )}
+
+          </div>
+        </div>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-20">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              {language === 'es' ? 'Productos relacionados' : 'Related products'}
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map((relatedProduct) => (
+                <Link
+                  key={relatedProduct.id}
+                  href={`/productos/${relatedProduct.id}`}
+                  className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <div className="aspect-square bg-gray-50 rounded-lg mb-4 overflow-hidden">
+                    <Image
+                      src={relatedProduct.primaryImageUrl || '/images/coffee-placeholder.jpg'}
+                      alt={language === 'es' ? relatedProduct.name : relatedProduct.nameEn}
+                      width={300}
+                      height={300}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <h3 className="font-bold text-lg text-black leading-tight mb-2">
+                    {language === 'es' ? relatedProduct.name : relatedProduct.nameEn}
+                  </h3>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl font-bold text-green-700">
+                      ${relatedProduct.priceUsd.toFixed(2)}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      {relatedProduct.weightGrams}g
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+        <Footer language={language} />
+        <CartSidebar language={language} />
+      </div>
+    </>
+  )
+}

@@ -49,7 +49,7 @@ export default function Hero({ language }: HeroProps) {
             height: '100%'
           }}
         >
-          <source src="https://blog.torisoftt.com/videos/1.%20Video%20Inicio%20Pagina%20web.mp4" type="video/mp4" />
+          <source src="https://blog.torisoftt.com/videos/1.%20Video%20Inicio%20Pagina%20web%20(1920%20x%201000%20px).mp4" type="video/mp4" />
         </video>
 
         <div
