@@ -81,6 +81,8 @@ Looking forward to your prompt response!`
     { es: 'Alianzas Comerciales', en: 'Business Partnerships' },
     { es: 'Visita a Fincas', en: 'Farm Visits' },
     { es: 'Certificaciones', en: 'Certifications' },
+    { es: 'Pasantías Pregrado', en: 'Undergraduate Internships' },
+    { es: 'Pasantías Postgrado', en: 'Postgraduate Internships' },
     { es: 'Otro', en: 'Other' }
   ]
 
@@ -92,7 +94,7 @@ Looking forward to your prompt response!`
       <section className="relative h-[400px] md:h-[500px] overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="https://blog.torisoftt.com/videos/quienesomos/agricultores%201.png"
+            src="https://blog.torisoftt.com/videos/galeriainicio/19.jpg"
             alt="Contacto Alohja Coffee"
             fill
             className="object-cover"
@@ -114,6 +116,21 @@ Looking forward to your prompt response!`
               }
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Internships Section */}
+      <section className="bg-gradient-to-br from-green-50 via-amber-50 to-yellow-50 py-12">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            {language === 'es' ? 'Programa de Pasantías' : 'Internship Program'}
+          </h2>
+          <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-4xl mx-auto">
+            {language === 'es'
+              ? 'En nuestras fincas abrimos las puertas a quienes deseen aprender y vivir de cerca la magia del café. Invitamos a estudiantes, investigadores y apasionados del agro a realizar pasantías con nosotros, donde podrán ampliar sus conocimientos, compartir experiencias y descubrir todo el proceso del cultivo sostenible, desde la semilla hasta la taza. Una oportunidad para crecer, conectar con la tierra y formar parte de una tradición que trasciende generaciones.'
+              : 'We open the doors of our farms to those who wish to learn and experience the magic of coffee up close. We invite students, researchers, and coffee enthusiasts to join our internship program, where they can expand their knowledge, share experiences, and discover the entire sustainable process—from seed to cup. It is an opportunity to grow, connect with the land, and be part of a tradition that transcends generations.'
+            }
+          </p>
         </div>
       </section>
 

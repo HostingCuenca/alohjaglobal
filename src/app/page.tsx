@@ -7,9 +7,72 @@ import Navigation from '@/components/Navigation'
 import Hero from '@/components/Hero'
 import Footer from '@/components/Footer'
 import { products } from '@/data/products'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Home() {
   const [language, setLanguage] = useState<'es' | 'en'>('es')
+  const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0)
+  const [galleryDirection, setGalleryDirection] = useState(0)
+
+  // Array de medios para la galería
+  const galleryMedia = [
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/2.%20ELABORACION%20DE%20CAFE%20poner%20segundo%20en%20la%20galeria.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/2.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/2.video%20cayendo%20la%20noche.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/2.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/3.%20video%20tarde%20montaña.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/3.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/4.%20video%20tarde%20montaña%202.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/4.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/5.%20anochecer%20montaña.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/5.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/6.%20bosque%20de%20café.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/6.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/7.%20shirilculapo.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/7.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/8.%20montaña.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/8.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/9.%20bosque%20de%20cafe%202.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/9.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/10.%20bosque%20nublado.mp4', poster: 'https://blog.torisoftt.com/videos/galeriainicio/10.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/12.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/13.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/14.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/16.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/17.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/18.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/19.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/21.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/22.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/23.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/24.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/25.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/26.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/27.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250323_120516.mp4' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250323_120721.mp4' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250323_121627.mp4' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250323_130908.mp4' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250324_180638.mp4' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250324_180843.mp4' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250324_181012.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250324_181428.mp4' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250324_181822.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250324_182009.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250324_182256.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250324_182455.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250324_185022.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250325_151653.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250325_151818.jpg' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250329_170111.jpg' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/20250329_170145.mp4' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/semillero%201.png' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/semillero%202.png' },
+    { type: 'image', src: 'https://blog.torisoftt.com/videos/galeriainicio/semillero%203.png' },
+    { type: 'video', src: 'https://blog.torisoftt.com/videos/galeriainicio/video%20semillero.mp4' }
+  ]
+
+  const nextGalleryItem = () => {
+    setGalleryDirection(1)
+    setCurrentGalleryIndex((prev) => (prev + 1) % galleryMedia.length)
+  }
+
+  const prevGalleryItem = () => {
+    setGalleryDirection(-1)
+    setCurrentGalleryIndex((prev) => (prev - 1 + galleryMedia.length) % galleryMedia.length)
+  }
 
   // Get featured products (carefully selected variety for homepage)
   const featuredProducts = products.filter(p => p.isActive && [
@@ -200,18 +263,86 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="w-full">
-            <video
-              className="w-full rounded-xl shadow-2xl"
-              controls
-              poster="/assets/fotosinicio/foto paisaje.jpg"
-            >
-              <source src="https://blog.torisoftt.com/videos/galeriainicio/1.%20VIDEO%20INICIO%20GALERIA.mp4" type="video/mp4" />
-              {language === 'es'
-                ? 'Tu navegador no soporta el elemento de video.'
-                : 'Your browser does not support the video element.'
-              }
-            </video>
+          {/* Galería horizontal con carrusel */}
+          <div className="relative w-full">
+            <div className="relative bg-black rounded-2xl shadow-2xl overflow-hidden">
+              {/* Contenedor del carrusel */}
+              <div className="relative aspect-video overflow-hidden">
+                <AnimatePresence initial={false} custom={galleryDirection} mode="wait">
+                  <motion.div
+                    key={currentGalleryIndex}
+                    custom={galleryDirection}
+                    initial={{ x: galleryDirection > 0 ? '100%' : '-100%', opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: galleryDirection > 0 ? '-100%' : '100%', opacity: 0 }}
+                    transition={{
+                      type: "tween",
+                      ease: "easeInOut",
+                      duration: 0.5
+                    }}
+                    className="absolute inset-0"
+                  >
+                    {galleryMedia[currentGalleryIndex].type === 'video' ? (
+                      <video
+                        key={currentGalleryIndex}
+                        className="w-full h-full object-cover"
+                        controls
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        poster={galleryMedia[currentGalleryIndex].poster || '/assets/fotosinicio/foto paisaje.jpg'}
+                      >
+                        <source src={galleryMedia[currentGalleryIndex].src} type="video/mp4" />
+                        {language === 'es'
+                          ? 'Tu navegador no soporta el elemento de video.'
+                          : 'Your browser does not support the video element.'
+                        }
+                      </video>
+                    ) : (
+                      <img
+                        src={galleryMedia[currentGalleryIndex].src}
+                        alt={`Galería ${currentGalleryIndex + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Controles de navegación */}
+              <div className="absolute inset-0 flex items-center justify-between px-4 pointer-events-none">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={prevGalleryItem}
+                  className="pointer-events-auto p-4 bg-white/90 hover:bg-white text-black rounded-full shadow-2xl transition-all duration-200 backdrop-blur-sm"
+                  aria-label="Anterior"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={nextGalleryItem}
+                  className="pointer-events-auto p-4 bg-white/90 hover:bg-white text-black rounded-full shadow-2xl transition-all duration-200 backdrop-blur-sm"
+                  aria-label="Siguiente"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                  </svg>
+                </motion.button>
+              </div>
+
+              {/* Contador de elementos */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
+                <div className="bg-black/70 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold">
+                  {currentGalleryIndex + 1} / {galleryMedia.length}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -281,7 +281,7 @@ export default function ProductDetailPage() {
               </div>
 
               <p className="text-gray-600 text-lg leading-relaxed">
-                {language === 'es' ? product.description : product.descriptionEn}
+                {language === 'es' ? (product.longDescription || product.description) : (product.longDescriptionEn || product.descriptionEn)}
               </p>
             </div>
 
@@ -290,8 +290,15 @@ export default function ProductDetailPage() {
               const originData = getOriginData();
 
               const getRoastDots = () => {
-                if (product.roastLevel === 'light') return '●●○○○'
-                if (product.roastLevel === 'dark') return '●●●●●'
+                const description = product.description || ""
+
+                // Detectar nivel de tostado por nombre
+                if (description.includes("Cinnamon") || description.includes("City")) return '●●●○○' // 3/5
+                if (description.includes("American") || description.includes("Full City")) return '●●●●○' // 4/5
+
+                // Fallback a roastLevel
+                if (product.roastLevel === 'light') return '●●●○○'
+                if (product.roastLevel === 'dark') return '●●●●○'
                 return '●●●○○'
               }
 

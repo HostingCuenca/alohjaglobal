@@ -160,23 +160,23 @@ export default function FarmerDetailPage() {
   // Tabla de información como la especificaste
   const infoTable = [
     {
-      label: language === 'es' ? 'Farm name / Nombre de la Finca' : 'Farm name',
+      label: language === 'es' ? 'Nombre de la Finca' : 'Farm name',
       value: farmer.farmName
     },
     {
-      label: language === 'es' ? 'Origin / Origen' : 'Origin',
+      label: language === 'es' ? 'Origen' : 'Origin',
       value: farmer.origin
     },
     {
-      label: language === 'es' ? 'Cultivated variety / Variedad de cultivo' : 'Cultivated variety',
+      label: language === 'es' ? 'Variedad de cultivo' : 'Cultivated variety',
       value: farmer.varieties
     },
     {
-      label: language === 'es' ? 'Crop Altitude / Altitud del cultivo' : 'Crop Altitude',
+      label: language === 'es' ? 'Altitud del cultivo' : 'Crop Altitude',
       value: farmer.altitude
     },
     {
-      label: language === 'es' ? 'Cultivation method / Método de cultivo' : 'Cultivation method',
+      label: language === 'es' ? 'Método de cultivo' : 'Cultivation method',
       value: farmer.cultivationMethod
     }
   ]

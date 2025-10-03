@@ -1,14 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function AboutUsPage() {
   const [language, setLanguage] = useState<'es' | 'en'>('es')
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentImage, setCurrentImage] = useState(0)
+  const [currentValue, setCurrentValue] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
   const galleryImages = [
     '5.png', '6.png', '7.png', '8.png',
@@ -35,6 +38,111 @@ export default function AboutUsPage() {
     setCurrentImage((prev) => (prev - 1 + galleryImages.length) % galleryImages.length)
   }
 
+  const corporateValues = [
+    {
+      es: 'Confianza en nuestros productos',
+      en: 'Confidence in our products',
+      description: {
+        es: 'Inspiramos seguridad y orgullo en quienes nos eligen.',
+        en: 'We inspire confidence and pride in those who choose us.'
+      },
+      image: 'https://blog.torisoftt.com/videos/3.%20NOSOTROS/imagenes%20valores%20corporativos/Confianza%20en%20nuestros%20productos.jpg'
+    },
+    {
+      es: 'Calidad',
+      en: 'Quality',
+      description: {
+        es: 'Garantizamos excelencia en todo lo que hacemos.',
+        en: 'We guarantee excellence in everything we do.'
+      },
+      image: 'https://blog.torisoftt.com/videos/3.%20NOSOTROS/imagenes%20valores%20corporativos/Calidad.jpg'
+    },
+    {
+      es: 'Sostenibilidad',
+      en: 'Sustainability',
+      description: {
+        es: 'Cuidamos el planeta y las comunidades.',
+        en: 'We care for the planet and communities.'
+      },
+      image: 'https://blog.torisoftt.com/videos/3.%20NOSOTROS/imagenes%20valores%20corporativos/Sostenibilidad.jpg'
+    },
+    {
+      es: 'Innovación',
+      en: 'Innovation',
+      description: {
+        es: 'Creamos nuevas formas de inspirar y sorprender.',
+        en: 'We create new ways to inspire and surprise.'
+      },
+      image: 'https://blog.torisoftt.com/videos/3.%20NOSOTROS/imagenes%20valores%20corporativos/innovacion.jpg'
+    },
+    {
+      es: 'Transparencia',
+      en: 'Transparency',
+      description: {
+        es: 'Procesos claros que generan confianza.',
+        en: 'Clear processes that build trust.'
+      },
+      image: 'https://blog.torisoftt.com/videos/3.%20NOSOTROS/imagenes%20valores%20corporativos/transparencia.png'
+    },
+    {
+      es: 'Inspiración',
+      en: 'Inspiration',
+      description: {
+        es: 'Motivamos a otros a ser parte de algo significativo.',
+        en: 'We motivate others to be part of something meaningful.'
+      },
+      image: 'https://blog.torisoftt.com/videos/3.%20NOSOTROS/imagenes%20valores%20corporativos/inspiraion.png'
+    },
+    {
+      es: 'Ética',
+      en: 'Ethics',
+      description: {
+        es: 'Tomamos decisiones correctas y responsables, basadas en integridad, respeto y justicia.',
+        en: 'We make correct and responsible decisions, based on integrity, respect and justice.'
+      },
+      image: 'https://blog.torisoftt.com/videos/3.%20NOSOTROS/imagenes%20valores%20corporativos/etica.png'
+    },
+    {
+      es: 'Comercio justo',
+      en: 'Fair trade',
+      description: {
+        es: 'Garantizamos el pago justo y digno que merecen los productores.',
+        en: 'We guarantee the fair and dignified payment that producers deserve.'
+      },
+      image: 'https://blog.torisoftt.com/videos/3.%20NOSOTROS/imagenes%20valores%20corporativos/comercio%20justo.png'
+    }
+  ]
+
+  const [direction, setDirection] = useState(0)
+
+  const nextValue = () => {
+    setDirection(1)
+    setCurrentValue((prev) => (prev + 1) % corporateValues.length)
+  }
+
+  const prevValue = () => {
+    setDirection(-1)
+    setCurrentValue((prev) => (prev - 1 + corporateValues.length) % corporateValues.length)
+  }
+
+  const goToValue = (index: number) => {
+    setDirection(index > currentValue ? 1 : -1)
+    setCurrentValue(index)
+    setIsAutoPlaying(false) // Pausar autoplay cuando el usuario interactúa
+  }
+
+  // Auto-play carousel cada 8 segundos
+  useEffect(() => {
+    if (!isAutoPlaying) return
+
+    const interval = setInterval(() => {
+      setDirection(1)
+      setCurrentValue((prev) => (prev + 1) % corporateValues.length)
+    }, 8000)
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, corporateValues.length])
+
   return (
     <div className="min-h-screen bg-white">
       <Navigation language={language} setLanguage={setLanguage} />
@@ -51,7 +159,7 @@ export default function AboutUsPage() {
               playsInline
               poster="/assets/fotosinicio/foto paisaje.jpg"
             >
-              <source src="https://blog.torisoftt.com/videos/quienes-somos.mp4" type="video/mp4" />
+              <source src="https://blog.torisoftt.com/videos/3.%20NOSOTROS/video%20quienes%20somos%20REDISE%C3%91ADO.mp4" type="video/mp4" />
               {language === 'es'
                 ? 'Tu navegador no soporta el elemento de video.'
                 : 'Your browser does not support the video element.'
@@ -94,7 +202,7 @@ export default function AboutUsPage() {
       </section>
 
       {/* Our Values Image */}
-      <section>
+      {/* <section>
         <div className="w-full">
           <Image
             src="/assets/nuestrosvalores.png"
@@ -104,7 +212,7 @@ export default function AboutUsPage() {
             className="w-full h-auto object-cover"
           />
         </div>
-      </section>
+      </section> */}
 
       {/* PREVIOUS VERSION - COMMENTED FOR BACKUP
       <section className="bg-amber-900 py-16">
@@ -154,7 +262,7 @@ export default function AboutUsPage() {
             </div>
             <div className="relative overflow-hidden rounded-xl shadow-2xl">
               <Image
-                src="https://blog.torisoftt.com/videos/quienesomos/10.png"
+                src="https://blog.torisoftt.com/videos/3.%20NOSOTROS/ERIKA%20Y%20RONALD.png"
                 alt="Alohja Coffee Heritage"
                 width={600}
                 height={400}
@@ -192,52 +300,182 @@ export default function AboutUsPage() {
           </div>
         </section>
 
-        {/* Values */}
+        {/* Values - Grid Cards */}
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-black text-center mb-12">
             {language === 'es' ? 'Valores Corporativos' : 'Corporate Values'}
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                es: 'Confianza en nuestros productos – Inspiramos seguridad y orgullo en quienes nos eligen.',
-                en: 'Confidence in our products – We inspire confidence and pride in those who choose us.'
-              },
-              {
-                es: 'Calidad – garantizamos excelencia en todo lo que hacemos.',
-                en: 'Quality – We guarantee excellence in everything we do.'
-              },
-              {
-                es: 'Sostenibilidad – Cuidamos el planeta y las comunidades.',
-                en: 'Sustainability – We care for the planet and communities.'
-              },
-              {
-                es: 'Innovación – Creamos nuevas formas de inspirar y sorprender.',
-                en: 'Innovation – We create new ways to inspire and surprise.'
-              },
-              {
-                es: 'Transparencia – Procesos claros que generan confianza.',
-                en: 'Transparency – Clear processes that build trust.'
-              },
-              {
-                es: 'Inspiración – Motivamos a otros a ser parte de algo significativo.',
-                en: 'Inspiration – We motivate others to be part of something meaningful.'
-              },
-              {
-                es: 'Ética - Tomamos decisiones correctas y responsables, basadas en integridad, respeto y justicia en todas nuestras acciones.',
-                en: 'Ethics - We make correct and responsible decisions, based on integrity, respect and justice in all our actions.'
-              },
-              {
-                es: 'Comercio justo: garantizamos el pago justo y digno que merecen los productores',
-                en: 'Fair trade -- We guarantee the fair and dignified payment that producers deserve.'
-              }
-            ].map((value, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <p className="text-gray-700 text-sm">
-                  {language === 'es' ? value.es : value.en}
-                </p>
+            {corporateValues.map((value, index) => (
+              <div key={index} className="group relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div className="aspect-square relative overflow-hidden">
+                  <Image
+                    src={value.image}
+                    alt={language === 'es' ? value.es : value.en}
+                    width={400}
+                    height={400}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 className="text-white font-bold text-xl mb-1">
+                      {language === 'es' ? value.es : value.en}
+                    </h3>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {language === 'es' ? value.description.es : value.description.en}
+                  </p>
+                </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Values - Interactive Slideshow */}
+        <section className="mb-16 space-y-8">
+          <h2 className="text-3xl font-bold text-black text-center mb-12">
+            {language === 'es' ? 'Explora Nuestros Valores' : 'Explore Our Values'}
+          </h2>
+
+          {/* Card Grande con animación tipo carrusel */}
+          <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden">
+            {/* Main Content Area with AnimatePresence */}
+            <div className="relative min-h-[500px] overflow-hidden">
+              <AnimatePresence initial={false} custom={direction} mode="wait">
+                <motion.div
+                  key={currentValue}
+                  custom={direction}
+                  initial={{ x: direction > 0 ? '100%' : '-100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: direction > 0 ? '-100%' : '100%' }}
+                  transition={{
+                    type: "tween",
+                    ease: "easeInOut",
+                    duration: 0.6
+                  }}
+                  className="absolute inset-0"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
+                    {/* Image Section */}
+                    <div className="relative lg:col-span-1 h-64 lg:h-auto">
+                      <Image
+                        src={corporateValues[currentValue].image}
+                        alt={language === 'es' ? corporateValues[currentValue].es : corporateValues[currentValue].en}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </div>
+
+                    {/* Text Content Section */}
+                    <div className="lg:col-span-2 p-8 lg:p-12 flex flex-col justify-center relative bg-white">
+                      <div className="space-y-6">
+                        <h3 className="text-4xl lg:text-5xl font-bold text-gray-900">
+                          {language === 'es' ? corporateValues[currentValue].es : corporateValues[currentValue].en}
+                        </h3>
+                        <p className="text-gray-700 text-xl lg:text-2xl leading-relaxed">
+                          {language === 'es' ? corporateValues[currentValue].description.es : corporateValues[currentValue].description.en}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Navigation Arrows - Fuera del contenido animado */}
+            <div className="absolute bottom-8 right-8 flex gap-3 z-10">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => {
+                  prevValue()
+                  setIsAutoPlaying(false)
+                }}
+                className="p-4 bg-amber-500 hover:bg-amber-600 text-white rounded-full shadow-lg transition-colors duration-200"
+                aria-label="Valor anterior"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => {
+                  nextValue()
+                  setIsAutoPlaying(false)
+                }}
+                className="p-4 bg-amber-500 hover:bg-amber-600 text-white rounded-full shadow-lg transition-colors duration-200"
+                aria-label="Siguiente valor"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </motion.button>
+            </div>
+
+            {/* Indicador de autoplay */}
+            {isAutoPlaying && (
+              <div className="absolute top-4 right-4 z-10">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                >
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                  </motion.div>
+                  Auto
+                </motion.div>
+              </div>
+            )}
+          </div>
+
+          {/* Thumbnails Navigation - Fuera de la card */}
+          <div className="max-w-4xl mx-auto">
+            <div className="flex justify-center gap-3 overflow-x-auto pb-2">
+              {corporateValues.map((value, index) => (
+                <motion.button
+                  key={index}
+                  whileHover={{ scale: 1.15, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => goToValue(index)}
+                  className={`flex-shrink-0 relative rounded-xl overflow-hidden transition-all duration-300 ${
+                    currentValue === index
+                      ? 'ring-4 ring-amber-500 shadow-xl'
+                      : 'opacity-60 hover:opacity-100 shadow-md'
+                  }`}
+                >
+                  <div className="w-20 h-20 lg:w-24 lg:h-24">
+                    <Image
+                      src={value.image}
+                      alt={language === 'es' ? value.es : value.en}
+                      width={96}
+                      height={96}
+                      className="w-full h-full object-cover"
+                      unoptimized
+                    />
+                  </div>
+                  {currentValue === index && (
+                    <motion.div
+                      layoutId="activeIndicator"
+                      className="absolute inset-0 border-4 border-amber-500 rounded-xl"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </motion.button>
+              ))}
+            </div>
           </div>
         </section>
 
