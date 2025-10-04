@@ -158,7 +158,7 @@ export default function ProductsClient({ products }: ProductsClientProps) {
                       if (!match) {
                         // No parentheses, use full name
                         return (
-                          <h3 className="font-bold text-lg text-black leading-tight mb-1">
+                          <h3 className="font-bold text-xl text-black leading-tight mb-1">
                             {fullName}
                           </h3>
                         )
@@ -176,7 +176,7 @@ export default function ProductsClient({ products }: ProductsClientProps) {
 
                       return (
                         <>
-                          <h3 className="font-bold text-lg text-black leading-tight mb-1">
+                          <h3 className="font-bold text-xl text-black leading-tight mb-1">
                             {productName}
                           </h3>
                           {subtitle && (
