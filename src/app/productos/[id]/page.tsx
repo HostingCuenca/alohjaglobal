@@ -132,9 +132,12 @@ async function getRelatedProducts(slug: string, roastLevel: string, grindType: s
       primaryImageUrl: rp.primary_image_url,
       priceLocal: parseFloat(rp.price_local),
       priceUsd: parseFloat(rp.price_usd),
+      currencyLocal: 'USD',
       weightGrams: rp.weight_grams,
       roastLevel: rp.roast_level,
-      grindType: rp.grind_type
+      grindType: rp.grind_type,
+      isActive: true,
+      stockQuantity: 0
     }))
   } catch (error) {
     console.error('Error fetching related products:', error)
