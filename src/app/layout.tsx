@@ -52,9 +52,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <head>
-        <link rel="icon" href="/icon.png" type="image/png" />
-      </head>
       <body
         className={`${playfairDisplay.variable} ${inter.variable} font-body antialiased`}
         suppressHydrationWarning={true}
