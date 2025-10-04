@@ -8,7 +8,7 @@ import Footer from '@/components/Footer'
 // HARDCODED DATA - Basado en JSON proporcionado
 const farmersData = {
   agricultores: [
-    {
+    { 
       id: "pablo-quezada",
       name: "Pablo Quezada",
       photo: "https://blog.torisoftt.com/videos/agricultores/pabloquezadaperfil.png",
