@@ -24,7 +24,7 @@ export default function Footer({ language }: FooterProps) {
               {/* Logo and Description */}
               <div className="lg:col-span-2">
                 <Image
-                  src="/assets/logo-nuevohorizontal.png"
+                  src="/assets/logoactual.png"
                   alt="Alohja Coffee"
                   width={150}
                   height={50}

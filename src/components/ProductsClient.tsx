@@ -167,8 +167,9 @@ export default function ProductsClient({ products }: ProductsClientProps) {
                       const beforeParens = match[1].trim()
                       const insideParens = match[2].trim()
 
-                      // Check if inside parentheses is a brand name (starts with capital, multiple words)
-                      const isBrandName = /^[A-Z]/.test(insideParens) && insideParens.split(' ').length >= 2
+                      // Check if inside parentheses is a brand name (starts with capital letter and has 2+ words)
+                      // Examples: "Café alta montaña", "Café Cordillera", "Café Origen Profundo"
+                      const isBrandName = /^[A-ZÁ-Ú]/.test(insideParens) && insideParens.split(' ').length >= 2
 
                       const productName = isBrandName ? insideParens : beforeParens
                       const subtitle = isBrandName ? beforeParens : insideParens

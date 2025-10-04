@@ -40,7 +40,7 @@ export default function Navigation({ language, setLanguage }: NavigationProps) {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/assets/logo-nuevohorizontal.png"
+              src="/assets/logoactual.png"
               alt="Alohja Coffee"
               width={180}
               height={60}
