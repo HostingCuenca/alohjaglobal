@@ -6,7 +6,10 @@ export const revalidate = 3600
 
 async function getProducts(): Promise<Product[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3202'
+    // Use full URL in production, localhost in dev
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ||
+                    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` :
+                    'http://localhost:3202'
     const response = await fetch(`${baseUrl}/api/products`, {
       next: { revalidate: 3600 } // Cache for 1 hour
     })
