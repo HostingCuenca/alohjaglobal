@@ -590,6 +590,23 @@ GROUP BY
     pf.flavor_notes, pf.brewing_recommendations, pf.is_active,
     pc.name, pc.name_en, cv.name;
 
+
+ALTER TABLE public.coffee_batches
+    ADD COLUMN IF NOT EXISTS origin VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS transfer_to_quito VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS storage VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS roast_types VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS transfer_to_shipping VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS destination_country VARCHAR(255);
+
+-- Agregar comentarios para documentación
+COMMENT ON COLUMN public.coffee_batches.origin IS 'Origen detallado del café (ej: Paltas-Olmedo-Vilcabamba)';
+  COMMENT ON COLUMN public.coffee_batches.transfer_to_quito IS 'Modo de traslado a Quito (ej: terrestre, aéreo)';
+  COMMENT ON COLUMN public.coffee_batches.storage IS 'Ubicación de almacenamiento temporal (ej: Bodega Quito Central)';
+  COMMENT ON COLUMN public.coffee_batches.roast_types IS 'Tipos de tostado aplicados (ej: tueste claro - tueste medio)';
+  COMMENT ON COLUMN public.coffee_batches.transfer_to_shipping IS 'Modo de traslado a embarque (ej: terrestre-marítimo)';
+  COMMENT ON COLUMN public.coffee_batches.destination_country IS 'País(es) de destino (ej: Japón - Estados Unidos)';
+
 -- ============================================
 -- COMMENTS FOR NEW TABLES/FIELDS
 -- ============================================

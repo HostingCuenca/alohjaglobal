@@ -1,36 +1,69 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface HeroProps {
   language: 'es' | 'en'
 }
 
 export default function Hero({ language }: HeroProps) {
+  const router = useRouter()
   const [searchValue, setSearchValue] = useState('')
-  const [searchResult, setSearchResult] = useState<{
-    loteId: string;
-    finca: string;
-    variedad: string;
-    altitud: string;
-    procesamiento: string;
-    fechaCosecha: string;
-    ubicacion: string;
-  } | null>(null)
+  const [searchResult, setSearchResult] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [notFound, setNotFound] = useState(false)
 
-  const handleSearch = () => {
-    // Simulando búsqueda de lote
-    if (searchValue.trim()) {
-      const mockResult = {
-        loteId: searchValue,
-        finca: language === 'es' ? 'Finca El Paraíso' : 'El Paraíso Farm',
-        variedad: language === 'es' ? 'Typica Ecuatoriana' : 'Ecuadorian Typica',
-        altitud: '1,200 - 1,400 msnm',
-        procesamiento: language === 'es' ? 'Lavado' : 'Washed',
-        fechaCosecha: language === 'es' ? 'Marzo 2024' : 'March 2024',
-        ubicacion: language === 'es' ? 'Provincia de Loja, Ecuador' : 'Loja Province, Ecuador'
+  // Función para formatear fechas
+  const formatEcuadorDate = (dateString: string | null | undefined): string => {
+    if (!dateString) return '-'
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) return dateString
+
+      const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'America/Guayaquil'
       }
-      setSearchResult(mockResult)
+
+      const locale = language === 'es' ? 'es-EC' : 'en-US'
+      return date.toLocaleDateString(locale, options)
+    } catch {
+      return dateString
+    }
+  }
+
+  const handleSearch = async () => {
+    if (!searchValue.trim()) return
+
+    setIsLoading(true)
+    setNotFound(false)
+    setSearchResult(null)
+
+    try {
+      const response = await fetch(`/api/batches-simple?batch_id=${searchValue.trim()}`)
+      const data = await response.json()
+
+      if (data.success && data.batch) {
+        setSearchResult(data.batch)
+        setNotFound(false)
+      } else {
+        setSearchResult(null)
+        setNotFound(true)
+      }
+    } catch (error) {
+      console.error('Error searching batch:', error)
+      setNotFound(true)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleViewFullDetails = () => {
+    if (searchResult) {
+      router.push(`/sostenibilidad?batch=${searchResult.batch_id}`)
     }
   }
 
@@ -84,56 +117,81 @@ export default function Hero({ language }: HeroProps) {
         {/* Search Box */}
         <div className="search-box rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
           <h3 className="text-xl md:text-2xl font-semibold mb-4">
-            {language === 'es' ? 'Busca tu lote de café' : 'Search your coffee batch'}
+            {language === 'es' ? 'Rastrea tu lote de café' : 'Track your coffee batch'}
           </h3>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              placeholder={language === 'es' ? 'Ingresa el código de tu lote (ej: ALO2024-001)' : 'Enter your batch code (e.g: ALO2024-001)'}
+              placeholder={language === 'es' ? 'Ej: AR000147, PQ000258' : 'Ex: AR000147, PQ000258'}
               className="flex-1 px-4 py-3 rounded-lg text-white placeholder-gray-300 bg-black bg-opacity-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              disabled={isLoading}
             />
             <button
               onClick={handleSearch}
-              className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105"
+              disabled={isLoading}
+              className="bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-black font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:transform-none"
             >
-              {language === 'es' ? 'Buscar' : 'Search'}
+              {isLoading ? (language === 'es' ? 'Buscando...' : 'Searching...') : (language === 'es' ? 'Buscar' : 'Search')}
             </button>
           </div>
         </div>
 
-        {/* Search Result */}
+        {/* Search Result - Versión Resumida */}
         {searchResult && (
           <div className="search-result rounded-2xl p-6 text-black max-w-3xl mx-auto mb-8">
             <h4 className="text-2xl font-bold mb-4 text-center">
-              {language === 'es' ? `Lote: ${searchResult.loteId}` : `Batch: ${searchResult.loteId}`}
+              {language === 'es' ? `Lote: ${searchResult.batch_id}` : `Batch: ${searchResult.batch_id}`}
             </h4>
-            <div className="grid md:grid-cols-2 gap-4 text-left">
+            <div className="grid md:grid-cols-2 gap-4 text-left mb-6">
               <div>
-                <strong>{language === 'es' ? 'Finca:' : 'Farm:'}</strong> {searchResult.finca}
+                <strong>{language === 'es' ? 'Finca:' : 'Farm:'}</strong> {searchResult.farm || '-'}
               </div>
               <div>
-                <strong>{language === 'es' ? 'Variedad:' : 'Variety:'}</strong> {searchResult.variedad}
+                <strong>{language === 'es' ? 'Variedad:' : 'Variety:'}</strong> {searchResult.variety || '-'}
               </div>
               <div>
-                <strong>{language === 'es' ? 'Altitud:' : 'Altitude:'}</strong> {searchResult.altitud}
+                <strong>{language === 'es' ? 'Provincia:' : 'Province:'}</strong> {searchResult.province || '-'}
               </div>
               <div>
-                <strong>{language === 'es' ? 'Procesamiento:' : 'Processing:'}</strong> {searchResult.procesamiento}
+                <strong>{language === 'es' ? 'Proceso:' : 'Process:'}</strong> {searchResult.process || '-'}
               </div>
               <div>
-                <strong>{language === 'es' ? 'Fecha de cosecha:' : 'Harvest date:'}</strong> {searchResult.fechaCosecha}
+                <strong>{language === 'es' ? 'Cosecha:' : 'Harvest:'}</strong> {formatEcuadorDate(searchResult.harvest_date)}
               </div>
               <div>
-                <strong>{language === 'es' ? 'Ubicación:' : 'Location:'}</strong> {searchResult.ubicacion}
+                <strong>{language === 'es' ? 'Caficultor:' : 'Farmer:'}</strong> {searchResult.farmer || '-'}
               </div>
+            </div>
+            <div className="text-center">
+              <button
+                onClick={handleViewFullDetails}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105"
+              >
+                {language === 'es' ? '📋 Ver Detalles Completos' : '📋 View Full Details'}
+              </button>
             </div>
           </div>
         )}
 
-        {!searchResult && (
+        {/* Not Found Message */}
+        {notFound && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-xl max-w-2xl mx-auto mb-8">
+            <p className="font-bold">
+              {language === 'es' ? '❌ Lote no encontrado' : '❌ Batch not found'}
+            </p>
+            <p className="text-sm mt-1">
+              {language === 'es'
+                ? 'Verifica el código e intenta nuevamente.'
+                : 'Please verify the code and try again.'
+              }
+            </p>
+          </div>
+        )}
+
+        {!searchResult && !notFound && !isLoading && (
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => window.location.href = '/productos'}

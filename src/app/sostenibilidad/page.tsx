@@ -13,91 +13,80 @@ export default function SustainabilityPage() {
   const [batchData, setBatchData] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [searchPerformed, setSearchPerformed] = useState(false)
+  const [availableBatches, setAvailableBatches] = useState<any[]>([])
 
-  // Sample batch data similar to lotes page
-  const sampleBatches = [
-    {
-      batch_id: "AR000147",
-      variety: "Typica Mejorada",
-      farmer: "Armando Ramirez",
-      harvest_date: "2025-08-15",
-      drying_method: "Natural",
-      transport_mode: "Vía terrestre",
-      roast_date: "2025-09-20",
-      pack_date: "2025-09-20",
-      distribution_date: "2025-09-20",
-      retail_date: "2025-09-20",
-      province: "LOJA",
-      farm: "Finca El Mirador",
-      altitude: "1,200 - 1,400 msnm",
-      process: "Lavado",
-      origin: "Paltas-Olmedo-Vilcabamba",
-      farmers_list: "Armando Ramirez",
-      drying_types: "Natural",
-      transfer_to_quito: "terrestre",
-      storage: "Bodega Quito Central",
-      roast_types: "tueste claro - tueste medio",
-      packed: "2025-09-20",
-      transfer_to_shipping: "terrestre-marítimo",
-      destination_country: "Japón - Estados Unidos"
-    },
-    {
-      batch_id: "PQ000258",
-      variety: "Gesha",
-      farmer: "Pablo Quezada",
-      harvest_date: "2025-07-20",
-      drying_method: "Honey",
-      transport_mode: "Vía aérea",
-      roast_date: "2025-09-15",
-      pack_date: "2025-09-15",
-      distribution_date: "2025-09-16",
-      retail_date: "2025-09-17",
-      province: "ELORO",
-      farm: "Gran Chaparral",
-      altitude: "1,500 - 1,800 msnm",
-      process: "Honey",
-      origin: "Portovelo-Piñas",
-      farmers_list: "Pablo Quezada - Ivan Ramirez",
-      drying_types: "Honey - Lavado",
-      transfer_to_quito: "aéreo",
-      storage: "Bodega Quito Norte",
-      roast_types: "tueste medio - tueste medio oscuro",
-      packed: "2025-09-15",
-      transfer_to_shipping: "aéreo-marítimo",
-      destination_country: "Corea del Sur - Singapur"
+  // Función para formatear fechas al estilo ecuatoriano
+  const formatEcuadorDate = (dateString: string | null | undefined): string => {
+    if (!dateString) return '-'
+
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) return dateString
+
+      // Formato: "15 de agosto de 2025" o "August 15, 2025"
+      const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'America/Guayaquil'
+      }
+
+      const locale = language === 'es' ? 'es-EC' : 'en-US'
+      return date.toLocaleDateString(locale, options)
+    } catch {
+      return dateString
     }
-  ]
+  }
+
+  // Cargar lotes disponibles al montar el componente
+  useEffect(() => {
+    loadAvailableBatches()
+
+    // Verificar si hay un parámetro de búsqueda en la URL
+    const urlParams = new URLSearchParams(window.location.search)
+    const batchParam = urlParams.get('batch')
+    if (batchParam) {
+      setBatchNumber(batchParam)
+      loadBatchData(batchParam)
+      // Scroll a la sección de resultados
+      setTimeout(() => {
+        const resultsSection = document.querySelector('.batch-results-section')
+        if (resultsSection) {
+          resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 500)
+    }
+  }, [])
+
+  const loadAvailableBatches = async () => {
+    try {
+      const response = await fetch('/api/batches-simple')
+      const data = await response.json()
+      if (data.success) {
+        setAvailableBatches(data.batches.slice(0, 3)) // Mostrar solo los primeros 3
+      }
+    } catch (error) {
+      console.error('Error loading available batches:', error)
+    }
+  }
 
   const loadBatchData = async (batchId: string) => {
     setIsLoading(true)
     setSearchPerformed(true)
 
     try {
-      // Try to fetch from API first
-      const response = await fetch(`/api/public/batches?batch_id=${batchId}`)
+      // Fetch from batches-simple API
+      const response = await fetch(`/api/batches-simple?batch_id=${batchId}`)
       const data = await response.json()
 
       if (data.success && data.batch) {
         setBatchData(data.batch)
       } else {
-        // Fallback to sample data
-        const foundBatch = sampleBatches.find(batch =>
-          batch.batch_id.toLowerCase() === batchId.toLowerCase().trim()
-        )
-
-        if (foundBatch) {
-          setBatchData(foundBatch)
-        } else {
-          setBatchData(null)
-        }
+        setBatchData(null)
       }
     } catch (error) {
       console.error('Error loading batch data:', error)
-      // Try sample data on error
-      const foundBatch = sampleBatches.find(batch =>
-        batch.batch_id.toLowerCase() === batchId.toLowerCase().trim()
-      )
-      setBatchData(foundBatch || null)
+      setBatchData(null)
     } finally {
       setIsLoading(false)
     }
@@ -657,25 +646,27 @@ export default function SustainabilityPage() {
               </div>
 
               {/* Quick examples */}
-              <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600 mb-3">
-                  {language === 'es' ? '💡 Prueba con estos códigos de ejemplo:' : '💡 Try these example codes:'}
-                </p>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {sampleBatches.map((batch) => (
-                    <button
-                      key={batch.batch_id}
-                      onClick={() => {
-                        setBatchNumber(batch.batch_id)
-                        loadBatchData(batch.batch_id)
-                      }}
-                      className="px-4 py-2 bg-white border-2 border-amber-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-amber-100 hover:border-amber-400 transition-all duration-200 shadow-sm hover:shadow"
-                    >
-                      {batch.batch_id}
-                    </button>
-                  ))}
+              {availableBatches.length > 0 && (
+                <div className="mt-6 text-center">
+                  <p className="text-sm text-gray-600 mb-3">
+                    {language === 'es' ? '💡 Prueba con estos códigos de ejemplo:' : '💡 Try these example codes:'}
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {availableBatches.map((batch) => (
+                      <button
+                        key={batch.batch_id}
+                        onClick={() => {
+                          setBatchNumber(batch.batch_id)
+                          loadBatchData(batch.batch_id)
+                        }}
+                        className="px-4 py-2 bg-white border-2 border-amber-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-amber-100 hover:border-amber-400 transition-all duration-200 shadow-sm hover:shadow"
+                      >
+                        {batch.batch_id}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -683,7 +674,7 @@ export default function SustainabilityPage() {
 
       {/* Batch Results Section */}
       {(batchData || searchPerformed) && (
-        <div className="max-w-7xl mx-auto px-4 pb-16">
+        <div className="batch-results-section max-w-7xl mx-auto px-4 pb-16">
           {batchData ? (
             <div className="bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden">
               {/* Header */}
@@ -734,7 +725,7 @@ export default function SustainabilityPage() {
                     </h4>
                     <div className="space-y-3">
                       {[
-                        { icon: '🗓️', label: language === 'es' ? 'Cosecha' : 'Harvest', value: batchData.harvest_date },
+                        { icon: '🗓️', label: language === 'es' ? 'Cosecha' : 'Harvest', value: formatEcuadorDate(batchData.harvest_date) },
                         { icon: '☀️', label: language === 'es' ? 'Secado' : 'Drying', value: batchData.drying_method },
                         { icon: '🚛', label: language === 'es' ? 'Traslado' : 'Transport', value: batchData.transport_mode || 'Terrestre' }
                       ].map((item, index) => (
@@ -757,8 +748,8 @@ export default function SustainabilityPage() {
                     </h4>
                     <div className="space-y-3">
                       {[
-                        { icon: '🔥', label: language === 'es' ? 'Tostado' : 'Roasted', value: batchData.roast_date },
-                        { icon: '📦', label: language === 'es' ? 'Empacado' : 'Packed', value: batchData.pack_date },
+                        { icon: '🔥', label: language === 'es' ? 'Tostado' : 'Roasted', value: formatEcuadorDate(batchData.roast_date) },
+                        { icon: '📦', label: language === 'es' ? 'Empacado' : 'Packed', value: formatEcuadorDate(batchData.pack_date) },
                         { icon: '🚢', label: language === 'es' ? 'Destino' : 'Destination', value: batchData.destination_country || 'Internacional' }
                       ].map((item, index) => (
                         <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -789,12 +780,12 @@ export default function SustainabilityPage() {
                     {/* Timeline Steps */}
                     <div className="grid grid-cols-2 md:grid-cols-6 gap-4 md:gap-2 relative" style={{ zIndex: 2 }}>
                       {[
-                        { Icon: Sprout, label: language === 'es' ? 'Cosecha' : 'Harvest', date: batchData.harvest_date, color: 'bg-green-500', textColor: 'text-white' },
-                        { Icon: Sun, label: language === 'es' ? 'Secado' : 'Drying', date: batchData.harvest_date, color: 'bg-yellow-500', textColor: 'text-white' },
-                        { Icon: Truck, label: language === 'es' ? 'Transporte' : 'Transport', date: batchData.pack_date, color: 'bg-blue-500', textColor: 'text-white' },
-                        { Icon: Flame, label: language === 'es' ? 'Tostado' : 'Roasting', date: batchData.roast_date, color: 'bg-orange-500', textColor: 'text-white' },
-                        { Icon: Package, label: language === 'es' ? 'Empaque' : 'Packaging', date: batchData.pack_date, color: 'bg-purple-500', textColor: 'text-white' },
-                        { Icon: Plane, label: language === 'es' ? 'Distribución' : 'Distribution', date: batchData.distribution_date, color: 'bg-cyan-500', textColor: 'text-white' }
+                        { Icon: Sprout, label: language === 'es' ? 'Cosecha' : 'Harvest', date: formatEcuadorDate(batchData.harvest_date), color: 'bg-green-500', textColor: 'text-white' },
+                        { Icon: Sun, label: language === 'es' ? 'Secado' : 'Drying', date: formatEcuadorDate(batchData.harvest_date), color: 'bg-yellow-500', textColor: 'text-white' },
+                        { Icon: Truck, label: language === 'es' ? 'Transporte' : 'Transport', date: formatEcuadorDate(batchData.pack_date), color: 'bg-blue-500', textColor: 'text-white' },
+                        { Icon: Flame, label: language === 'es' ? 'Tostado' : 'Roasting', date: formatEcuadorDate(batchData.roast_date), color: 'bg-orange-500', textColor: 'text-white' },
+                        { Icon: Package, label: language === 'es' ? 'Empaque' : 'Packaging', date: formatEcuadorDate(batchData.pack_date), color: 'bg-purple-500', textColor: 'text-white' },
+                        { Icon: Plane, label: language === 'es' ? 'Distribución' : 'Distribution', date: formatEcuadorDate(batchData.distribution_date), color: 'bg-cyan-500', textColor: 'text-white' }
                       ].map((step, index) => (
                         <div key={index} className="flex flex-col items-center text-center">
                           {/* Icon Circle */}

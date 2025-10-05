@@ -4,7 +4,7 @@ import { query } from '@/lib/db'
 export async function GET() {
   try {
     const result = await query(`
-      SELECT 
+      SELECT
         cb.batch_id,
         cb.harvest_date,
         cb.processing_method,
@@ -17,6 +17,12 @@ export async function GET() {
         cb.status,
         cb.green_weight_kg,
         cb.final_weight_kg,
+        cb.origin,
+        cb.transfer_to_quito,
+        cb.storage,
+        cb.roast_types,
+        cb.transfer_to_shipping,
+        cb.destination_country,
         f.full_name as farmer_name,
         f.farmer_code,
         farm.name as farm_name,
