@@ -93,11 +93,6 @@ export default function NewBatchPage() {
     }
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('cms_token')
-    router.push('/crmalohja')
-  }
-
   if (!user) {
     return <div>Loading...</div>
   }
@@ -107,7 +102,7 @@ export default function NewBatchPage() {
       <CMSSidebar />
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <CMSHeader user={user} onLogout={handleLogout} />
+        <CMSHeader user={user} />
 
         <main className="flex-1 overflow-y-auto p-6">
           <div className="max-w-4xl mx-auto">
