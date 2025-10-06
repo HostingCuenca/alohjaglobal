@@ -48,7 +48,7 @@ const farmersData = {
       id: "elauterio-fajardo",
       name: "Elauterio Fajardo",
       photo: "https://blog.torisoftt.com/videos/agricultores/elauteriofajardoperfil.png",
-      hasInterview: false,
+      hasInterview: true,
       gender: "male",
       farmName: "Tandambo",
       origin: "Paltas - Loja",
@@ -57,13 +57,14 @@ const farmersData = {
       cultivationMethod: "Bajo sombra",
       quote: "Con cada grano que recojo pienso en un futuro mejor para mis hijos. Quiero que la calidad de nuestro café sea valorada y que nuestra voz como agricultores se escuche en el mundo.",
       gallery: ["https://blog.torisoftt.com/videos/agricultores/elauteriofajardoperfil.png"],
+      interviewVideo: "https://blog.torisoftt.com/videos/ENTREVISTA%20ELAUTERIO%20FAJARDO.mp4",
       individualVideo: "https://blog.torisoftt.com/videos/agricultores/elauteriofajardovideo.mp4"
     },
     {
       id: "edita-collaguazo",
       name: "Edita Collaguazo",
       photo: "https://blog.torisoftt.com/videos/agricultores/elbitacollaguazoperfil.png",
-      hasInterview: false,
+      hasInterview: true,
       gender: "female",
       farmName: "Tandambo",
       origin: "Paltas - Loja",
@@ -72,6 +73,7 @@ const farmersData = {
       cultivationMethod: "Bajo sombra",
       quote: "Cada grano que selecciono lleva consigo mi esperanza de progreso. Sueño con que las mujeres del campo tengamos más oportunidades y que nuestro esfuerzo sea visible.",
       gallery: ["https://blog.torisoftt.com/videos/agricultores/elbitacollaguazoperfil.png"],
+      interviewVideo: "https://blog.torisoftt.com/videos/ENTREVISTA%20ELBITA%20COLLAGUAZO.mp4",
       individualVideo: "https://blog.torisoftt.com/videos/agricultores/elbitacollaguazovideo.mp4"
     },
     {
