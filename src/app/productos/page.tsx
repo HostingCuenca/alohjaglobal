@@ -2,8 +2,8 @@ import ProductsClient from '@/components/ProductsClient'
 import { Product } from '@/types/cart'
 import { query } from '@/lib/db'
 
-// Enable ISR - revalidate every hour
-export const revalidate = 3600
+// Enable ISR - revalidate every 30 seconds for real-time price updates
+export const revalidate = 30
 
 async function getProducts(): Promise<Product[]> {
   try {

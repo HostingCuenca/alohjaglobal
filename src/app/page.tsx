@@ -1,18 +1,52 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Hero from '@/components/Hero'
 import Footer from '@/components/Footer'
-import { products } from '@/data/products'
 import { motion, AnimatePresence } from 'framer-motion'
+
+interface Product {
+  id: string
+  name: string
+  nameEn: string
+  description: string
+  descriptionEn: string
+  priceLocal: number
+  weightGrams: number
+  primaryImageUrl: string
+  flavorNotes: string[]
+  isActive: boolean
+}
 
 export default function Home() {
   const [language, setLanguage] = useState<'es' | 'en'>('es')
   const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0)
   const [galleryDirection, setGalleryDirection] = useState(0)
+  const [products, setProducts] = useState<Product[]>([])
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true)
+
+  // Cargar productos desde la API
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const response = await fetch('/api/products')
+        const data = await response.json()
+
+        if (data.success) {
+          setProducts(data.products.filter((p: Product) => p.isActive))
+        }
+      } catch (error) {
+        console.error('Error loading products:', error)
+      } finally {
+        setIsLoadingProducts(false)
+      }
+    }
+
+    loadProducts()
+  }, [])
 
   // Array de medios para la galería
   const galleryMedia = [
@@ -74,13 +108,8 @@ export default function Home() {
     setCurrentGalleryIndex((prev) => (prev - 1 + galleryMedia.length) % galleryMedia.length)
   }
 
-  // Get featured products (carefully selected variety for homepage)
-  const featuredProducts = products.filter(p => p.isActive && [
-    'coffee-alta-montana',          // Ground light roast
-    'coffee-cordillera',            // Ground dark roast
-    'whole-bean-light-340',         // Whole bean light
-    'whole-bean-dark-340'           // Whole bean dark
-  ].includes(p.id))
+  // Get featured products (first 4 active products from database)
+  const featuredProducts = products.slice(0, 4)
 
   return (
     <div className="min-h-screen bg-white">
@@ -363,52 +392,65 @@ export default function Home() {
           </div>
 
           {/* Featured Products Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {featuredProducts.map((product, index) => (
-              <Link key={product.id} href={`/productos/${product.id}`} className="block">
-                <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                  <div className="aspect-square bg-gray-50 rounded-lg mb-3 overflow-hidden">
-                    <Image
-                      src={product.primaryImageUrl || '/images/coffee-placeholder.jpg'}
-                      alt={language === 'es' ? product.name : product.nameEn}
-                      width={200}
-                      height={200}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="font-bold text-sm text-black leading-tight">
-                      {language === 'es' ? product.name : product.nameEn}
-                    </h3>
-                    <p className="text-xs text-gray-600 leading-tight line-clamp-2">
-                      {(() => {
-                        const desc = language === 'es' ? product.description : product.descriptionEn;
-                        if (!desc) return '';
-                        // Extract first sentence or first 80 characters for preview
-                        const firstSentence = desc.split('.')[0];
-                        return firstSentence.length > 80 ? firstSentence.substring(0, 77) + '...' : firstSentence + '.';
-                      })()}
-                    </p>
-                    {product.flavorNotes && product.flavorNotes.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {product.flavorNotes.slice(0, 2).map((note, noteIndex) => (
-                          <span key={noteIndex} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                            {note}
-                          </span>
-                        ))}
+          {isLoadingProducts ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+              <p className="mt-4 text-gray-600">
+                {language === 'es' ? 'Cargando productos...' : 'Loading products...'}
+              </p>
+            </div>
+          ) : featuredProducts.length === 0 ? (
+            <div className="text-center py-12 text-gray-600">
+              <p>{language === 'es' ? 'No hay productos disponibles en este momento.' : 'No products available at this time.'}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              {featuredProducts.map((product, index) => (
+                <Link key={product.id} href={`/productos/${product.id}`} className="block">
+                  <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <div className="aspect-square bg-gray-50 rounded-lg mb-3 overflow-hidden">
+                      <Image
+                        src={product.primaryImageUrl || '/images/coffee-placeholder.jpg'}
+                        alt={language === 'es' ? product.name : product.nameEn}
+                        width={200}
+                        height={200}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="font-bold text-sm text-black leading-tight">
+                        {language === 'es' ? product.name : product.nameEn}
+                      </h3>
+                      <p className="text-xs text-gray-600 leading-tight line-clamp-2">
+                        {(() => {
+                          const desc = language === 'es' ? product.description : product.descriptionEn;
+                          if (!desc) return '';
+                          // Extract first sentence or first 80 characters for preview
+                          const firstSentence = desc.split('.')[0];
+                          return firstSentence.length > 80 ? firstSentence.substring(0, 77) + '...' : firstSentence + '.';
+                        })()}
+                      </p>
+                      {product.flavorNotes && product.flavorNotes.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {product.flavorNotes.slice(0, 2).map((note, noteIndex) => (
+                            <span key={noteIndex} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                              {note}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between">
+                        <span className="text-lg font-bold text-green-700">
+                          ${product.priceLocal.toFixed(2)}
+                        </span>
+                        <span className="text-xs text-gray-500">{product.weightGrams}g</span>
                       </div>
-                    )}
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-green-700">
-                        ${product.priceLocal.toFixed(2)}
-                      </span>
-                      <span className="text-xs text-gray-500">{product.weightGrams}g</span>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          )}
 
           <div className="text-center">
             <button
