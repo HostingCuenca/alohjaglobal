@@ -1,7 +1,7 @@
 import { Product } from '@/types/cart'
 
 export const products: Product[] = [
-  {
+  { 
     id: "coffee-alta-montana",
     sku: "CAM",
     name: "Café molido tueste claro (Café alta montaña)",
