@@ -29,7 +29,7 @@ export default function CartSidebar({ language }: CartSidebarProps) {
         `\n\nTotal: $${state.total.toFixed(2)} ${state.items[0]?.currency || 'USD'}\n\n` +
         `Could you confirm availability and payment method?`
 
-    const whatsappNumber = '593999999999' // Tu número de WhatsApp
+    const whatsappNumber = '593962573519'
     const encodedMessage = encodeURIComponent(message)
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
 
