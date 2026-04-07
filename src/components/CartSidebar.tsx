@@ -13,6 +13,7 @@ export default function CartSidebar({ language }: CartSidebarProps) {
   const [isProcessing, setIsProcessing] = useState(false)
 
   const handleWhatsAppCheckout = () => {
+  const handleWhatsAppCheckout = () => { 
     setIsProcessing(true)
 
     const message = language === 'es'
