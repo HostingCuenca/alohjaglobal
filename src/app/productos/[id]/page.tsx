@@ -10,14 +10,15 @@ export const revalidate = 3600
 // Generate static params for all products
 export async function generateStaticParams() {
   try {
-    // Direct database query instead of HTTP fetch
     const result = await query(`
-      SELECT slug FROM products WHERE is_active = true
+      SELECT slug FROM products WHERE is_active = true AND slug IS NOT NULL
     `)
 
-    return result.rows.map((row: any) => ({
-      id: row.slug,
-    }))
+    return result.rows
+      .filter((row: any) => row.slug && typeof row.slug === 'string')
+      .map((row: any) => ({
+        id: row.slug,
+      }))
   } catch (error) {
     console.error('Error generating static params:', error)
     return []
@@ -146,8 +147,9 @@ async function getRelatedProducts(slug: string, roastLevel: string, grindType: s
 }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const product = await getProduct(params.id)
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const product = await getProduct(id)
 
   if (!product) {
     return {
@@ -173,15 +175,16 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = await getProduct(params.id)
+export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const product = await getProduct(id)
 
   if (!product) {
     notFound()
   }
 
   const relatedProducts = await getRelatedProducts(
-    params.id,
+    id,
     product.roastLevel || '',
     product.grindType || ''
   )
